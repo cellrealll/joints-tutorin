@@ -905,3 +905,4 @@
     flex-direction: column;
   }
 }
+.course-roadmap-return { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; }

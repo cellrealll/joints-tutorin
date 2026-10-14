@@ -75,11 +75,15 @@
   flex-direction: column;
   gap: 13px;
   margin-top: 54px;
+  min-height: 0;
+  overflow-y: auto;
+  flex-shrink: 1;
 }
 
 .nav-item {
   width: 100%;
   min-height: 44px;
+  flex-shrink: 0;
   padding: 0 18px;
   border: none;
   border-radius: 25px;

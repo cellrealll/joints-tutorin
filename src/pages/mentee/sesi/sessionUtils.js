@@ -4,9 +4,22 @@ export function endTime(session) {
   return `${String(Math.floor(end / 60)).padStart(2, "0")}:${String(end % 60).padStart(2, "0")}`;
 }
 
+export function sessionStart(session) {
+  return new Date(`${session.date}T${session.time}:00+07:00`).getTime();
+}
+
 export function isUpcomingSession(session) {
-  const end = new Date(`${session.date}T${session.time}:00`).getTime() + session.duration * 60000;
+  const end = sessionStart(session) + session.duration * 60000;
   return session.status !== "Selesai" && session.status !== "Dibatalkan" && end > Date.now();
+}
+
+export function compareSessionSchedule(a, b) {
+  return sessionStart(a) - sessionStart(b) || a.id.localeCompare(b.id);
+}
+
+export function canJoinSession(session, now = Date.now()) {
+  const start = sessionStart(session);
+  return session.status === "Dikonfirmasi" && now >= start - 10 * 60000 && now < start + session.duration * 60000;
 }
 
 export function sessionCategory(session) {

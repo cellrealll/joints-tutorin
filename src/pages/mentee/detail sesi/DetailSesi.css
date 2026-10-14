@@ -272,3 +272,7 @@
     margin-top: 28px;
   }
 }
+
+.session-detail-actions { margin-top: 24px; }
+.session-detail-actions .sessions-cancel { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.session-detail-actions .sessions-cancel p { flex-basis: 100%; }

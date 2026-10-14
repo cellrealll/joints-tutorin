@@ -7,6 +7,11 @@ import SearchBar from "./components/common/SearchBar";
 import AppIcon from "./components/common/AppIcon";
 
 import Dashboard from "./pages/mentee/dashboard/Dashboard";
+import CareerRoadmap from "./pages/mentee/career/CareerRoadmap";
+import SkillAnalysis from "./pages/mentee/career/SkillAnalysis";
+import CareerPortfolio from "./pages/mentee/career/CareerPortfolio";
+import IndustryMentorship from "./pages/mentee/career/IndustryMentorship";
+import CareerOpportunities from "./pages/mentee/career/CareerOpportunities";
 import CariTutor from "./pages/mentee/cari tutor/CariTutor";
 import Profil from "./pages/mentee/profil mentee/Profil";
 import ProfilMentor from "./pages/mentee/profil mentor/ProfilMentor";
@@ -88,10 +93,13 @@ export default function App() {
   const [active, updateActive] = useState("Beranda");
   const [selectedTutor, setSelectedTutor] = useState(null);
   const [profileOrigin, setProfileOrigin] = useState("Beranda");
+  const [detailSession, setDetailSession] = useState(null);
+  const [detailOrigin, setDetailOrigin] = useState("Courses");
   const [bookingNote, setBookingNote] = useState("");
   const [assessmentSession, setAssessmentSession] = useState(null);
   const [assessmentOrigin, setAssessmentOrigin] = useState("Sesi");
   const [courseDetailId, setCourseDetailId] = useState("");
+  const [mentorshipCategory, setMentorshipCategory] = useState("Career Consultation");
 
   function setActive(page) {
     if (dashboardMode === "mentor" && ["Shop"].includes(page)) return;
@@ -121,6 +129,12 @@ export default function App() {
     setProfileOrigin(active);
     setSelectedTutor(tutor);
     setActive("Profil mentor");
+  }
+
+  function openSessionDetail(session) {
+    setDetailSession(session);
+    setDetailOrigin(active);
+    setActive("Detail Sesi");
   }
 
   function openTest(mode, session) {
@@ -168,7 +182,7 @@ export default function App() {
       <Sidebar
         active={
           sessionPages.includes(active)
-            ? "Sesi"
+            ? "Courses"
             : active === "Profil mentor"
               ? profileOrigin
               : active
@@ -195,16 +209,27 @@ export default function App() {
             <Dashboard
               setActive={setActive}
               onTutorProfile={openTutor}
-              onDetailSession={() => setActive("Detail Sesi")}
+              onDetailSession={openSessionDetail}
               onProfile={() => setActive("Profil mentor")}
               onCourseDetail={openCourseDetail}
             />
+          ) : active === "Career Roadmap" ? (
+            <CareerRoadmap onCourseDetail={openCourseDetail} setActive={setActive} />
+          ) : active === "Skill Analysis" ? (
+            <SkillAnalysis setActive={setActive} onCourseDetail={openCourseDetail} onTutorProfile={openTutor} />
+          ) : active === "Career Portfolio" ? (
+            <CareerPortfolio setActive={setActive} onPortfolioReview={() => { setMentorshipCategory("Portfolio Review"); setActive("Industry Mentorship"); }} />
+          ) : active === "Industry Mentorship" ? (
+            <IndustryMentorship setActive={setActive} onOpenSession={openSessionDetail} initialCategory={mentorshipCategory} />
+          ) : active === "Career Opportunities" ? (
+            <CareerOpportunities setActive={setActive} onCourseDetail={openCourseDetail} />
           ) : active === "Cari tutor" || active === "Cari mentor" || active === "Cari course" ? (
             <CariTutor
               key={courseDetailId || "catalog"}
               onProfile={openTutor}
               onStartPreTest={openCoursePreTest}
               initialCourseId={courseDetailId}
+              onRoadmap={() => setActive("Career Roadmap")}
             />
           ) : active === "Profil mentor" ? (
             <ProfilMentor
@@ -216,9 +241,9 @@ export default function App() {
           ) : active === "Akun" ? (
             <Profil setActive={setActive} />
           ) : active === "Sesi" ? (
-            <Sesi setActive={setActive} onOpenTest={openTest} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
+            <Sesi setActive={setActive} onDetailSession={openSessionDetail} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
           ) : active === "Courses" ? (
-            <Sesi setActive={setActive} onOpenTest={openTest} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
+            <Sesi setActive={setActive} onDetailSession={openSessionDetail} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
           ) : active === "Pre-test" && assessmentSession ? (
             <PreTest key={`${assessmentSession.id}-pre`} session={assessmentSession} courseId={assessmentSession.courseId || courseFor(assessmentSession.subject)}
               onBack={backFromAssessment} />
@@ -234,15 +259,16 @@ export default function App() {
               bookingNote={bookingNote}
               onBack={() => setActive("Cari course")}
               onBookingNoteChange={setBookingNote}
-              onSessionDetail={() => setActive("Detail Sesi")}
+              onSessionDetail={() => openSessionDetail(null)}
               onHome={() => setActive("Beranda")}
               onTeach={() => setActive("Jadi mentor")}
             />
           ) : active === "Detail Sesi" ? (
             <DetailSesi
+              session={detailSession}
               bookingNote={bookingNote}
-              onOpenTest={(mode) => openTest(mode, { id: booking.code, subject: booking.topic, tutor: bookingMentor.name })}
-              onBack={() => setActive("Courses")}
+              onOpenTest={(mode) => openTest(mode, detailSession || { id: booking.code, subject: booking.topic, tutor: bookingMentor.name })}
+              onBack={() => setActive(detailOrigin === "Booking Sesi" ? "Courses" : detailOrigin)}
               onTeach={() => setActive("Jadi mentor")}
             />
           ) : (

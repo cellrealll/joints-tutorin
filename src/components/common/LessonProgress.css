@@ -1,0 +1,7 @@
+.lesson-progress { display: grid; gap: 10px; }
+.lesson-progress > p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.lesson-progress > label { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; cursor: pointer; }
+.lesson-progress input { flex: 0 0 17px; width: 17px; height: 17px; margin: 2px 0 0; accent-color: var(--purple); }
+.lesson-progress small { display: block; color: #217554; font-size: 11px; }
+.lesson-progress > p[role="status"] { color: var(--purple); }
+.lesson-progress > p:empty { display: none; }

@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { getMentorProgress } from "./mentorProgress";
+import { demoOpeningCredits, migrateDemoCredits } from "./creditLedger";
+import { prepareIndustryBooking, cancelIndustryBooking } from "./industryBooking";
 
 const storageKey = "tutorin-activity-v2";
 const listeners = new Set();
@@ -20,7 +22,7 @@ const seedTransactions = [
   { id: "tx-4", title: "Course - Public Speaking for Work", detail: "Dengan Maya Santoso", amount: -58, date: relativeDate(-6) },
   { id: "tx-3", title: "Bonus belajar", detail: "Target belajar tercapai", amount: 10, date: relativeDate(-8) },
   { id: "tx-2", title: "Sesi belajar - Sejarah", detail: "Dengan Citra Mandira", amount: -10, date: relativeDate(-9) },
-  { id: "tx-1", title: "Saldo awal", detail: "Kredit belajar Tutor.in", amount: 60, date: relativeDate(-14) },
+  { id: "tx-1", title: "Saldo awal", detail: "Kredit belajar Tutor.in", amount: demoOpeningCredits, date: relativeDate(-14) },
 ];
 const seedSessions = [
   { id: "session-1", subject: "Frontend Web Development", tutor: "Rafi Ahmad", date: relativeDate(0), time: "10:00", duration: 120, credits: 82, status: "Dikonfirmasi", courseId: "programming" },
@@ -45,7 +47,7 @@ function migrateSessionRoles(state) {
       if (!sessions.some((existing) => existing.id === session.id)) sessions.push(session);
     });
   }
-  return { ...state, sessions, sessionRolesVersion: 1 };
+  return migrateDemoCredits({ ...state, sessions, sessionRolesVersion: 1 });
 }
 
 function load() {
@@ -82,8 +84,18 @@ export function addBooking(booking) {
   commit({ ...snapshot, sessions: [...snapshot.sessions, { ...booking, role: "mentee", id: crypto.randomUUID(), duration: 60, status: "Menunggu konfirmasi" }] });
 }
 export function cancelSession(id) {
+  if (snapshot.sessions.find((session) => session.id === id)?.kind === "industry-mentorship") {
+    const next = cancelIndustryBooking(snapshot, id);
+    if (next !== snapshot) commit(next);
+    return;
+  }
   commit({ ...snapshot, sessions: snapshot.sessions.map((session) => session.id === id && session.status === "Menunggu konfirmasi"
     ? { ...session, status: "Dibatalkan" } : session) });
+}
+export function bookIndustryMentorship(input) {
+  const id = crypto.randomUUID();
+  commit(prepareIndustryBooking(snapshot, input, id));
+  return snapshot.sessions.find((session) => session.id === id);
 }
 export function completeDemoPurchase(order) {
   if (snapshot.transactions.some((item) => item.id === order.id)) return;

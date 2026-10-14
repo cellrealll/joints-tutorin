@@ -1,6 +1,12 @@
 import { useMemo, useRef, useState } from "react";
+import { courseCatalog as courses } from "../../../state/courseCatalog";
+import { saveEnrollments, useEnrollments } from "../../../state/enrollments";
 import AppIcon from "../../../components/common/AppIcon";
-import { addBooking } from "../../../state/tutorStore";
+import { addBooking, useTutorData } from "../../../state/tutorStore";
+import { courseLearningProgress } from "../../../state/learningProgress";
+import LessonProgress from "../../../components/common/LessonProgress";
+import useRoadmapProgress from "../career/useRoadmapProgress";
+import { recommendedCourseStart } from "../../../state/careerModel";
 import { assessmentKey, assessmentResult, readAssessment } from "../test/assessmentStorage";
 
 const shiftOptions = [
@@ -21,203 +27,8 @@ const dayMeta = {
   Min: { label: "Minggu", offset: 0 },
 };
 
-const courses = [
-  {
-    id: "uiux-course",
-    courseId: "programming",
-    title: "UI/UX Product Design",
-    category: "Design",
-    field: "Product Design",
-    sessionCount: 7,
-    description:
-      "Belajar riset user, wireframe, prototyping, usability testing, dan handoff ke developer.",
-    tutors: [
-      {
-        name: "Alya Rahmani",
-        subjects: "UI/UX Product Design",
-        rating: "4.9",
-        reviews: "132",
-        role: "Senior Designer",
-        roleClass: "pro",
-        creditsCourse: 72,
-        avatar: "ph:user-circle-fill",
-        availability: { days: ["Rab", "Kam", "Jum"], shift: "shift-3" },
-      },
-      {
-        name: "Nadia Putri",
-        subjects: "Design System",
-        rating: "4.8",
-        reviews: "98",
-        role: "Design Mentor",
-        roleClass: "active",
-        creditsCourse: 64,
-        avatar: "ph:user-circle-fill",
-        availability: { days: ["Sel", "Kam", "Sab"], shift: "shift-2" },
-      },
-    ],
-    sessions: [
-      "User research dan problem framing",
-      "Persona, journey map, dan opportunity area",
-      "Information architecture dan user flow",
-      "Wireframe low-fidelity",
-      "Prototype high-fidelity",
-      "Usability testing dan iterasi",
-      "Final project product case study dan sertifikat",
-    ],
-    project: "Membuat end-to-end case study untuk fitur aplikasi digital.",
-  },
-  {
-    id: "frontend-course",
-    courseId: "programming",
-    title: "Frontend Web Development",
-    category: "IT",
-    field: "Web Development",
-    sessionCount: 8,
-    description:
-      "Bangun UI responsif dengan HTML, CSS, JavaScript, React, state, API, dan deployment.",
-    tutors: [
-      {
-        name: "Rafi Ahmad",
-        subjects: "Frontend Web Development",
-        rating: "4.8",
-        reviews: "102",
-        role: "Frontend Engineer",
-        roleClass: "mentor",
-        creditsCourse: 82,
-        avatar: "ph:user-circle-fill",
-        availability: { days: ["Sen", "Rab", "Jum"], shift: "shift-2" },
-      },
-      {
-        name: "Dion Prasetyo",
-        subjects: "React Frontend",
-        rating: "4.8",
-        reviews: "98",
-        role: "React Mentor",
-        roleClass: "active",
-        creditsCourse: 88,
-        avatar: "ph:user-circle-fill",
-        availability: { days: ["Sel", "Kam", "Min"], shift: "shift-3" },
-      },
-    ],
-    sessions: [
-      "HTML semantic dan struktur UI",
-      "CSS layout responsif",
-      "JavaScript DOM dan event",
-      "React component dan props",
-      "State, form, dan validasi",
-      "API integration",
-      "Testing UI ringan",
-      "Final project dashboard frontend dan sertifikat",
-    ],
-    project: "Membuat dashboard frontend dengan data API, filter, dan responsive layout.",
-  },
-  {
-    id: "backend-course",
-    courseId: "programming",
-    title: "Backend API Engineering",
-    category: "IT",
-    field: "Backend",
-    sessionCount: 8,
-    description:
-      "Pelajari REST API, autentikasi, database, testing endpoint, dan dokumentasi API.",
-    tutors: [
-      {
-        name: "Bima Ardi",
-        subjects: "Backend API Engineering",
-        rating: "4.9",
-        reviews: "121",
-        role: "Backend Engineer",
-        roleClass: "pro",
-        creditsCourse: 96,
-        avatar: "ph:user-circle-fill",
-        availability: { days: ["Rab", "Kam", "Jum"], shift: "shift-4" },
-      },
-      {
-        name: "Citra Mandira",
-        subjects: "Database dan API",
-        rating: "4.8",
-        reviews: "110",
-        role: "API Mentor",
-        roleClass: "active",
-        creditsCourse: 90,
-        avatar: "ph:user-circle-fill",
-        availability: { days: ["Sen", "Sel", "Sab"], shift: "shift-4" },
-      },
-    ],
-    sessions: [
-      "HTTP, REST, dan API contract",
-      "Node.js server fundamentals",
-      "Routing, controller, dan validation",
-      "Database schema dan query",
-      "Authentication dan authorization",
-      "Error handling dan logging",
-      "API testing dan Postman collection",
-      "Final project production-ready API dan sertifikat",
-    ],
-    project: "Membangun REST API lengkap dengan auth, database, dan dokumentasi endpoint.",
-  },
-  {
-    id: "data-course",
-    courseId: "programming",
-    title: "Public Speaking for Work",
-    category: "Communication",
-    field: "Communication",
-    sessionCount: 7,
-    description:
-      "Latihan struktur bicara, storytelling, presentasi profesional, dan handling Q&A.",
-    tutors: [
-      {
-        name: "Maya Santoso",
-        subjects: "Public Speaking",
-        rating: "4.7",
-        reviews: "87",
-        role: "Data Analyst",
-        roleClass: "active",
-        creditsCourse: 58,
-        avatar: "ph:user-circle-fill",
-        availability: { days: ["Sen", "Rab", "Jum"], shift: "shift-1" },
-      },
-      {
-        name: "Kevin Wijaya",
-        subjects: "Pitching dan Presentation",
-        rating: "4.6",
-        reviews: "75",
-        role: "BI Mentor",
-        roleClass: "starter",
-        creditsCourse: 62,
-        avatar: "ph:user-circle-fill",
-        availability: { days: ["Sel", "Kam", "Min"], shift: "shift-2" },
-      },
-    ],
-    sessions: [
-      "Confidence dan struktur pesan",
-      "Audience analysis",
-      "Storytelling untuk presentasi",
-      "Slide narrative",
-      "Voice, pacing, dan gesture",
-      "Handling Q&A",
-      "Final project presentasi profesional dan sertifikat",
-    ],
-    project: "Mempresentasikan ide kerja dengan deck, Q&A, dan rekaman evaluasi.",
-  },
-];
 
 const categoryOptions = ["IT", "Design", "Communication"];
-const enrollmentKey = "tutorin-course-enrollments-v1";
-
-function readEnrollments() {
-  try {
-    const value = JSON.parse(localStorage.getItem(enrollmentKey));
-    return value && typeof value === "object" ? value : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveEnrollments(value) {
-  localStorage.setItem(enrollmentKey, JSON.stringify(value));
-}
-
 function formatAvailability(tutor) {
   const shift = shiftOptions.find((item) => item.id === tutor.availability.shift);
   const days = tutor.availability.days.map((day) => dayMeta[day].label).join(", ");
@@ -237,9 +48,6 @@ function nextDateFor(day) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
-function recommendedStep(score, total) {
-  return Math.min(total, Math.max(1, Math.ceil((score / 100) * total)));
-}
 
 function FilterSelect({ label, value, onChange, options }) {
   const [open, setOpen] = useState(false);
@@ -326,8 +134,9 @@ function CertificatePanel() {
 }
 
 function ScheduleSetup({ course, result, enrollment, onSave }) {
-  const lockedStart = recommendedStep(result.score, course.sessions.length);
-  const [startStep, setStartStep] = useState(enrollment.startStep || lockedStart);
+  const { profile } = useRoadmapProgress();
+  const lockedStart = recommendedCourseStart(course.id, profile);
+  const [startStep, setStartStep] = useState(Math.min(enrollment.startStep || lockedStart, lockedStart));
   const [selectedTutor, setSelectedTutor] = useState(enrollment.tutor || "");
   const [selectedDay, setSelectedDay] = useState(enrollment.day || "");
   const tutor = course.tutors.find((item) => item.name === selectedTutor);
@@ -369,7 +178,7 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
       <div className="setup-grid">
         <div className="setup-step">
           <h3>1. Mulai dari sesi</h3>
-          <p>Rekomendasi sistem: sesi {lockedStart}. Kamu boleh mundur, tapi belum bisa maju.</p>
+          <p>Rekomendasi kompetensi: sesi {lockedStart}. Materi awal hanya dapat dilewati setelah assessment Advanced dan semua prasyaratnya terpenuhi.</p>
           <div className="step-choice-list">
             {course.sessions.map((session, index) => {
               const step = index + 1;
@@ -413,10 +222,15 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
   );
 }
 
-function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollment, onEnroll, onCancelEnrollment, onUpdateEnrollment }) {
+function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollment, onEnroll, onCancelEnrollment, onUpdateEnrollment, onRoadmap }) {
   const confirmRef = useRef(null);
+  const { sessions } = useTutorData();
+  const learning = courseLearningProgress(course, sessions, enrollment);
+  const { allAssessments } = useRoadmapProgress();
   const rawPretest = readAssessment(assessmentKey(course.id, course.courseId, "pre"));
-  const pretestResult = rawPretest ? assessmentResult(rawPretest, course.courseId, "pre") : null;
+  const ownPretest = rawPretest ? assessmentResult(rawPretest, course.courseId, "pre") : null;
+  const reusedPretest = allAssessments.find((assessment) => assessment.bank === course.courseId && assessment.mode === "pre");
+  const pretestResult = ownPretest || reusedPretest;
   const isEnrolled = enrollment?.registered;
 
   return (
@@ -465,12 +279,15 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
         )}
 
         {isEnrolled && pretestResult && (
+          <>
+          {!ownPretest && <p className="activity-feedback">Hasil pre-test dari bank soal yang sama digunakan kembali. Rekomendasi mulai materi tetap mengikuti kompetensi dan prasyarat, bukan skor total.</p>}
           <ScheduleSetup
             course={course}
             result={pretestResult}
             enrollment={enrollment || {}}
             onSave={(updates) => onUpdateEnrollment(course.id, updates)}
           />
+          </>
         )}
 
         <section className="course-panel">
@@ -492,6 +309,13 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
               </article>
             ))}
           </div>
+        </section>
+
+        <section className="course-panel" aria-labelledby="course-learning-progress-title">
+          <div className="course-section-heading"><div><span className="course-eyebrow">Terhubung ke Career Roadmap</span><h2 id="course-learning-progress-title">Progres belajar saya</h2></div><span className="course-pill">{learning.completedLessons.length}/{course.sessions.length} materi</span></div>
+          <div className="progress-track" role="progressbar" aria-label="Materi course dipelajari" aria-valuemin={0} aria-valuemax={100} aria-valuenow={learning.percent}><div className="progress-fill" style={{ width: `${learning.percent}%` }} /></div>
+          <LessonProgress course={course} learning={learning} enrollment={enrollment} />
+          {onRoadmap && <button className="text-link course-roadmap-return" onClick={onRoadmap}>Lihat Career Roadmap<AppIcon name="career:route" size={17} /></button>}
         </section>
 
         <section className="course-panel">
@@ -543,13 +367,12 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
   );
 }
 
-export default function CariTutor({ onProfile = () => {}, onStartPreTest = () => {}, initialCourseId = "" }) {
+export default function CariTutor({ onProfile = () => {}, onStartPreTest = () => {}, initialCourseId = "", onRoadmap }) {
   const [category, setCategory] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(() => courses.find((course) => course.id === initialCourseId) || null);
-  const [enrollments, setEnrollments] = useState(readEnrollments);
+  const enrollments = useEnrollments();
 
   function updateEnrollments(next) {
-    setEnrollments(next);
     saveEnrollments(next);
   }
 
@@ -575,10 +398,11 @@ export default function CariTutor({ onProfile = () => {}, onStartPreTest = () =>
         onEnroll={enroll}
         onCancelEnrollment={(courseId) => {
           const next = { ...enrollments };
-          delete next[courseId];
+          next[courseId] = { ...next[courseId], registered: false, scheduled: false };
           updateEnrollments(next);
         }}
         onUpdateEnrollment={updateEnrollment}
+        onRoadmap={onRoadmap}
       />
     );
   }

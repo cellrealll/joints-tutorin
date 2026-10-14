@@ -2,8 +2,20 @@
 import AppIcon from "../../../components/common/AppIcon";
 import { dateKey, formatDate, useTutorData } from "../../../state/tutorStore";
 import { EmptyState } from "../../../components/common/ActivityUI";
-import { isUpcomingSession } from "../sesi/sessionUtils";
+import { compareSessionSchedule, endTime, isUpcomingSession } from "../sesi/sessionUtils";
+import JoinSession from "../sesi/JoinSession";
+import useSessionClock from "../sesi/useSessionClock";
 import { useProfile } from "../../../state/profile";
+import useRoadmapProgress from "../career/useRoadmapProgress";
+
+function CareerRoadmapEntry({ setActive }) {
+  const { career, progress } = useRoadmapProgress();
+  return <section className="roadmap-dashboard-entry">
+    <AppIcon name="career:route" size={33} />
+    <div><h2>Belajar dengan tujuan karier</h2><p>{career.title} · {progress.percent}% milestone selesai{progress.next ? ` · Berikutnya: ${progress.next.title}` : " · Semua milestone tercatat"}</p></div>
+    <button className="activity-primary" onClick={() => setActive("Career Roadmap")}>Buka roadmap<AppIcon name="solar:alt-arrow-right-linear" size={16} /></button>
+  </section>;
+}
 
 function WelcomeBanner({ setActive }) {
   const profile = useProfile();
@@ -59,12 +71,11 @@ function SectionHeading({ icon, title, action, onAction }) {
 }
 
 function NextSession({ onDetailSession, setActive }) {
+  useSessionClock();
   const { sessions } = useTutorData();
   const session = sessions
     .filter(isUpcomingSession)
-    .sort((a, b) =>
-      `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`)
-    )[0];
+    .sort(compareSessionSchedule)[0];
 
   return (
     <section className="sessions-section">
@@ -93,17 +104,20 @@ function NextSession({ onDetailSession, setActive }) {
               </span>
               <span className="meta-pill">
                 <AppIcon name="solar:clock-circle-bold" size={13} />
-                {session.time} WIB / {session.duration} menit
+                {session.time} - {endTime(session)} WIB
               </span>
             </div>
           </div>
-          <button
-            className="outline-button session-detail"
-            onClick={onDetailSession}
-          >
-            Detail Course
-            <AppIcon name="solar:alt-arrow-right-linear" size={20} />
-          </button>
+          <div className="session-actions">
+            <JoinSession key={session.id} session={session} />
+            <button
+              className="outline-button session-detail"
+              onClick={() => onDetailSession(session)}
+            >
+              Detail Course
+              <AppIcon name="solar:alt-arrow-right-linear" size={20} />
+            </button>
+          </div>
         </article>
       ) : (
         <EmptyState
@@ -294,6 +308,7 @@ export default function Dashboard({
           setActive={setActive}
         />
         <CourseRecommendations setActive={setActive} onCourseDetail={onCourseDetail} />
+        <CareerRoadmapEntry setActive={setActive} />
         <TeachBanner setActive={setActive} />
       </div>
       <aside className="dashboard-right">

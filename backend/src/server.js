@@ -6,6 +6,7 @@ const { sequelize } = require("./config/db");
 const app = express();
 
 app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
+app.use("/api/career", require("./routes/career"));
 app.use(express.json());
 
 require("./models");

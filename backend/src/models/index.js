@@ -7,6 +7,9 @@ const Course = require("./Course");
 const Tutor = require("./Tutor");
 const Enrollment = require("./Enrollment");
 const User = require("./User");
+const CareerProfile = require("./CareerProfile");
+CareerProfile.belongsTo(User, { foreignKey: "userId", as: "user" });
+User.hasOne(CareerProfile, { foreignKey: "userId", as: "careerProfile" });
 
 // Define associations (pastikan nama foreignKey sama dengan yang ada di models)
 if (Course && Tutor && typeof Course.belongsTo === "function") {
@@ -36,4 +39,5 @@ module.exports = {
   Tutor,
   Enrollment,
   User,
+  CareerProfile,
 };

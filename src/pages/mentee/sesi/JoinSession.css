@@ -1,0 +1,8 @@
+.join-session { display: grid; gap: 8px; max-width: 280px; }
+.join-session > button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; }
+.join-session > p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.session-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+@media (max-width: 600px) {
+  .sessions-row > .session-actions { grid-column: 2; justify-self: end; }
+  .session-card > .session-actions { width: 100%; align-items: stretch; }
+}

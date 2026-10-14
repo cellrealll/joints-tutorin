@@ -1,0 +1,33 @@
+import { useState } from "react";
+import AppIcon from "../../../components/common/AppIcon";
+import { courseCatalog } from "../../../state/courseCatalog";
+import { saveSkillAttempt } from "../../../state/careerStore";
+import { proficiencyLabels } from "../../../state/careerSkills";
+import { recommendedCourseStart } from "../../../state/careerModel";
+import useRoadmapProgress from "./useRoadmapProgress";
+import { CareerHero, CareerMeter, CareerPage, CareerTarget } from "./CareerUI";
+
+export default function SkillAnalysis({ setActive, onCourseDetail, onTutorProfile }) {
+  const { career, analysis, profile } = useRoadmapProgress();
+  const [assessment, setAssessment] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [feedback, setFeedback] = useState("");
+  const [review, setReview] = useState(null);
+  function start(skill) { setAssessment(skill); setAnswers({}); setReview(null); setFeedback(""); }
+  function submit(event) {
+    event.preventDefault();
+    try { saveSkillAttempt(assessment.id, answers); setReview({ skill: assessment, answers }); setAssessment(null); setFeedback("Assessment tersimpan. Analisis skill, roadmap, dan matching sudah diperbarui."); }
+    catch (error) { setFeedback(error.message); }
+  }
+  const next = analysis.gaps.find((skill) => !skill.assessed) || analysis.gaps[0];
+  return <CareerPage active="Skill Analysis" setActive={setActive}>
+    <CareerHero title="My Skill Analysis" text="Kenali kekuatanmu. Temukan skill yang perlu dilatih untuk langkah karier berikutnya." icon="career:chart"><CareerTarget /></CareerHero>
+    <div className="career-stats"><section><strong>{analysis.readiness}%</strong><span>Progres kompetensi {career.title}</span><CareerMeter value={analysis.readiness} label="Progres kompetensi karier" /></section><section><strong>{analysis.skills.filter((skill) => !skill.gap).length}/{analysis.skills.length}</strong><span>Skill mencapai target</span></section><section><strong>{analysis.gaps.length}</strong><span>Skill untuk dikembangkan</span>{next && <button className="text-link" onClick={() => start(next)}>Assess skill berikutnya <AppIcon name="career:right" size={16} /></button>}</section></div>
+    <p className="career-explainer">Target adalah panduan belajar Tutor.in, bukan standar resmi perekrutan. Progres = total level yang tercapai (maksimal target per skill) / total level target. Tes singkat bersifat formatif; skill tidak diberi label verified.</p>
+    <p className="activity-feedback" role="status">{feedback}</p>
+    {assessment && <section className="activity-panel career-assessment" aria-labelledby="career-assessment-title"><div className="career-section-heading"><div><span className="roadmap-eyebrow">ASSESSMENT PER KOMPETENSI</span><h2 id="career-assessment-title">{assessment.title}</h2></div><button className="activity-outline" onClick={() => setAssessment(null)}>Tutup</button></div><form aria-label="Skill assessment" onSubmit={submit}>{assessment.questions.map((question, index) => <fieldset key={question.prompt}><legend>{index + 1}. {question.prompt}</legend>{question.options.map((option, number) => <label key={option}><input required type="radio" name={`skill-question-${index}`} checked={answers[index] === number} onChange={() => setAnswers({ ...answers, [index]: number })} />{option}</label>)}</fieldset>)}<button className="activity-primary" type="submit">Simpan hasil assessment</button></form></section>}
+    {review && <section className="activity-panel career-review"><h2>Pembahasan {review.skill.title}</h2>{review.skill.questions.map((question, index) => <p key={question.prompt}><AppIcon name={review.answers[index] === question.correct ? "career:check" : "career:bulb"} size={18} />{question.prompt}<strong>{question.options[question.correct]}</strong></p>)}</section>}
+    <section className="activity-panel"><div className="career-section-heading"><h2>Skill saat ini & targetmu</h2><span className="career-badge">{career.title}</span></div><div className="career-skills-grid">{analysis.skills.map((skill) => <article className="career-skill-card" key={skill.id}><div className="career-section-heading"><h3>{skill.title}</h3><span className={`career-badge ${skill.gap ? "amber" : "green"}`}>{skill.gap ? "Perlu latihan" : "Target tercapai"}</span></div><div className="career-levels"><span>Saat ini<strong>{proficiencyLabels[skill.level]}</strong></span><span>Target<strong>{proficiencyLabels[skill.target]}</strong></span></div><CareerMeter value={Math.round(Math.min(skill.level, skill.target) / skill.target * 100)} label={`Progres ${skill.title}`} /><p>{skill.source}{skill.practiced && " / materi dipelajari"}. {skill.assessed ? "Hasil yang sudah ada digunakan kembali." : "Belum ada penilaian kompetensi khusus."}</p><div className="career-actions"><button className="activity-outline" onClick={() => start(skill)}>{skill.assessed ? "Assess ulang (opsional)" : "Assess This Skill"}</button><button className="activity-primary" onClick={() => onCourseDetail(skill.courseId)}>Improve This Skill</button></div>{skill.lessons.length === 0 && <small>Course terkait; latihan skill khusus tetap diperlukan.</small>}</article>)}</div></section>
+    <section className="activity-panel"><div className="career-section-heading"><h2>Langkah belajar personal</h2><button className="text-link" onClick={() => setActive("Career Roadmap")}>Lihat roadmap<AppIcon name="career:right" size={17} /></button></div><p className="career-explainer">Rekomendasi melewati materi hanya diberikan untuk assessment Advanced dengan semua prasyarat terpenuhi. Centang belajar mandiri atau satu skor total tidak membuka skip otomatis.</p><div className="career-recommendations">{[...new Set(analysis.gaps.map((skill) => skill.courseId))].map((id) => { const course = courseCatalog.find((item) => item.id === id); const step = recommendedCourseStart(id, profile); return <article key={id}><AppIcon name="career:book" size={28} /><div><h3>{course.title}</h3><p>Mulai sesi {step}: {course.sessions[step - 1]}</p><small>Rekomendasi peer tutor: {course.tutors[0].name}</small></div><div className="career-actions"><button className="activity-primary" onClick={() => onCourseDetail(id)}>Buka course</button><button className="activity-outline" onClick={() => onTutorProfile(course.tutors[0])}>Profil tutor</button></div></article>; })}{!analysis.gaps.length && <p>Semua target skill pada jalur ini sudah tercapai. Terapkan lewat proyek dan minta masukan mentor.</p>}</div></section>
+  </CareerPage>;
+}

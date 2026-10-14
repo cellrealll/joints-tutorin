@@ -1,0 +1,274 @@
+.session-detail-page {
+  min-width: 0;
+}
+
+.session-detail-back {
+  border: 0;
+  background: transparent;
+  color: var(--purple);
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 8px 0 8px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.session-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 341px;
+  align-items: start;
+  gap: 22px;
+}
+
+.session-detail-main {
+  min-width: 0;
+}
+
+.session-detail-panel,
+.session-evaluation-panel {
+  border: 1px solid #d9d9d9;
+  border-radius: 21px;
+  background: #fff;
+}
+
+.session-detail-panel {
+  min-height: 560px;
+  padding: 38px 54px 32px;
+}
+
+.session-detail-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 33px;
+}
+
+.session-detail-heading h1,
+.session-evaluation-heading h2 {
+  margin: 0;
+  color: var(--navy);
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.session-detail-heading p {
+  margin: 25px 0 0;
+  color: #69738a;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.session-status-pill {
+  min-height: 34px;
+  padding: 0 17px;
+  border-radius: 20px;
+  background: #fff4c7;
+  color: #dc8900;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.session-detail-panel > h2 {
+  margin: 0 0 28px;
+  color: var(--navy);
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.session-detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 33px;
+}
+
+.session-detail-item {
+  display: grid;
+  grid-template-columns: 31px minmax(0, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+
+.session-detail-item svg {
+  color: var(--purple);
+}
+
+.session-detail-item span {
+  display: block;
+  color: #9aa4b5;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.session-detail-item strong {
+  display: block;
+  color: var(--navy);
+  font-size: 17px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+.session-note-card {
+  margin-top: 32px;
+  min-height: 92px;
+  padding: 19px 25px;
+  border-radius: 14px;
+  background: #f6f8ff;
+}
+
+.session-note-card h3 {
+  margin: 0 0 11px;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.session-note-card p {
+  margin: 0;
+  color: #69738a;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.session-evaluation-panel {
+  margin-top: 20px;
+  padding: 28px 43px 21px;
+}
+
+.session-evaluation-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+
+.session-evaluation-heading span {
+  color: var(--purple);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.evaluation-item {
+  min-height: 75px;
+  padding: 18px 28px;
+  border: 1px solid #d9d9d9;
+  border-radius: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  background: #fbfcff;
+}
+
+.evaluation-item + .evaluation-item {
+  margin-top: 12px;
+}
+
+.evaluation-item h3 {
+  margin: 0 0 7px;
+  color: var(--navy);
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.evaluation-item p {
+  margin: 0;
+  color: #69738a;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.evaluation-button {
+  flex-shrink: 0;
+  min-width: 148px;
+  min-height: 38px;
+  padding: 9px 17px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.detail-teach-banner {
+  margin-top: 80px;
+  min-height: 73px;
+  padding: 14px 40px;
+  border-radius: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  background: var(--purple);
+  color: #fff;
+}
+
+.detail-teach-banner h2 {
+  margin: 0 0 3px;
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.detail-teach-banner p {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@media (max-width: 1450px) {
+  .session-detail-layout {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 18px;
+  }
+
+  .session-detail-panel {
+    padding: 34px 40px 30px;
+  }
+
+  .session-evaluation-panel {
+    padding-left: 34px;
+    padding-right: 34px;
+  }
+}
+
+@media (max-width: 1150px) {
+  .session-detail-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .session-detail-panel,
+  .session-evaluation-panel {
+    padding: 24px 18px;
+  }
+
+  .session-detail-heading,
+  .evaluation-item,
+  .detail-teach-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .session-detail-heading h1,
+  .session-evaluation-heading h2 {
+    font-size: 27px;
+  }
+
+  .evaluation-button {
+    width: 100%;
+  }
+
+  .detail-teach-banner {
+    margin-top: 28px;
+  }
+}

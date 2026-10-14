@@ -1,0 +1,90 @@
+.sessions-hero { display: flex; align-items: center; gap: 24px; min-height: 192px; padding: 28px; border-radius: 20px; background: var(--purple); color: #fff; }
+.sessions-hero > div:first-child { flex: 1; min-width: 0; }
+.sessions-hero > div > span { color: #ffe06e; font-size: 14px; font-weight: 700; }
+.sessions-hero h1 { margin: 12px 0; font-size: 31px; line-height: 1.25; }
+.sessions-hero p { margin: 0; font-size: 15px; line-height: 1.6; max-width: 550px; }
+.sessions-count { flex: 0 0 105px; min-height: 100px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; background: #ffffff20; border-radius: 16px; text-align: center; padding: 12px; }
+.sessions-count strong { font-size: 32px; }
+.sessions-count > span { color: #fff !important; font-size: 12px !important; }
+.sessions-content { margin-top: 24px; }
+.sessions-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sessions-section-heading h2 { margin: 0 0 7px; font-size: 25px; }
+.sessions-section-heading p { margin: 0; color: var(--muted); font-size: 13px; }
+.sessions-clear-date { display: flex; align-items: center; gap: 5px; border: 0; background: transparent; color: var(--purple); font-size: 12px; }
+.sessions-list { display: grid; gap: 16px; margin-top: 20px; animation: page-enter 220ms ease-out; }
+.sessions-row { display: flex; align-items: center; gap: 20px; padding: 20px; border: 1px solid #c5c6cf; border-radius: 8px; background: #fff; }
+.sessions-date { flex: 0 0 90px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 3px; min-height: 96px; padding: 10px 6px; border-radius: 8px; background: #f4efff; color: var(--purple); text-align: center; }
+.sessions-date span { font-size: 11px; font-weight: 650; }
+.sessions-date strong { font-size: 38px; line-height: 1.1; }
+.sessions-info { min-width: 0; flex: 1; }
+.sessions-info h3 { margin: 0 0 6px; font-size: 20px; line-height: 1.35; overflow-wrap: anywhere; }
+.sessions-info > p { margin: 0 0 8px; font-size: 14px; color: #65718d; }
+.sessions-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.sessions-time, .sessions-badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 18px; font-size: 10px; font-weight: 650; }
+.sessions-time { background: #e5dcff; color: #7542dd; }
+.sessions-badge.confirmed { background: #e4f2ff; color: #2674ab; }
+.sessions-badge.pending { background: #fff2d8; color: #936200; }
+.sessions-badge.completed { background: #def7ec; color: #217554; }
+.sessions-badge.cancelled { background: #ffe6ec; color: #b73759; }
+.sessions-detail { flex-shrink: 0; }
+.sessions-calendar h2 { display: flex; align-items: center; justify-content: space-between; }
+.sessions-month { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 14px; font-size: 13px; }
+.sessions-month button { display: grid; place-items: center; width: 30px; height: 30px; border: 0; border-radius: 6px; background: var(--page); color: var(--purple); }
+.sessions-calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.sessions-calendar-grid > span, .sessions-calendar-grid > button { display: grid; place-items: center; aspect-ratio: 1; min-width: 0; }
+.sessions-day-name { color: #8c96ad; font-size: 12px; font-weight: 700; }
+.sessions-calendar-grid > button { position: relative; padding: 0 0 5px; border: 1px solid transparent; border-radius: 50%; background: transparent; color: var(--navy); font-size: 12px; font-weight: 650; }
+.sessions-calendar-grid > button:hover { background: #eee7ff; }
+.sessions-calendar-grid > .has-upcoming-mentee { background: #efe7ff; color: #6534c8; }
+.sessions-calendar-grid > .has-upcoming-mentor { background: #dff6ef; color: #176854; }
+.sessions-calendar-grid > .has-history-mentee { background: #edf0f8; color: #52698c; }
+.sessions-calendar-grid > .has-history-mentor { background: #eff5e9; color: #59774b; }
+.sessions-calendar-grid > .has-cancelled { background: #ffe9ef; color: #a44460; }
+.sessions-calendar-grid > .has-mixed { background: #f0eef7; }
+.sessions-calendar-grid > .selected { outline: 2px solid var(--purple); outline-offset: 2px; }
+.sessions-calendar-grid > [aria-current="date"] { box-shadow: inset 0 0 0 2px #efb900; }
+.sessions-date-markers { position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); display: flex; gap: 2px; }
+.session-marker { display: inline-block; flex: 0 0 5px; width: 5px; height: 5px; border-radius: 50%; }
+.session-marker.upcoming-mentee { background: var(--purple); }
+.session-marker.upcoming-mentor { background: #13866c; }
+.session-marker.history-mentee { background: #7186ab; }
+.session-marker.history-mentor { background: #879e64; }
+.session-marker.cancelled { background: #c36481; }
+.sessions-calendar-legend { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 8px; margin-top: 20px; padding: 12px; border-radius: 8px; background: var(--page); color: #65718d; font-size: 10px; line-height: 1.4; }
+.sessions-calendar-legend > span { display: flex; align-items: center; gap: 6px; }
+.sessions-calendar-legend .session-marker { flex-basis: 7px; width: 7px; height: 7px; }
+.session-today-marker { flex: 0 0 10px; width: 10px; height: 10px; border: 2px solid #efb900; border-radius: 50%; }
+.sessions-today-button { display: flex; align-items: center; gap: 7px; margin: -4px 0 16px; padding: 5px 0; border: 0; background: transparent; color: #776000; font-size: 11px; }
+.sessions-today-button > span { width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%; border: 2px solid #efb900; }
+.sessions-role-filter { display: flex; align-items: center; gap: 18px; margin: 22px 0; }
+.sessions-role-filter > span { font-size: 13px; font-weight: 650; flex-shrink: 0; }
+.sessions-role-filter .activity-tabs { margin: 0; flex: 1; max-width: 420px; }
+.sessions-role-badge { display: inline-flex; padding: 5px 9px; border-radius: 18px; font-size: 10px; font-weight: 650; background: #efe7ff; color: #6534c8; }
+.sessions-role-badge.mentor { background: #dff6ef; color: #176854; }
+.sessions-row.upcoming-mentor { border-left: 3px solid #13866c; }
+.sessions-row.upcoming-mentor .sessions-date { background: #e7f7f1; color: #13866c; }
+.sessions-row.history-mentee { border-left: 3px solid #7186ab; }
+.sessions-row.history-mentee .sessions-date { background: #edf0f8; color: #52698c; }
+.sessions-row.history-mentor { border-left: 3px solid #879e64; }
+.sessions-row.history-mentor .sessions-date { background: #eff5e9; color: #59774b; }
+.sessions-badge.missed { background: #f0edf5; color: #756881; }
+.sessions-stat-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 20px 0; }
+.sessions-stat-grid > div { padding: 15px 8px; background: var(--page); border-radius: 8px; text-align: center; }
+.sessions-stat-grid strong { display: block; font-size: 26px; color: var(--purple); }
+.sessions-stat-grid span { display: block; margin-top: 7px; font-size: 10px; color: #65718d; }
+.sessions-demo-room { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 25px 10px; }
+.sessions-demo-room > svg { color: var(--purple); }
+.sessions-demo-room h3 { margin-bottom: 5px; }
+.sessions-demo-room p, .sessions-demo-room > span { color: var(--muted); font-size: 13px; }
+.sessions-demo-room > button { margin-top: 24px; }
+.sessions-room-button { width: 100%; margin-top: 20px; }
+.sessions-cancel { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.sessions-cancel p { flex-basis: 100%; }
+@media (max-width: 600px) { .sessions-hero { padding: 22px 18px; flex-wrap: wrap; gap: 16px; } .sessions-hero h1 { font-size: 26px; } .sessions-hero > div:first-child { flex-basis: 100%; } .sessions-count { min-height: 50px; flex-basis: auto; flex-direction: row; gap: 12px; padding: 10px 15px; } .sessions-count strong { font-size: 24px; } .sessions-row { flex-wrap: wrap; gap: 12px; padding: 16px; } .sessions-date { flex-basis: 65px; min-height: 85px; } .sessions-date strong { font-size: 30px; } .sessions-info h3 { font-size: 17px; } .sessions-detail { margin-left: auto; font-size: 12px; min-height: 36px; } .sessions-section-heading { flex-wrap: wrap; } }
+
+@media (max-width: 600px) {
+  .sessions-role-filter { flex-direction: column; align-items: stretch; gap: 10px; }
+  .sessions-role-filter .activity-tabs { max-width: none; }
+  .sessions-row { display: grid; grid-template-columns: 65px minmax(0, 1fr); }
+  .sessions-detail { grid-column: 2; justify-self: end; }
+}

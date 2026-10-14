@@ -1,0 +1,5 @@
+.mentor-list-card { position: relative; }
+.mentor-card-heart { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: #fff; color: #858298; }
+.mentor-card-heart:hover { background: #f1ecff; color: var(--purple); }
+.mentor-card-heart[aria-pressed="true"] { color: var(--purple); background: #f1ecff; }
+.mentor-card-error { font-size: 12px; color: #b72b46; }

@@ -1,0 +1,19 @@
+.history-list-heading { display: flex; align-items: center; justify-content: space-between; margin: 14px 0 10px; color: var(--muted); font-size: 12px; }
+.history-list-heading button { display: flex; align-items: center; gap: 6px; border: 0; background: transparent; color: var(--purple); font-weight: 650; font-size: 12px; }
+.history-list { display: grid; gap: 10px; animation: page-enter 220ms ease-out; }
+.history-row { display: flex; gap: 14px; align-items: center; min-height: 82px; padding: 17px; background: #fff; border: 1px solid var(--border); border-radius: 8px; }
+.history-icon { display: grid; place-items: center; width: 42px; height: 42px; flex: 0 0 42px; border-radius: 50%; }
+.history-icon.expense { background: #ffe5ec; color: #d5456b; }
+.history-icon.income { background: #e2f7ee; color: #25855b; }
+.history-description { min-width: 0; }
+.history-description h2 { margin: 0 0 5px; font-size: 16px; line-height: 1.4; overflow-wrap: anywhere; }
+.history-description p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+.history-amount { flex-shrink: 0; margin-left: auto; text-align: right; font-size: 16px; }
+.history-amount.expense strong { color: #d5456b; }
+.history-amount.income strong { color: #25855b; }
+.history-amount span { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; }
+.history-pagination { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.history-pagination button { display: grid; place-items: center; min-width: 34px; height: 34px; padding: 0 8px; border: 1px solid var(--border); border-radius: 8px; background: #fff; color: var(--muted); font-size: 14px; }
+.history-pagination [aria-current="page"] { background: var(--purple); color: #fff; border-color: var(--purple); }
+@media (max-width: 600px) { .history-row { flex-wrap: wrap; padding: 14px; gap: 10px; } .history-description { flex: 1; } .history-description h2 { font-size: 14px; } .history-amount { width: 100%; display: flex; justify-content: space-between; align-items: center; padding-left: 52px; font-size: 14px; } .history-amount span { margin: 0; } }
+.credit-history-page { display: block; width: 100%; max-width: 1200px; margin-inline: auto; }

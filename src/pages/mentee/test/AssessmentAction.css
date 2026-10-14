@@ -1,0 +1,10 @@
+.assessment-completed { display: grid; justify-items: end; gap: 6px; min-width: 150px; }
+.assessment-completed-label { display: flex; align-items: center; gap: 5px; color: #27825b; font-size: 12px; }
+.assessment-completed-score { display: flex; align-items: center; gap: 12px; }
+.assessment-completed-score > span { color: #737b91; font-size: 13px; }
+.assessment-completed-score > strong { color: var(--purple); font-size: 28px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.assessment-completed-score small { margin-left: 4px; color: #737b91; font-size: 13px; font-weight: 500; }
+.assessment-review-button { display: inline-flex; align-items: center; gap: 6px; padding: 3px 0; background: transparent; border: 0; color: var(--purple); font-size: 12px; }
+.assessment-review-button:hover { color: #5925c9; }
+.session-test-actions .assessment-completed { flex: 1; justify-items: start; min-width: 150px; }
+@media (max-width: 600px) { .evaluation-item .assessment-completed { justify-items: start; min-width: 0; } }

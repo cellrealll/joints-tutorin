@@ -1,0 +1,12 @@
+.search-input,
+.search-input:focus,
+.search-input:focus-visible,
+.search-input:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.search-input:focus-visible {
+  outline: none !important;
+}

@@ -1,0 +1,85 @@
+.mentor-journey { display: grid; gap: 12px; padding-top: 10px; }
+.mentor-credit-overview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 20px 0; }
+.mentor-credit-overview > div { display: flex; align-items: center; gap: 16px; padding: 0 24px; min-width: 0; }
+.mentor-credit-overview > div + div { border-left: 1px solid #e3e8f1; }
+.mentor-credit-overview h2 { margin: 0 0 5px; font-size: 14px; font-weight: 650; }
+.mentor-credit-overview strong { display: block; font-size: 28px; line-height: 1.2; }.mentor-credit-overview strong > span { font-size: 13px; font-weight: 500; color: #737b91; }
+.mentor-credit-overview p { margin: 5px 0 0; color: #737b91; font-size: 12px; line-height: 1.5; }
+.mentor-credit-icon { display: grid; place-items: center; flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%; }.mentor-credit-icon.earned { color: #27825b; background: #e0f2e7; }.mentor-credit-icon.wallet { color: #7c4dff; background: #eee8ff; }
+.mentor-wallet-history { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; margin-left: auto; border: 0; border-radius: 8px; background: transparent; color: var(--purple); }.mentor-wallet-history:hover { background: #eee8ff; }
+@media (max-width: 600px) { .mentor-credit-overview { grid-template-columns: minmax(0, 1fr); padding: 16px 0; gap: 16px; }.mentor-credit-overview > div { padding: 0 12px; gap: 12px; }.mentor-credit-overview > div + div { border-left: 0; border-top: 1px solid #e3e8f1; padding-top: 16px; }.mentor-credit-icon { width: 36px; height: 36px; }.mentor-credit-overview h2 { font-size: 13px; }.mentor-credit-overview p { font-size: 11px; }.mentor-credit-overview strong { font-size: 25px; } }
+.mentor-journey button { transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
+.mentor-journey-hero { position: relative; isolation: isolate; overflow: hidden; min-height: 176px; padding: 32px 50px; background: #eaf2e8; border-radius: 20px; }
+.mentor-journey-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: -1; }
+.mentor-journey-hero > div { max-width: 640px; }
+.mentor-journey-eyebrow { font-size: 11px; color: #28774e; font-weight: 750; }
+.mentor-journey-hero h1 { font-size: 32px; margin: 7px 0; line-height: 1.2; }
+.mentor-journey-hero p { font-size: 15px; line-height: 1.5; margin: 0; }
+.mentor-level-summary { display: grid; grid-template-columns: 1.05fr 1.2fr 1fr; align-items: center; gap: 28px; padding: 20px 28px; border: 1px solid var(--border); border-radius: 20px; background: #fff; }
+.mentor-current-level { display: flex; align-items: center; gap: 18px; border-right: 1px solid #e3e8f1; min-width: 0; }
+.mentor-level-badge { display: grid; place-items: center; width: 70px; height: 78px; flex-shrink: 0; background: #e5eaff; border: 5px solid #c6d7ff; border-radius: 25%; color: #7050f5; box-shadow: inset 0 0 0 3px #f4f5ff; }
+.mentor-summary-label { font-size: 11px; font-weight: 700; color: #7c7d87; }
+.mentor-current-level h2 { font-size: 23px; margin: 5px 0; line-height: 1.25; }
+.mentor-level-pill { display: inline-block; padding: 2px 20px; border-radius: 20px; background: #e0f0ff; color: #4378e8; font-size: 12px; font-weight: 700; }
+.mentor-total-credits { min-width: 0; }
+.mentor-total-credits > strong { display: block; font-size: 28px; margin: 4px 0; line-height: 1.2; }
+.mentor-total-credits > strong > span { color: #82838b; font-weight: 550; }
+.mentor-journey progress { appearance: none; display: block; border: 0; border-radius: 20px; height: 15px; width: 100%; overflow: hidden; background: #e1e8fa; }
+.mentor-journey progress::-webkit-progress-bar { background: #e1e8fa; border-radius: 20px; }
+.mentor-journey progress::-webkit-progress-value { background: #8157ff; border-radius: 20px; transition: width 400ms ease; }
+.mentor-journey progress::-moz-progress-bar { background: #8157ff; border-radius: 20px; }
+.mentor-next-level { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 20px 16px; min-height: 94px; border: 0; border-radius: 20px; background: #f4f1ff; color: var(--navy); text-align: left; }
+.mentor-next-level > svg:first-child { color: #f9b12a; flex-shrink: 0; }
+.mentor-next-level > svg:last-child { flex-shrink: 0; }
+.mentor-next-level span { font-size: 11px; line-height: 1.5; }
+.mentor-next-level strong { display: block; font-size: 17px; }
+.mentor-next-level:hover { background: #eae4ff; }
+.mentor-map { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 3.07; background: #c5e99d; }
+.mentor-map > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mentor-map-levels { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px; padding: 22px 18px; }
+.mentor-map-stop { position: relative; display: flex; flex-direction: column; align-items: stretch; justify-content: start; align-self: start; height: 75%; border: 0; background: none; padding: 0; text-align: left; color: var(--navy); min-width: 0; }
+.mentor-map-stop:nth-child(1) { margin-top: 20px; }.mentor-map-stop:nth-child(2) { margin-top: 12px; }.mentor-map-stop:nth-child(3) { margin-top: 7px; }.mentor-map-stop:nth-child(5) { margin-top: -10px; }
+.mentor-map-label { position: relative; display: flex; align-items: start; gap: 7px; background: #fff; border: 2px solid #fff; border-radius: 20px; padding: 11px 9px; box-shadow: 0 3px 5px #31484825; min-height: 85px; transition: transform 180ms ease; }
+.mentor-map-label::after { content: ""; position: absolute; left: 22px; bottom: -10px; border-style: solid; border-width: 10px 9px 0; border-color: #fff transparent transparent; }
+.mentor-map-label strong { display: block; font-size: 12px; line-height: 1.3; }
+.mentor-map-label div > span { display: block; font-size: 11px; line-height: 1.4; margin-top: 3px; }
+.mentor-map-icon { display: grid; place-items: center; width: 25px; height: 25px; flex-shrink: 0; border-radius: 50%; background: #e9e7ff; color: #7650f5; }
+.mentor-map-stop.complete .mentor-map-icon { color: #2dba6e; background: #dcffe7; }.mentor-map-stop.locked .mentor-map-icon { color: #92959c; background: #ededf0; }
+.mentor-map-stop.current .mentor-map-label { border-color: #ffdc32; background: #fffdec; }.mentor-map-stop.current .mentor-map-label::after { border-top-color: #ffdc32; }
+.mentor-map-stop:hover .mentor-map-label { transform: translateY(-4px); }.mentor-map-stop:focus-visible { outline: 2px solid var(--purple); outline-offset: 4px; border-radius: 8px; }
+.mentor-map-marker { position: absolute; bottom: 0; left: 30%; display: grid; place-items: center; width: 36px; height: 36px; border: 3px solid #fff; outline: 2px solid #c9cfff; border-radius: 50%; background: #8995cc; color: white; box-shadow: 0 3px 5px #31484825; }
+.mentor-map-stop.complete .mentor-map-marker { background: #42c67a; outline-color: #a6eac2; }.mentor-map-stop.current .mentor-map-marker { background: #7650f5; }
+.mentor-map-stop:nth-child(2) .mentor-map-marker { bottom: -15px; }.mentor-map-stop:nth-child(5) .mentor-map-marker { bottom: 35px; }
+.mentor-journey-bottom { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; }
+.mentor-missions, .mentor-rewards { min-width: 0; padding: 18px; border: 1px solid var(--border); border-radius: 20px; background: #fff; }
+.mentor-section-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }.mentor-section-heading > svg { color: #8655fa; flex-shrink: 0; }
+.mentor-section-heading h2 { font-size: 18px; line-height: 1.3; margin: 0; }.mentor-section-heading p { font-size: 11px; line-height: 1.4; margin: 3px 0 0; }
+.mentor-journey .text-link { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; }
+.mentor-section-heading > button { margin-left: auto; flex-shrink: 0; }
+.mentor-mission { display: grid; grid-template-columns: 36px minmax(0, 1.6fr) minmax(75px, 1fr) 56px 28px; gap: 10px; align-items: center; border: 1px solid #dde5fa; padding: 10px; border-radius: 8px; margin-top: 5px; }
+.mentor-mission-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #edf3ff; color: #3285ef; }.mentor-mission-icon.orange { background: #fff2e7; color: #ff9c23; }.mentor-mission-icon.gold { background: #fff8d8; color: #edb800; }
+.mentor-mission-copy { min-width: 0; }.mentor-mission h3 { font-size: 12px; margin: 0; line-height: 1.4; }.mentor-mission p { font-size: 10px; margin: 2px 0 0; line-height: 1.4; }
+.mentor-mission-meter { display: flex; align-items: center; gap: 7px; }.mentor-mission-meter progress { height: 12px; }.mentor-mission-meter span { font-size: 11px; color: #7b7b86; white-space: nowrap; }
+.mentor-mission-reward { display: flex; gap: 4px; align-items: center; font-size: 17px; }.mentor-mission-reward > svg { color: #e5b900; flex-shrink: 0; }.mentor-mission-reward small { display: block; font-size: 10px; line-height: 1; }
+.mentor-claim { display: grid; place-items: center; width: 28px; height: 34px; padding: 0; border: 0; border-radius: 6px; background: transparent; color: var(--purple); }.mentor-claim:hover:not(:disabled) { background: #eee8ff; transform: translateX(2px); }.mentor-claim:disabled { color: #32a66d; opacity: 1; }
+.mentor-reward-content { display: flex; align-items: center; gap: 16px; min-height: 168px; padding: 18px; border-radius: 8px; background: #fff8e2; }.mentor-reward-badge { color: #ffbd2c; flex-shrink: 0; filter: drop-shadow(0 3px 0 #e8a626); }
+.mentor-reward-content h3 { font-size: 19px; margin: 0 0 10px; }.mentor-reward-content ul { padding: 0; margin: 0 0 12px; list-style: none; }.mentor-reward-content li { display: flex; align-items: start; gap: 7px; font-size: 12px; line-height: 1.5; margin-top: 5px; }.mentor-reward-content li svg { color: #1bc278; flex-shrink: 0; }
+.mentor-journey-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+.mentor-dialog-badge { display: grid; place-items: center; background: #f0eaff; color: var(--purple); width: 78px; height: 78px; border-radius: 20px; }.mentor-journey-dialog > p { line-height: 1.6; }.mentor-dialog-missions .mentor-mission { grid-template-columns: 36px minmax(0, 1fr) 56px 28px; }.mentor-dialog-missions .mentor-mission-meter { grid-column: 2; grid-row: 2; }
+.app-shell .sidebar .sidebar-role-area { display: block; }
+.sidebar-role-switch { min-height: 34px; }.sidebar-role-switch.to-mentor { background: #dff1e7; color: #23764e; }.sidebar-role-switch.to-mentor:hover { background: #cce7d8; }.sidebar-role-switch > svg { flex-shrink: 0; }.sidebar-role-switch > span { min-width: 0; overflow-wrap: anywhere; }
+.sidebar-collapsed .sidebar .sidebar-role-area { padding: 0; border: 0; background: transparent; box-shadow: none; }.sidebar-collapsed .sidebar-teach-content, .sidebar-collapsed .sidebar-role-switch > span { display: none; }.sidebar-collapsed .sidebar-role-switch { min-height: 40px; padding: 8px; }
+@media (max-height: 650px) { .sidebar .sidebar-teach-content { display: none; }.sidebar .sidebar-role-area { padding: 0; background: transparent; border: 0; box-shadow: none; } }
+@media (max-width: 1250px) { .mentor-level-summary { gap: 16px; padding: 18px; }.mentor-current-level { gap: 10px; }.mentor-current-level h2 { font-size: 19px; }.mentor-level-badge { width: 52px; height: 62px; }.mentor-journey-bottom { grid-template-columns: 1fr; }.mentor-map-levels { gap: 12px; padding: 16px 10px; }.mentor-map-label { padding: 8px; gap: 5px; }.mentor-map-label div > span { font-size: 10px; }.mentor-map-label strong { font-size: 11px; } }
+@media (max-width: 1000px) { .mentor-level-summary { grid-template-columns: 1fr 1fr; }.mentor-next-level { grid-column: 1 / -1; min-height: 64px; padding: 12px 18px; justify-content: start; }.mentor-next-level > svg:last-child { margin-left: auto; }.mentor-map { aspect-ratio: auto; background: #f0f6eb; }.mentor-map > img { height: auto; aspect-ratio: 3.07; }.mentor-map-levels { position: static; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; padding: 12px; }.mentor-map-stop:nth-child(n) { margin: 0; height: auto; }.mentor-map-label { height: 100%; border-radius: 8px; flex-direction: column; }.mentor-map-label::after, .mentor-map-marker { display: none; } }
+@media (max-width: 800px) { .sidebar .sidebar-teach-content, .sidebar-role-switch > span { display: none; }.sidebar .sidebar-role-area { padding: 0; background: transparent; border: 0; box-shadow: none; }.sidebar-role-switch { min-height: 40px; padding: 8px; } }
+@media (max-width: 600px) { .mentor-journey-hero { padding: 24px 18px; }.mentor-journey-hero h1 { font-size: 27px; }.mentor-journey-hero p { font-size: 13px; }.mentor-desktop-break { display: none; }.mentor-level-summary { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 18px; }.mentor-current-level { border: 0; }.mentor-next-level { grid-column: auto; }.mentor-map-levels { grid-template-columns: minmax(0, 1fr); }.mentor-map-label { flex-direction: row; align-items: center; padding: 10px; gap: 10px; min-height: 60px; }.mentor-map-label strong { font-size: 13px; }.mentor-map-label div > span { font-size: 11px; }.mentor-missions, .mentor-rewards { padding: 14px; }.mentor-section-heading { flex-wrap: wrap; gap: 8px; }.mentor-section-heading > div { flex: 1; min-width: 120px; }.mentor-section-heading > button { margin-left: 36px; }.mentor-mission { grid-template-columns: 30px minmax(0, 1fr) 45px 28px; gap: 6px; padding: 8px; }.mentor-mission-icon { width: 30px; height: 30px; }.mentor-mission-meter { grid-column: 2; grid-row: 2; }.mentor-mission-reward { grid-column: 3; grid-row: 1 / 3; }.mentor-claim { grid-column: 4; grid-row: 1 / 3; }.mentor-reward-content { padding: 14px; gap: 12px; flex-wrap: wrap; }.mentor-reward-badge > svg { width: 52px; height: 52px; }.mentor-journey-footer { flex-wrap: wrap; }.mentor-journey-dialog { padding: 20px 14px; }.mentor-dialog-missions .mentor-mission { grid-template-columns: 30px minmax(0, 1fr) 45px 28px; } }
+@media (prefers-reduced-motion: reduce) { .mentor-journey button, .mentor-map-label, .mentor-journey progress::-webkit-progress-value { transition: none; }.mentor-map-stop:hover .mentor-map-label { transform: none; } }
+@media (max-width: 400px) {
+  .mentor-mission, .mentor-dialog-missions .mentor-mission { grid-template-columns: 30px minmax(0, 1fr) 28px; }
+  .mentor-mission-copy { grid-column: 2; grid-row: 1; overflow-wrap: anywhere; }
+  .mentor-mission-meter { grid-column: 2; grid-row: 2; }
+  .mentor-mission-reward { grid-column: 2; grid-row: 3; }
+  .mentor-claim { grid-column: 3; grid-row: 1 / 4; }
+  .mentor-journey-hero > img { opacity: .5; object-position: left; }
+}

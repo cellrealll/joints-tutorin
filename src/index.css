@@ -18,6 +18,47 @@
   --border: #D9D9D9;
 }
 
+.app-shell.mode-mentee {
+  --purple: #27864a;
+  --purple-light: #ccefd6;
+  --page: #f6f9ff;
+  --border: #dcebe1;
+  --career-dark: #247b43;
+  --career-light: #eefaf1;
+  --career-light-2: #dff5e5;
+  --career-ink: #247b43;
+  --career-body: #4b6856;
+  --career-line: #ccefd6;
+  --career-wash: #f6fbf7;
+  --leaf-green: #63ca76;
+}
+
+.app-shell.mode-mentor {
+  --career-dark: #5030a6;
+  --career-light: #f2ecff;
+  --career-light-2: #e5d9ff;
+  --career-ink: #663bc7;
+  --career-body: #576b86;
+  --career-line: #d7c5ff;
+  --career-wash: #f7f3ff;
+}
+
+.mode-mentee .sidebar { background: #f7fbff; border-right-color: #d9d9d9; }
+.mode-mentee .nav-item:hover,
+.mode-mentee .collapse-btn:hover,
+.mode-mentee .career-menu:has(.career-subitem.selected) > .career-menu-trigger { background: var(--career-light); }
+.mode-mentee .nav-item.selected { background: var(--career-light-2); }
+.mode-mentee .career-subitem:hover,
+.mode-mentee .career-subitem.selected { background: var(--career-light-2); }
+.mode-mentee .mini-cta { background: var(--career-light-2); }
+.mode-mentee .welcome-banner { background: linear-gradient(125deg, #edf3ff, #fff); color: var(--navy); }
+.mode-mentee .welcome-banner h1 span { color: var(--career-ink); }
+.mode-mentee .welcome-banner p { color: var(--career-body); }
+.mode-mentee .activity-primary:hover:not(:disabled),
+.mode-mentee .primary-button:hover:not(:disabled) { background: #206f3b; }
+.mode-mentee .activity-outline:hover:not(:disabled) { background: #f2fae9; }
+.mode-mentee .search-box:focus-within { box-shadow: 0 0 0 3px #63ca7633; }
+
 * {
   box-sizing: border-box;
 }
@@ -63,7 +104,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   outline-offset: 3px;
 }
 
-.page-view { animation: page-enter 260ms ease-out; }
+.page-view { animation: page-shift-in 180ms ease-out; }
+::view-transition-old(root) { animation: role-switch-out 170ms ease-in both; }
+::view-transition-new(root) { animation: role-switch-in 240ms ease-out both; }
 .progress-fill { transition: width 450ms ease; }
 .chart-bar { transform-origin: bottom; animation: chart-enter 550ms ease-out; }
 .notification-popover { animation: page-enter 180ms ease-out; }
@@ -103,6 +146,9 @@ dialog[open] { animation: page-enter 200ms ease-out; }
 
 button:active:not(:disabled) { transform: translateY(1px); }
 @keyframes page-enter { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes page-shift-in { from { transform: translateY(6px); } to { transform: translateY(0); } }
+@keyframes role-switch-out { to { opacity: 0; transform: translateY(-4px); } }
+@keyframes role-switch-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes chart-enter { from { transform: scaleY(.1); } to { transform: scaleY(1); } }
 @keyframes spinner-turn { to { transform: rotate(360deg); } }
 

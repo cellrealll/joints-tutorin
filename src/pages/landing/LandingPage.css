@@ -3,6 +3,7 @@
 .landing-background { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; pointer-events: none; }
 .landing-welcome { min-height: 100svh; padding: 90px 17.5% 150px; display: flex; align-items: flex-start; flex-direction: column; justify-content: center; }
 .landing-brand { position: absolute; top: 26px; left: 5%; }.landing-brand h1 { font-size: 28px; margin: 0; font-weight: 850; }.landing-brand span { color: #7c4dff; }
+.landing-brand img { display: block; width: 105px; height: 79px; object-fit: contain; mix-blend-mode: multiply; }
 .landing-intro { position: relative; z-index: 1; width: 710px; max-width: 100%; animation: landing-enter 600ms ease both; }
 .landing-eyebrow { display: inline-block; margin: 0 0 14px; padding: 9px 25px; border-radius: 30px; background: white; box-shadow: 0 3px 5px #24365e25; font-size: 15px; font-weight: 650; }
 .landing-intro h2 { margin: 0; font-size: 68px; font-weight: 850; line-height: 1.25; letter-spacing: 0; }.landing-intro h2 > span { color: #2c88ff; }
@@ -17,7 +18,9 @@
 .landing-role-heading { position: relative; z-index: 1; }.landing-role-eyebrow { margin: 0 0 10px; font-size: 11px; font-weight: 750; color: #3b6a51; }.landing-role-heading h2 { font-size: 55px; line-height: 1.2; font-weight: 850; margin: 0; outline: none; }.landing-role-heading h2 > span { color: #2c88ff; }.landing-role-heading > p:last-child { font-size: 19px; margin: 15px 0 0; font-weight: 600; }
 .landing-role-options { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; width: min(100%, 660px); }
 .landing-role-option { display: flex; align-items: center; flex-direction: column; padding: 28px 20px 24px; border: 1px solid; border-radius: 8px; min-width: 0; color: #19245f; box-shadow: 3px 5px 0 var(--role-shadow); transition: transform 200ms ease, box-shadow 200ms ease; }
-.landing-role-option.teach { --role-accent: #00bd70; --role-icon: #d9f7e5; --role-shadow: #b4ebcc; background: #effcf3; border-color: #d3f0df; }.landing-role-option.learn { --role-accent: #7c4dff; --role-icon: #ede5ff; --role-shadow: #d2c1ff; background: #f6f2ff; border-color: #e7dcff; }
+.landing-role-option.teach { --role-accent: #7043dd; --role-icon: #ede5ff; --role-shadow: #d2c1ff; background: #f6f2ff; border-color: #e7dcff; }.landing-role-option.learn { --role-accent: #3da85a; --role-icon: #e1f6e7; --role-shadow: #ccefd6; background: #f2fbf4; border-color: #ccefd6; }
+.landing-role-option.learn .landing-role-icon { color: #63ca76; }
+.landing-role-option.learn .landing-role-arrow { background: #63ca76; border-color: #e1f6e7; }
 .landing-role-option:hover { transform: translateY(-7px); box-shadow: 3px 12px 0 var(--role-shadow); }.landing-role-option:active { transform: translateY(-2px); }
 .landing-role-icon { display: grid; place-items: center; width: 114px; height: 95px; border-radius: 50%; background: var(--role-icon); color: var(--role-accent); margin-bottom: 22px; }
 .landing-role-prefix { font-size: 21px; font-weight: 750; }.landing-role-option > strong { font-size: 40px; line-height: 1.2; color: var(--role-accent); margin: 0 0 15px; font-weight: 850; }.landing-role-description { font-size: 15px; font-weight: 550; line-height: 1.5; }

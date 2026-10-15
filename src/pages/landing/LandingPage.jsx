@@ -4,6 +4,7 @@ import room from "../../assets/landing-study-room.png";
 import campus from "../../assets/landing-campus.png";
 import welcomeMascot from "../../assets/mascot-welcome.png";
 import readingMascot from "../../assets/mascot-reading.png";
+import expandedLogo from "../../../images/logos/logo1.png";
 import "./LandingPage.css";
 
 const features = [
@@ -27,7 +28,7 @@ export default function LandingPage({ onChooseRole }) {
   return <main className="landing-page">
     {!choosingRole ? <section className="landing-welcome" id="mulai" aria-labelledby="landing-title">
       <img className="landing-background" src={room} alt="" fetchPriority="high" />
-      <a className="landing-brand" href="#mulai" aria-label="Tutor.in beranda"><h1 id="landing-title">Tutor<span>.in</span></h1></a>
+      <a className="landing-brand" href="#mulai" aria-label="Tutor.in beranda"><h1 id="landing-title"><img src={expandedLogo} alt="Tutor.in" /></h1></a>
       <div className="landing-intro">
         <p className="landing-eyebrow">Siap belajar dengan cara paling fun?</p>
         <h2>Swap knowledge,<br /><span>Grow</span> together.</h2>

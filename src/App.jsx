@@ -1,10 +1,12 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import LandingPage from "./pages/landing/LandingPage";
 import Sidebar from "./components/layout/Sidebar";
 import Header from "./components/layout/Header";
 import SearchBar from "./components/common/SearchBar";
 import AppIcon from "./components/common/AppIcon";
+import TitoGuide from "./components/onboarding/TitoGuide";
 
 import Dashboard from "./pages/mentee/dashboard/Dashboard";
 import CareerRoadmap from "./pages/mentee/career/CareerRoadmap";
@@ -25,12 +27,14 @@ import PostTest from "./pages/mentee/test/PostTest";
 import { courseFor } from "./pages/mentee/test/testData";
 import { booking, tutor as bookingMentor } from "./pages/mentee/sessionData";
 import DashboardMentor from "./pages/mentor/dashboard/DashboardMentor";
+import MentorCertificates from "./pages/mentor/certificates/MentorCertificates";
 import { updateProfile, useProfile } from "./state/profile";
 
 import "./pages/mentee/dashboard/Dashboard.css";
 import "./pages/mentee/cari tutor/CariTutor.css";
 import "./pages/mentee/booking sesi/BookingSesi.css";
 import "./pages/mentee/detail sesi/DetailSesi.css";
+import "./styles/MenteeTheme.css";
 
 function AlternatePage({ active, setActive, onActivateMentor }) {
   const [error, setError] = useState("");
@@ -100,6 +104,7 @@ export default function App() {
   const [assessmentOrigin, setAssessmentOrigin] = useState("Sesi");
   const [courseDetailId, setCourseDetailId] = useState("");
   const [mentorshipCategory, setMentorshipCategory] = useState("Career Consultation");
+  const switchingRole = useRef(false);
 
   function setActive(page) {
     if (dashboardMode === "mentor" && ["Shop"].includes(page)) return;
@@ -111,10 +116,23 @@ export default function App() {
 
   function switchDashboard(mode) {
     if (mode === "mentor" && !profile.mentorActive) { updateActive("Jadi mentor"); return; }
-    setPreferredMode(mode);
+    if (switchingRole.current) return;
+    const change = () => {
+      setPreferredMode(mode);
+      updateActive("Beranda");
+      window.scrollTo({ top: 0, behavior: "instant" });
+    };
     try { localStorage.setItem("tutorin-dashboard-mode", mode); } catch { /* Mode switching still works without saved preferences. */ }
-    updateActive("Beranda");
-    window.scrollTo({ top: 0, behavior: "instant" });
+    if (mode === dashboardMode || !entered || !document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      change();
+      return;
+    }
+    switchingRole.current = true;
+    const transition = document.startViewTransition(() => flushSync(change));
+    transition.finished.then(
+      () => { switchingRole.current = false; },
+      () => { switchingRole.current = false; },
+    );
   }
 
   function activateMentor() {
@@ -178,11 +196,11 @@ export default function App() {
   }} />;
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell mode-${dashboardMode}`}>
       <Sidebar
         active={
           sessionPages.includes(active)
-            ? "Courses"
+            ? dashboardMode === "mentor" ? "Sesi" : "Courses"
             : active === "Profil mentor"
               ? profileOrigin
               : active
@@ -205,6 +223,8 @@ export default function App() {
         <div className="page-view" key={`${active}-${dashboardMode}`}>
           {active === "Beranda" && dashboardMode === "mentor" ? (
             <DashboardMentor onSessions={() => setActive("Sesi")} onHistory={() => setActive("Riwayat Kredit")} onSwitchMode={switchDashboard} />
+          ) : active === "Sertifikat Tutor" && dashboardMode === "mentor" ? (
+            <MentorCertificates onSessions={() => setActive("Sesi")} />
           ) : active === "Beranda" ? (
             <Dashboard
               setActive={setActive}
@@ -241,9 +261,9 @@ export default function App() {
           ) : active === "Akun" ? (
             <Profil setActive={setActive} />
           ) : active === "Sesi" ? (
-            <Sesi setActive={setActive} onDetailSession={openSessionDetail} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
+            <Sesi setActive={setActive} onDetailSession={openSessionDetail} dashboardMode={dashboardMode} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
           ) : active === "Courses" ? (
-            <Sesi setActive={setActive} onDetailSession={openSessionDetail} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
+            <Sesi setActive={setActive} onDetailSession={openSessionDetail} dashboardMode={dashboardMode} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
           ) : active === "Pre-test" && assessmentSession ? (
             <PreTest key={`${assessmentSession.id}-pre`} session={assessmentSession} courseId={assessmentSession.courseId || courseFor(assessmentSession.subject)}
               onBack={backFromAssessment} />
@@ -276,6 +296,7 @@ export default function App() {
           )}
         </div>
       </main>
+      <TitoGuide key={`${profile.email || profile.username}-${dashboardMode}`} profile={profile} role={dashboardMode} onNavigate={setActive} />
     </div>
   );
 }

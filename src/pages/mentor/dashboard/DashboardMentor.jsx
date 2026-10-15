@@ -31,11 +31,11 @@ export default function DashboardMentor({ onSessions, onHistory }) {
   const selectedLevel = detail?.level !== undefined ? mentorLevels[detail.level] : null;
   return <div className="mentor-journey">
     <header className="mentor-journey-hero"><img src={bannerImage} alt="" /><div><span className="mentor-journey-eyebrow">DASHBOARD MENTOR</span><h1>Perjalanan Mentor</h1><p>Naik level dengan mengajar, bantu lebih banyak mentee,<br className="mentor-desktop-break" /> dan kumpulkan kredit untuk membuka pencapaian baru!</p></div></header>
-    <section className="mentor-credit-overview" aria-label="Ringkasan kredit mentor">
+    <section className="mentor-credit-overview" data-guide-target="mentor-credit" aria-label="Ringkasan kredit mentor">
       <div><span className="mentor-credit-icon earned"><AppIcon name="fluent:hat-graduation-12-filled" size={25} /></span><div><h2>Total kredit mengajar</h2><strong>{credits} <span>kredit</span></strong><p>Akumulasi hasil mengajar untuk pencapaian level.</p></div></div>
       <div><span className="mentor-credit-icon wallet"><AppIcon name="solar:wallet-bold" size={25} /></span><div><h2>Saldo kredit saat ini</h2><strong>{data.balance} <span>kredit</span></strong><p>Saldo tersedia untuk dipakai belajar sebagai mentee.</p></div><button className="mentor-wallet-history" onClick={onHistory} aria-label="Lihat riwayat kredit" title="Riwayat kredit"><AppIcon name="solar:arrow-right-linear" size={22} /></button></div>
     </section>
-    <section className="mentor-level-summary" aria-label="Progres level mentor">
+    <section className="mentor-level-summary" data-guide-target="mentor-level" aria-label="Progres level mentor">
       <div className="mentor-current-level"><span className="mentor-level-badge"><AppIcon name={current.icon} size={39} /></span><div><span className="mentor-summary-label">LEVEL SAAT INI</span><h2>{current.name}</h2><span className="mentor-level-pill">Level {currentIndex + 1} dari 5</span></div></div>
       <div className="mentor-total-credits"><span className="mentor-summary-label">PROGRES LEVEL</span><strong>{credits} <span>/ {next?.threshold ?? mentorLevels.at(-1).threshold}</span></strong><progress max={next?.threshold ?? credits} value={credits} aria-label="Progres kredit mengajar" /></div>
       <button className="mentor-next-level" onClick={() => openDetail({ level: next ? currentIndex + 1 : currentIndex })}><AppIcon name="solar:cup-star-bold" size={44} /><span>{next ? `${next.threshold - credits} kredit lagi menuju` : "Semua level tercapai!"}<strong>{next?.name ?? current.name}</strong></span><AppIcon name="solar:alt-arrow-right-linear" size={22} /></button>

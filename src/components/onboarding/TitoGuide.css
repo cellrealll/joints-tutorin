@@ -1,0 +1,26 @@
+.tito-lock, .tito-shade { position: fixed; inset: 0; z-index: 90; }
+.tito-lock { background: transparent; cursor: default; }
+.tito-shade { z-index: 91; background: #10162fbd; pointer-events: none; }
+.tito-spotlight { position: fixed; z-index: 91; border: 2px solid #fff; border-radius: 16px; box-shadow: 0 0 0 9999px #10162fbd, 0 0 0 6px #fff8; pointer-events: auto; transition: top 220ms ease, left 220ms ease, width 220ms ease, height 220ms ease; }
+.tito-guide { position: fixed; z-index: 92; right: 22px; bottom: 20px; display: flex; flex-direction: column; width: min(375px, calc(100% - 24px)); height: min(335px, calc(100dvh - 40px)); padding: 18px; border: 1px solid #d8cef2; border-radius: 22px; background: #fff; box-shadow: 0 20px 60px #17234750; color: var(--navy); animation: tito-rise 220ms ease-out; }
+.mode-mentee .tito-guide { border-color: #b0e5cd; }
+.tito-guide-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.tito-guide-name { display: inline-flex; align-items: center; gap: 6px; color: var(--purple); font-size: 10px; font-weight: 800; letter-spacing: 1.1px; }
+.tito-guide-top > button { padding: 4px 6px; border: 0; background: transparent; color: #6d7486; font-size: 12px; font-weight: 650; }
+.tito-guide-top > button:hover { color: var(--purple); }
+.tito-guide-body { display: grid; grid-template-columns: minmax(0, 1fr) 116px; gap: 3px; align-items: end; flex: 1; min-height: 0; }
+.tito-guide-count { display: inline-block; margin: 12px 0 4px; color: var(--purple); font-size: 11px; font-weight: 750; }
+.tito-guide-body h2 { margin: 0 0 8px; font-size: 22px; line-height: 1.2; }
+.tito-guide-body p { margin: 0 0 7px; color: #56627a; font-size: 12px; line-height: 1.6; }
+.tito-guide-mascot { display: block; width: 120px; height: 160px; object-fit: contain; object-position: bottom; justify-self: end; filter: drop-shadow(0 7px 8px #251f3c15); }
+.tito-guide-progress { display: flex; gap: 6px; margin: 14px 0 16px; }
+.tito-guide-progress > span { flex: 1; height: 5px; border-radius: 5px; background: #e7e6ee; transition: background 180ms ease; }
+.tito-guide-progress > span.done { background: var(--purple); }
+.tito-guide-actions { display: flex; justify-content: space-between; gap: 10px; }
+.tito-guide-actions > button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 38px; padding: 8px 15px; border-radius: 10px; font-size: 12px; font-weight: 750; }
+.tito-secondary { border: 1px solid var(--border); background: #fff; color: var(--navy); }
+.tito-primary { border: 1px solid var(--purple); background: var(--purple); color: #fff; }
+@keyframes tito-rise { from { transform: translateY(12px); } to { transform: translateY(0); } }
+@media (max-width: 600px) { .tito-guide { right: 10px; bottom: 10px; height: min(320px, calc(100dvh - 20px)); padding: 14px; border-radius: 18px; }.tito-guide-body { grid-template-columns: minmax(0, 1fr) 88px; }.tito-guide-body h2 { font-size: 19px; }.tito-guide-body p { font-size: 11px; }.tito-guide-mascot { width: 90px; height: 130px; } }
+@media (max-height: 600px) { .tito-guide { max-height: calc(100dvh - 20px); overflow-y: auto; }.tito-guide-body { min-height: 0; } }
+@media (prefers-reduced-motion: reduce) { .tito-guide { animation: none; }.tito-guide-progress > span, .tito-spotlight { transition: none; } }

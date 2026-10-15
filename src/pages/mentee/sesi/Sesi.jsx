@@ -9,11 +9,15 @@ import { compareSessionSchedule, endTime, isUpcomingSession, sessionCategory, se
 import JoinSession from "./JoinSession";
 import useSessionClock from "./useSessionClock";
 
-export default function Sesi({ setActive, onDetailSession, initialRoleFilter = "Semua" }) {
+export default function Sesi({ setActive, onDetailSession, initialRoleFilter = "Semua", dashboardMode = "mentee" }) {
   const { sessions } = useTutorData();
   const [tab, setTab] = useState("Mendatang");
   const [roleFilter, setRoleFilter] = useState(initialRoleFilter);
   const [selectedDate, setSelectedDate] = useState("");
+  const mentorView = dashboardMode === "mentor";
+  const listTitle = mentorView
+    ? { Mendatang: "Sesi Mengajar Mendatang", Riwayat: "Riwayat Mengajar", Dibatalkan: "Sesi Dibatalkan" }[tab]
+    : { Mendatang: "Course Mendatang", Riwayat: "Riwayat Course", Dibatalkan: "Course Dibatalkan" }[tab];
   useSessionClock();
   const today = dateKey(new Date());
   const roleSessions = sessions.filter((session) => roleFilter === "Semua" || (roleFilter === "Mengajar" ? session.role === "mentor" : session.role !== "mentor"));
@@ -35,14 +39,14 @@ export default function Sesi({ setActive, onDetailSession, initialRoleFilter = "
 
   return <div className="activity-layout sessions-page">
     <div className="activity-main">
-      <section className="sessions-hero"><div><span>Courses Saya</span><h1>Kelola course dan jadwalmu</h1><p>Course terdaftar, jadwal mentor, riwayat belajar, dan konfirmasi mentor dalam satu kalender.</p></div>
+      <section className="sessions-hero"><div><span>{mentorView ? "Sesi Mengajar" : "Courses Saya"}</span><h1>{mentorView ? "Jadwal mengajarmu" : "Kelola course dan jadwalmu"}</h1><p>{mentorView ? "Lihat sesi bersama mentee, jadwal mendatang, dan riwayat mengajar dalam satu kalender." : "Course terdaftar, jadwal mentor, riwayat belajar, dan konfirmasi mentor dalam satu kalender."}</p></div>
         <div className="sessions-count"><strong>{upcoming.length}</strong><span>Jadwal mendatang</span></div>
       </section>
-      <div className="sessions-role-filter"><span>Aktivitas saya</span><div className="activity-tabs" aria-label="Filter peran">
+      {!mentorView && <div className="sessions-role-filter"><span>Aktivitas saya</span><div className="activity-tabs" aria-label="Filter peran">
         {["Semua", "Belajar", "Mengajar"].map((label) => <button key={label} aria-pressed={roleFilter === label} onClick={() => setRoleFilter(label)}>{label}</button>)}
-      </div></div>
+      </div></div>}
       <section className="sessions-content">
-        <div className="sessions-section-heading"><div><h2>{tab === "Mendatang" ? "Course Mendatang" : tab === "Riwayat" ? "Riwayat Course" : "Course Dibatalkan"}</h2><p>{visible.length} jadwal {selectedDate ? `pada ${formatDate(selectedDate)}` : "dalam daftar"}</p></div>
+        <div className="sessions-section-heading"><div><h2>{listTitle}</h2><p>{visible.length} jadwal {selectedDate ? `pada ${formatDate(selectedDate)}` : "dalam daftar"}</p></div>
           {selectedDate && <button className="sessions-clear-date" onClick={() => setSelectedDate("")}>Semua tanggal<AppIcon name="solar:close-circle-linear" size={16} /></button>}
         </div>
         <div className="activity-tabs" aria-label="Filter course">{["Mendatang", "Riwayat", "Dibatalkan"].map((label) => <button key={label} aria-pressed={tab === label} onClick={() => { setTab(label); setSelectedDate(""); }}>{label}</button>)}</div>
@@ -58,17 +62,17 @@ export default function Sesi({ setActive, onDetailSession, initialRoleFilter = "
               <div className="session-actions"><JoinSession session={session} /><button className="activity-outline sessions-detail" onClick={() => onDetailSession(session)}>Detail<AppIcon name="solar:alt-arrow-right-linear" size={17} /></button></div>
             </article>;
           })}
-          {!visible.length && <EmptyState title="Belum ada course terjadwal" description={selectedDate ? "Tidak ada jadwal course pada tanggal yang dipilih." : "Course yang sudah kamu daftar dan jadwalkan akan muncul di sini."} />}
+          {!visible.length && <EmptyState title={mentorView ? "Belum ada sesi mengajar" : "Belum ada course terjadwal"} description={selectedDate ? "Tidak ada jadwal pada tanggal yang dipilih." : mentorView ? "Sesi bersama mentee akan muncul di sini setelah terjadwal." : "Course yang sudah kamu daftar dan jadwalkan akan muncul di sini."} />}
         </div>
       </section>
-      <div className="activity-banner-footer"><TeachBanner setActive={setActive} /></div>
+      {!mentorView && <div className="activity-banner-footer"><TeachBanner setActive={setActive} /></div>}
     </div>
     <aside className="activity-side">
       <SessionCalendar sessions={roleSessions} selectedDate={selectedDate} onSelectDate={selectDate} />
       <section className="activity-panel sessions-progress"><h2>Progres Minggu Ini</h2>
-        <div className="sessions-stat-grid"><div><strong>{weeklyCompleted.length}</strong><span>Course selesai</span></div><div><strong>{weeklyCompleted.reduce((sum, session) => sum + session.duration, 0) / 60}</strong><span>Jam belajar</span></div><div><strong>{upcoming.length}</strong><span>Mendatang</span></div></div>
+        <div className="sessions-stat-grid"><div><strong>{weeklyCompleted.length}</strong><span>{mentorView ? "Sesi selesai" : "Course selesai"}</span></div><div><strong>{weeklyCompleted.reduce((sum, session) => sum + session.duration, 0) / 60}</strong><span>{mentorView ? "Jam mengajar" : "Jam belajar"}</span></div><div><strong>{upcoming.length}</strong><span>Mendatang</span></div></div>
         <div className="progress-track" role="progressbar" aria-label="Target lima sesi per minggu" aria-valuemin={0} aria-valuemax={5} aria-valuenow={Math.min(weeklyCompleted.length, 5)}><div className="progress-fill" style={{ width: `${Math.min(weeklyCompleted.length / 5, 1) * 100}%` }} /></div>
-        <p className="activity-muted">{weeklyCompleted.length} dari target 5 jadwal course minggu ini</p>
+        <p className="activity-muted">{weeklyCompleted.length} dari target 5 jadwal {mentorView ? "mengajar" : "course"} minggu ini</p>
       </section>
     </aside>
   </div>;

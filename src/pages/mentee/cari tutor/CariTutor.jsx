@@ -194,7 +194,7 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
         <div className="setup-step">
           <div className="setup-heading-inline">
             <h3>2. Pilih tutor</h3>
-            {(selectedTutor || selectedDay || selectedShift) && <button type="button" onClick={clearChoice}>Clear choice</button>}
+            {(selectedTutor || selectedDay || selectedShift) && <button type="button" onClick={clearChoice}>Hapus pilihan</button>}
           </div>
           <div className="setup-choice-list">
             {course.tutors.map((item) => (
@@ -204,18 +204,21 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
               </button>
             ))}
           </div>
-          <h3>3. Pilih jadwal</h3>
-          <div className="setup-choice-list compact">
-            {availableDays.map((day) => (
-              <button key={day} type="button" aria-pressed={selectedDay === day} onClick={() => setSelectedDay(day)}>
-                {dayMeta[day].label}
-              </button>
-            ))}
+          <div className="setup-schedule-section">
+            <h3>3. Pilih jadwal</h3>
+            <p>{tutor ? `Pilih hari belajar bersama ${tutor.name}.` : "Pilih tutor terlebih dahulu untuk melihat hari yang tersedia."}</p>
+            {tutor && <div className="setup-choice-list compact">
+              {availableDays.map((day) => (
+                <button key={day} type="button" aria-pressed={selectedDay === day} onClick={() => setSelectedDay(day)}>
+                  {dayMeta[day].label}
+                </button>
+              ))}
+            </div>}
+            {selectedShiftData && <p className="selected-shift-note">Jam mentor ini tetap: {selectedShiftData.label}, {selectedShiftData.range}</p>}
+            <button className="primary-button setup-submit" type="button" disabled={!selectedTutor || !selectedDay || !selectedShiftData} onClick={saveSchedule}>
+              Simpan jadwal course
+            </button>
           </div>
-          {selectedShiftData && <p className="selected-shift-note">Jam mentor ini tetap: {selectedShiftData.label}, {selectedShiftData.range}</p>}
-          <button className="primary-button setup-submit" type="button" disabled={!selectedTutor || !selectedDay || !selectedShiftData} onClick={saveSchedule}>
-            Simpan jadwal course
-          </button>
         </div>
       </div>
     </section>

@@ -107,6 +107,41 @@
 .roadmap-dashboard-entry h2 { margin: 0 0 5px; font-size: 19px; }
 .roadmap-dashboard-entry p { margin: 0; font-size: 12px; line-height: 1.6; color: #69738a; }
 .roadmap-dashboard-entry > button { flex-shrink: 0; font-size: 12px; }
+
+/* A clearer starting point and a connected path through the milestones. */
+.roadmap-hero {
+  isolation: isolate;
+  min-height: 296px;
+  padding: 38px 44px;
+  background: radial-gradient(circle at 81% 18%, #ffffff78 0 13%, transparent 13.3%), linear-gradient(125deg, var(--career-light-2), var(--career-light));
+  color: var(--navy);
+  box-shadow: 0 12px 25px #23755417;
+}
+.roadmap-hero::before, .roadmap-hero::after { content: ""; position: absolute; z-index: 0; pointer-events: none; border: 1px solid #ffffffb0; border-radius: 50%; }
+.roadmap-hero::before { width: 335px; height: 335px; right: 30px; top: -82px; }
+.roadmap-hero::after { width: 475px; height: 475px; right: -65px; top: -150px; }
+.roadmap-hero > img { position: relative; z-index: 1; filter: drop-shadow(0 15px 20px #23755425); }
+.roadmap-hero .roadmap-eyebrow { color: var(--career-ink); }
+.roadmap-hero p { color: var(--career-body); }
+.roadmap-hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.roadmap-hero-meta > span { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--career-line); border-radius: 999px; background: #ffffff99; color: var(--career-ink); font-size: 11px; font-weight: 700; }
+.roadmap-career-options > button { border-color: var(--career-line); box-shadow: 0 3px 12px #152b2310; transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease; }
+.roadmap-career-options > button:hover { transform: translateY(-2px); box-shadow: 0 8px 18px #152b231c; }
+.roadmap-career-options > button[aria-pressed="true"] { background: var(--career-light); box-shadow: 0 0 0 2px var(--career-line); }
+.roadmap-progress-summary { border-color: var(--career-line); box-shadow: 0 8px 24px #163b2d0d; }
+.roadmap-progress-ring { background: conic-gradient(var(--purple) var(--roadmap-progress), var(--career-light-2) 0); }
+.roadmap-next-step { padding: 16px 0 16px 22px; }
+.roadmap-next-step > strong { color: var(--career-ink); }
+.roadmap-section-heading > span, .roadmap-skill-icon, .roadmap-panel-icon { background: var(--career-light); }
+.roadmap-stage:not(:last-child)::before { background: var(--career-line); }
+.roadmap-stage.ongoing .roadmap-node { box-shadow: 0 0 0 5px var(--career-light-2); }
+.roadmap-stage.ongoing .roadmap-stage-card { box-shadow: 0 10px 24px #16482f1b; }
+.roadmap-stage-card { box-shadow: 0 3px 12px #1c42320c; transition: box-shadow 180ms ease; }
+.roadmap-stage-card:hover { box-shadow: 0 9px 22px #1c42321b; }
+.roadmap-course-link, .roadmap-dashboard-entry { background: var(--career-wash); }
+.roadmap-skill-tags > span { color: var(--career-ink); background: var(--career-light); }
+.roadmap-dashboard-entry { border-color: var(--career-line); }
+
 @media (max-width: 1150px) { .roadmap-layout { grid-template-columns: minmax(0, 1fr); } .roadmap-sidebar { grid-template-columns: repeat(2, minmax(0, 1fr)); } .roadmap-next-step { display: none; } }
 @media (max-width: 650px) {
   .roadmap-hero { padding: 25px 20px; gap: 0; } .roadmap-hero > div { max-width: 100%; } .roadmap-hero h2 { font-size: 31px; } .roadmap-hero p { font-size: 12px; max-width: 290px; } .roadmap-hero > img { position: absolute; right: -45px; top: -10px; width: 180px; opacity: .15; }
@@ -115,4 +150,12 @@
   .roadmap-journey { padding: 20px 12px; } .roadmap-section-heading { align-items: flex-start; } .roadmap-section-heading h2 { font-size: 18px; } .roadmap-section-heading > span { font-size: 9px; } .roadmap-legend { gap: 9px; font-size: 9px; }
   .roadmap-stage { padding-left: 35px; } .roadmap-stage:not(:last-child)::before { left: 12px; } .roadmap-node { width: 26px; height: 26px; top: 28px; font-size: 10px; } .roadmap-node > svg { width: 16px; } .roadmap-stage-toggle { padding: 14px 11px; gap: 8px; } .roadmap-skill-icon { width: 33px; height: 33px; flex-basis: 33px; border-radius: 9px; } .roadmap-skill-icon > svg { width: 22px; } .roadmap-stage-heading > strong { font-size: 14px; } .roadmap-stage-number { font-size: 8px; } .roadmap-stage-status { font-size: 9px; }
   .roadmap-stage-content { padding: 0 11px 14px; } .roadmap-stage-footer { flex-wrap: wrap; padding: 11px; } .roadmap-stage-footer > button { font-size: 10px; } .roadmap-sidebar { grid-template-columns: minmax(0, 1fr); } .roadmap-dashboard-entry { flex-wrap: wrap; gap: 12px; padding: 18px; } .roadmap-dashboard-entry > button { margin-left: auto; }
+}
+
+@media (max-width: 650px) {
+  .roadmap-hero { min-height: 300px; padding: 27px 22px; }
+  .roadmap-hero::before { right: -110px; }
+  .roadmap-hero::after { right: -195px; }
+  .roadmap-hero > img { z-index: 0; top: auto; right: -22px; bottom: -18px; width: 150px; opacity: .12; }
+  .roadmap-hero-meta { position: relative; z-index: 1; }
 }

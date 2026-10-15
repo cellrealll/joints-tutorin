@@ -1,0 +1,113 @@
+/* Fresh mint accents for learners; large page surfaces stay neutral. */
+.mode-mentee .sidebar,
+.mode-mentee .search-box { border-color: var(--border); }
+.mode-mentee .sidebar { background: #f7fbff; border-right-color: #d9d9d9; }
+.mode-mentee .nav-item:hover,
+.mode-mentee .collapse-btn:hover,
+.mode-mentee .career-subitem:hover,
+.mode-mentee .career-menu:has(.career-subitem.selected) > .career-menu-trigger { background: var(--career-light); }
+.mode-mentee .nav-item.selected,
+.mode-mentee .career-subitem.selected { background: var(--career-light-2); }
+.mode-mentee .teach-card { box-shadow: 0 3px 8px #27864a16; }
+.mode-mentee .mini-cta,
+.mode-mentee .meta-pill,
+.mode-mentee .course-mini-icon,
+.mode-mentee .tutor-badge,
+.mode-mentee .roadmap-skill-icon,
+.mode-mentee .roadmap-panel-icon { background: var(--career-light-2); }
+.mode-mentee .tito-guide { border-color: var(--career-line); }
+.mode-mentee .tito-guide-progress > span { background: var(--career-light); }
+.mode-mentee .tito-guide-progress > span.done { background: var(--leaf-green); }
+
+.mode-mentee .welcome-banner,
+.mode-mentee .roadmap-hero,
+.mode-mentee .career-feature-hero,
+.mode-mentee .career-feature-hero.green,
+.mode-mentee .portfolio-profile,
+.mode-mentee .course-hero { background: linear-gradient(125deg, #edf3ff, #fff); border: 1px solid #dfe7f2; color: var(--navy); }
+.mode-mentee .primary-button,
+.mode-mentee .activity-primary,
+.mode-mentee .tito-primary { background: var(--leaf-green); color: var(--navy); border-color: var(--leaf-green); }
+.mode-mentee .course-hero-actions .primary-button { background: var(--leaf-green); color: var(--navy); }
+.mode-mentee .button-yellow { background: #ffe27a; color: var(--career-dark); }
+.mode-mentee .button-white { color: var(--career-dark); }
+.mode-mentee .primary-button:hover:not(:disabled),
+.mode-mentee .activity-primary:hover:not(:disabled),
+.mode-mentee .tito-primary:hover:not(:disabled) { background: #4dbf68; border-color: #4dbf68; color: var(--navy); }
+.mode-mentee .progress-track,
+.mode-mentee .career-meter,
+.mode-mentee .roadmap-progress-ring { background-color: var(--career-light-2); }
+.mode-mentee .chart-bar { background: #a5e2b3; }
+.mode-mentee .chart-bar.bar-highlight { background: var(--purple); }
+.mode-mentee .empty-state,
+.mode-mentee .empty-icon { border-color: var(--career-line); }
+
+.mode-mentee .activity-tabs,
+.mode-mentee .sessions-date,
+.mode-mentee .sessions-time,
+.mode-mentee .sessions-role-badge,
+.mode-mentee .sessions-calendar-grid > .has-upcoming-mentee,
+.mode-mentee .sessions-calendar-grid > button:hover,
+.mode-mentee .shop-package.selected,
+.mode-mentee .shop-method.selected,
+.mode-mentee .shop-upload,
+.mode-mentee .shop-verification-status > span,
+.mode-mentee .career-recommendations > article,
+.mode-mentee .industry-review { background: var(--career-light); }
+.mode-mentee .sessions-time,
+.mode-mentee .sessions-calendar-grid > .has-upcoming-mentee,
+.mode-mentee .sessions-role-badge { color: var(--career-dark); }
+.mode-mentee .shop-method.selected,
+.mode-mentee .shop-upload,
+.mode-mentee .shop-package.selected { border-color: var(--career-line); }
+.mode-mentee .sessions-row.upcoming-mentee { border-left-color: var(--leaf-green); }
+.mode-mentee .sessions-row.upcoming-mentee .sessions-date { background: var(--career-light); color: var(--career-dark); }
+.mode-mentee .sessions-row.history-mentee { border-left-color: #a5e2b3; }
+.mode-mentee .sessions-row.history-mentee .sessions-date { background: var(--career-wash); color: var(--career-dark); }
+.mode-mentee .session-marker.history-mentee { background: #a5e2b3; }
+.mode-mentee .activity-outline:hover:not(:disabled),
+.mode-mentee .mentor-card-heart:hover,
+.mode-mentee .mentor-card-heart[aria-pressed="true"] { background: var(--career-light); }
+.mode-mentee .custom-dropdown[data-open="true"] .dropdown-trigger,
+.mode-mentee .dropdown-trigger:hover:not(:disabled) { border-color: var(--career-line); box-shadow: 0 0 0 3px #63ca7625; background: var(--career-wash); }
+.mode-mentee .dropdown-option[aria-selected="true"] { background: var(--career-light); color: var(--career-dark); }
+
+.mode-mentee .roadmap-career-options > button[aria-pressed="true"],
+.mode-mentee .roadmap-section-heading > span,
+.mode-mentee .roadmap-skill-tags > span,
+.mode-mentee .roadmap-course-link,
+.mode-mentee .roadmap-dashboard-entry,
+.mode-mentee .career-badge,
+.mode-mentee .career-job-card .career-match-summary { background: var(--career-light); }
+.mode-mentee .roadmap-career-options > button[aria-pressed="true"],
+.mode-mentee .roadmap-dashboard-entry { border-color: var(--career-line); }
+.mode-mentee .roadmap-stage.ongoing .roadmap-node { box-shadow: 0 0 0 4px var(--career-light-2); }
+.mode-mentee .roadmap-stage.completed .roadmap-node,
+.mode-mentee .roadmap-finished { background: var(--career-light-2); color: var(--career-dark); }
+.mode-mentee .roadmap-stage.completed .roadmap-stage-card { border-color: var(--career-line); }
+.mode-mentee .roadmap-stage:not(:last-child)::before { background: var(--career-line); }
+.mode-mentee .roadmap-stage.completed::before { background: var(--leaf-green); }
+.mode-mentee .roadmap-skill-tags > span { color: var(--career-dark); }
+.mode-mentee .roadmap-stage.completed .roadmap-stage-status,
+.mode-mentee .roadmap-summary-count,
+.mode-mentee .career-review strong,
+.mode-mentee .career-match-summary { color: var(--career-ink); }
+.mode-mentee .career-skill-card::before,
+.mode-mentee .career-job-card::before { background: linear-gradient(90deg, var(--purple), var(--leaf-green)); }
+.mode-mentee .career-meter > span { background: linear-gradient(90deg, var(--career-dark), var(--leaf-green)); }
+.mode-mentee .career-stat-primary .career-meter > span { background: var(--purple); }
+.mode-mentee .career-badge.green,
+.mode-mentee .industry-slot-list > button[aria-pressed="true"] { background: var(--career-light-2); color: var(--career-dark); }
+.mode-mentee .industry-slot-list > button { color: var(--career-dark); background: var(--career-wash); border-color: var(--career-line); }
+.mode-mentee .industry-slot-list > button[aria-pressed="true"] { border-color: var(--purple); box-shadow: 0 0 0 1px var(--purple); }
+
+.mode-mentee .test-option:hover,
+.mode-mentee .test-option[data-selected="true"],
+.mode-mentee .test-option-letter,
+.mode-mentee .test-mode-tabs button > span,
+.mode-mentee .test-crossword-cell[data-active="true"],
+.mode-mentee .test-clue[aria-pressed="true"],
+.mode-mentee .test-clue:hover { background: var(--career-light); }
+.mode-mentee .test-clue[aria-pressed="true"],
+.mode-mentee .test-crossword-cell { border-color: var(--career-line); }
+.mode-mentee .test-number-grid button[data-answered="true"] { background: var(--career-light-2); border-color: var(--career-line); color: var(--career-dark); }

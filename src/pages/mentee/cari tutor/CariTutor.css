@@ -50,13 +50,13 @@
 }
 
 .filter-select.open {
-  border-color: #c9bbff;
-  box-shadow: 0 0 0 3px #7848ff14;
+  border-color: var(--career-line);
+  box-shadow: 0 0 0 3px #63ca7625;
 }
 
 .filter-select.active {
-  border-color: #c9bbff;
-  background: #fbfaff;
+  border-color: var(--career-line);
+  background: var(--career-wash);
   color: var(--purple);
 }
 
@@ -102,7 +102,7 @@
   max-height: 245px;
   overflow: auto;
   padding: 7px;
-  border: 1px solid #ddd8ef;
+  border: 1px solid var(--career-line);
   border-radius: 14px;
   background: #fff;
   box-shadow: 0 16px 35px #19245f18;
@@ -124,12 +124,12 @@
 }
 
 .filter-option:hover {
-  background: #f2edff;
+  background: var(--career-light);
   color: var(--purple);
 }
 
 .filter-option.selected {
-  background: #eee8ff;
+  background: var(--career-light-2);
   color: var(--purple);
 }
 
@@ -138,7 +138,7 @@
   padding: 0 16px;
   border: 0;
   border-radius: 20px;
-  background: #eee8ff;
+  background: var(--career-light-2);
   color: var(--purple);
   font-size: 12px;
   font-weight: 800;
@@ -172,7 +172,7 @@
   width: 72px;
   height: 72px;
   border-radius: 18px;
-  background: #eee8ff;
+  background: var(--career-light-2);
   color: var(--purple);
   display: flex;
   align-items: center;
@@ -238,7 +238,7 @@
   min-height: 28px;
   padding: 6px 11px;
   border-radius: 16px;
-  background: #f1edff;
+  background: var(--career-light);
   color: var(--purple);
   font-size: 11px;
   font-weight: 800;
@@ -331,7 +331,7 @@
 }
 
 .favorite-button:hover {
-  background: #f2edff;
+  background: var(--career-light);
 }
 
 .favorite-button:active {
@@ -383,7 +383,7 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: #eee8ff;
+  background: var(--career-light-2);
   color: var(--purple);
   display: flex;
   align-items: center;
@@ -521,7 +521,7 @@
   width: 106px;
   height: 106px;
   border-radius: 50%;
-  border: 12px solid #d9ceff;
+  border: 12px solid var(--career-line);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -560,9 +560,9 @@
   grid-template-columns: 42px minmax(0, 1fr);
   gap: 14px;
   padding: 16px;
-  border: 1px solid #ece8fa;
+  border: 1px solid var(--career-line);
   border-radius: 16px;
-  background: #fbfaff;
+  background: var(--career-wash);
 }
 
 .session-number {
@@ -596,7 +596,7 @@
   gap: 18px;
   align-items: center;
   padding: 16px;
-  border: 1px solid #e3ddf8;
+  border: 1px solid var(--career-line);
   border-radius: 18px;
   background: #fff;
 }
@@ -613,7 +613,7 @@
 
 .course-tutor-card.selected {
   border-color: var(--purple);
-  box-shadow: 0 0 0 3px #7848ff12;
+  box-shadow: 0 0 0 3px #63ca7625;
 }
 
 .course-tutor-actions {
@@ -630,7 +630,7 @@
 }
 
 .setup-panel {
-  border-color: #cfc4ff;
+  border-color: var(--career-line);
 }
 
 .setup-grid {
@@ -673,6 +673,15 @@
   font-weight: 800;
 }
 
+.setup-schedule-section {
+  margin-top: 28px;
+  padding-top: 23px;
+  border-top: 1px solid var(--career-line);
+}
+
+.setup-schedule-section h3 { margin-bottom: 5px; }
+.setup-schedule-section > p:not(.selected-shift-note) { margin-bottom: 16px; line-height: 1.5; }
+
 .step-choice-list,
 .setup-choice-list {
   display: flex;
@@ -682,7 +691,7 @@
 
 .step-choice-list button,
 .setup-choice-list button {
-  border: 1px solid #ddd6fb;
+  border: 1px solid var(--career-line);
   border-radius: 12px;
   background: #fff;
   color: var(--navy);
@@ -700,8 +709,8 @@
 .step-choice-list button[aria-pressed="true"],
 .setup-choice-list button[aria-pressed="true"] {
   border-color: var(--purple);
-  background: #f5f1ff;
-  box-shadow: 0 0 0 3px #7848ff12;
+  background: var(--career-light);
+  box-shadow: 0 0 0 3px #63ca7625;
 }
 
 .step-choice-list button:disabled {

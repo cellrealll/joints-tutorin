@@ -83,8 +83,8 @@ export default function Sidebar({ active, setActive, isMentor, dashboardMode, on
         <div className="sidebar-teach-content">
         <div className="mascot-scene"><img className="sidebar-mascot" src={mascot} alt="" width="139" height="116" /></div>
 
-        <h3>Bersama, kita saling tumbuh!</h3>
-        <p>Ajarkan apa yang kamu kuasai, pelajari apa yang kamu butuhkan.</p>
+        <h3>{dashboardMode === "mentee" ? "Semangat belajar, kamu pasti bisa!" : "Yuk, bantu yang lain tumbuh!"}</h3>
+        <p>{dashboardMode === "mentee" ? "Temukan course yang kamu suka, mulai dari langkah kecil, dan rayakan setiap progresmu." : "Bagikan keahlianmu, dampingi mentee, dan lihat progres mereka berkembang."}</p>
         </div>
 
         <button className={`mini-cta sidebar-role-switch ${isMentor ? `to-${targetMode}` : ""}`} aria-label={roleLabel} title={roleLabel}

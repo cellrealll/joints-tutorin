@@ -9,7 +9,7 @@ import { compareSessionSchedule, endTime, isUpcomingSession, sessionCategory, se
 import JoinSession from "./JoinSession";
 import useSessionClock from "./useSessionClock";
 
-export default function Sesi({ setActive, onDetailSession, initialRoleFilter = "Semua", dashboardMode = "mentee" }) {
+export default function Sesi({ setActive, onDetailSession, onJoinSession, initialRoleFilter = "Semua", dashboardMode = "mentee" }) {
   const { sessions } = useTutorData();
   const [tab, setTab] = useState("Mendatang");
   const [roleFilter, setRoleFilter] = useState(initialRoleFilter);
@@ -56,10 +56,10 @@ export default function Sesi({ setActive, onDetailSession, initialRoleFilter = "
             return <article className={`sessions-row ${sessionCategory(session)}`} key={session.id} data-role={session.role}>
               <div className="sessions-date"><span>{formatDate(session.date, { weekday: "long", day: undefined, month: undefined, year: undefined })}</span><strong>{date.getDate()}</strong><span>{formatDate(session.date, { day: undefined, month: "short" })}</span></div>
               <div className="sessions-info"><h3>{session.subject}</h3><p>{session.role === "mentor" ? `Mengajar ${session.learner}` : `dengan mentor ${session.tutor}`}</p>
-                <div className="sessions-meta"><span className={`sessions-role-badge ${session.role}`}>{session.kind === "industry-mentorship" ? "Industry Mentor / Demo" : session.role === "mentor" ? "Mengajar" : "Belajar"}</span><span className="sessions-time"><AppIcon name="solar:clock-circle-bold" size={13} />{session.time} - {endTime(session)} WIB</span>
-                  <span className={`sessions-badge ${sessionStatus(session) === "Terlewat" ? "missed" : session.status === "Menunggu konfirmasi" ? "pending" : session.status === "Dibatalkan" ? "cancelled" : session.status === "Selesai" ? "completed" : "confirmed"}`}>{sessionStatus(session)}</span></div>
+                <div className="sessions-meta"><span className={`sessions-role-badge ${session.role}`}>{session.kind === "industry-mentorship" ? "Industry Mentor" : session.role === "mentor" ? "Mengajar" : "Belajar"}</span><span className="sessions-time"><AppIcon name="solar:clock-circle-bold" size={13} />{session.time} - {endTime(session)} WIB</span>
+                  <span className={`sessions-badge ${sessionStatus(session) === "Sedang sesi" ? "live" : sessionStatus(session) === "Terlewat" ? "missed" : session.status === "Menunggu konfirmasi" ? "pending" : session.status === "Dibatalkan" ? "cancelled" : session.status === "Selesai" ? "completed" : "confirmed"}`}>{sessionStatus(session)}</span></div>
               </div>
-              <div className="session-actions"><JoinSession session={session} /><button className="activity-outline sessions-detail" onClick={() => onDetailSession(session)}>Detail<AppIcon name="solar:alt-arrow-right-linear" size={17} /></button></div>
+              <div className="session-actions"><JoinSession session={session} onJoin={onJoinSession} /><button className="activity-outline sessions-detail" onClick={() => onDetailSession(session)}>Detail<AppIcon name="solar:alt-arrow-right-linear" size={17} /></button></div>
             </article>;
           })}
           {!visible.length && <EmptyState title={mentorView ? "Belum ada sesi mengajar" : "Belum ada course terjadwal"} description={selectedDate ? "Tidak ada jadwal pada tanggal yang dipilih." : mentorView ? "Sesi bersama mentee akan muncul di sini setelah terjadwal." : "Course yang sudah kamu daftar dan jadwalkan akan muncul di sini."} />}

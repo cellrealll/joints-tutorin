@@ -8,6 +8,7 @@ import LessonProgress from "../../../components/common/LessonProgress";
 import useRoadmapProgress from "../career/useRoadmapProgress";
 import { recommendedCourseStart } from "../../../state/careerModel";
 import { assessmentKey, assessmentResult, readAssessment } from "../test/assessmentStorage";
+import { courseFor, placementLevel } from "../test/testData";
 
 const shiftOptions = [
   { id: "shift-1", label: "Shift 1", time: "08:00", range: "08:00 - 10:00" },
@@ -110,7 +111,7 @@ function CourseProgressPanel() {
     <section className="panel course-progress-panel">
       <h3>Alur Course</h3>
       <div className="course-flow">
-        {["Daftar course", "Pre-test", "Pilih mulai sesi", "Pilih tutor dan jadwal", "Project dan sertifikat"].map((step, index) => (
+        {["Daftar course", "Placement Test", "Pilih mulai sesi", "Pilih tutor dan jadwal", "Project dan sertifikat"].map((step, index) => (
           <div className="course-flow-step" key={step}>
             <span>{index + 1}</span>
             <strong>{step}</strong>
@@ -159,7 +160,7 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
       time: selectedShiftData.time,
       duration: 120,
       credits: selectedTutorData.creditsCourse,
-      courseId: course.courseId,
+      courseId: courseFor(course.title) || course.courseId,
       catalogCourseId: course.id,
       startStep,
     });
@@ -170,10 +171,10 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
     <section className="course-panel setup-panel">
       <div className="course-section-heading">
         <div>
-          <span className="course-eyebrow">Setelah pre-test</span>
+          <span className="course-eyebrow">Setelah Placement Test</span>
           <h2>Atur course kamu</h2>
         </div>
-        <span className="course-pill">Skor {result.score}/100</span>
+        <span className="course-pill">{placementLevel(result.score)} · {result.score}/100</span>
       </div>
       <div className="setup-grid">
         <div className="setup-step">
@@ -230,10 +231,13 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
   const { sessions } = useTutorData();
   const learning = courseLearningProgress(course, sessions, enrollment);
   const { allAssessments } = useRoadmapProgress();
-  const rawPretest = readAssessment(assessmentKey(course.id, course.courseId, "pre"));
-  const ownPretest = rawPretest ? assessmentResult(rawPretest, course.courseId, "pre") : null;
-  const reusedPretest = allAssessments.find((assessment) => assessment.bank === course.courseId && assessment.mode === "pre");
-  const pretestResult = ownPretest || reusedPretest;
+  const placementBank = courseFor(course.title) || course.courseId;
+  const rawPretest = readAssessment(assessmentKey(course.id, placementBank, "pre"));
+  const legacyPretest = placementBank !== course.courseId ? readAssessment(assessmentKey(course.id, course.courseId, "pre")) : null;
+  const ownPretest = rawPretest ? assessmentResult(rawPretest, placementBank, "pre") : null;
+  const previousPretest = legacyPretest ? assessmentResult(legacyPretest, course.courseId, "pre") : null;
+  const reusedPretest = allAssessments.find((assessment) => assessment.bank === placementBank && assessment.mode === "pre");
+  const pretestResult = ownPretest || previousPretest || reusedPretest;
   const isEnrolled = enrollment?.registered;
 
   return (
@@ -255,7 +259,7 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
             </button>
             {isEnrolled && (
               <button className="primary-button secondary-action" type="button" disabled={Boolean(pretestResult)} onClick={() => onStartPreTest(course)}>
-                {pretestResult ? "Pre-test selesai" : "Mulai Pre-test"}
+                {pretestResult ? "Placement Test selesai" : "Mulai Placement Test"}
                 <AppIcon name="solar:clipboard-check-bold" size={18} />
               </button>
             )}
@@ -270,9 +274,9 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
         {isEnrolled && !pretestResult && (
           <section className="course-panel skill-gap-panel">
             <div>
-              <span className="course-eyebrow">Pre-test terkunci terbuka</span>
-              <h2>Kerjakan pre-test sebelum pilih jadwal</h2>
-              <p>Setelah pre-test selesai, kamu baru bisa memilih mulai dari sesi berapa, tutor, dan shift jadwal yang tersedia.</p>
+              <span className="course-eyebrow">Placement Test tersedia</span>
+              <h2>Kerjakan Placement Test sebelum pilih jadwal</h2>
+              <p>Hasil tes membantu menentukan titik mulai belajar. Setelah selesai, kamu bisa memilih sesi awal, tutor, dan jadwal.</p>
             </div>
             <div className="score-ring pending-score">
               <AppIcon name="solar:lock-keyhole-unlocked-linear" size={38} />
@@ -283,7 +287,7 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
 
         {isEnrolled && pretestResult && (
           <>
-          {!ownPretest && <p className="activity-feedback">Hasil pre-test dari bank soal yang sama digunakan kembali. Rekomendasi mulai materi tetap mengikuti kompetensi dan prasyarat, bukan skor total.</p>}
+          {!ownPretest && <p className="activity-feedback">Hasil Placement Test sebelumnya digunakan kembali. Rekomendasi mulai materi tetap mengikuti kompetensi dan prasyarat, bukan skor total.</p>}
           <ScheduleSetup
             course={course}
             result={pretestResult}
@@ -360,7 +364,7 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
           <h2 id="course-confirm-title">Daftar course?</h2>
           <button aria-label="Tutup konfirmasi" onClick={() => confirmRef.current?.close()}><AppIcon name="solar:close-circle-linear" size={24} /></button>
         </div>
-        <p>Kamu akan terdaftar di {course.title}. Setelah itu pre-test terbuka, lalu jadwal bisa dipilih setelah pre-test selesai.</p>
+        <p>Kamu akan terdaftar di {course.title}. Setelah itu Placement Test terbuka, lalu jadwal bisa dipilih setelah tes selesai.</p>
         <div className="test-confirm-actions">
           <button className="activity-outline" type="button" onClick={() => confirmRef.current?.close()}>Batal</button>
           <button className="activity-primary" type="button" onClick={() => { onEnroll(course.id); confirmRef.current?.close(); }}>Ya, daftar</button>

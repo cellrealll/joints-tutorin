@@ -27,8 +27,10 @@ export function sessionCategory(session) {
   return `${isUpcomingSession(session) ? "upcoming" : "history"}-${session.role === "mentor" ? "mentor" : "mentee"}`;
 }
 
-export function sessionStatus(session) {
-  if (session.status !== "Selesai" && session.status !== "Dibatalkan" && !isUpcomingSession(session)) return "Terlewat";
+export function sessionStatus(session, now = Date.now()) {
+  const start = sessionStart(session);
+  if (session.status === "Dikonfirmasi" && now >= start && now < start + session.duration * 60000) return "Sedang sesi";
+  if (session.status !== "Selesai" && session.status !== "Dibatalkan" && now >= start + session.duration * 60000) return "Terlewat";
   return session.status;
 }
 

@@ -9,14 +9,14 @@ import "./Test.css";
 export default function PostTest({ session, courseId, onBack }) {
   const [tab, setTab] = useState("crossword");
   const course = courses[courseId];
-  const { attempt, update, submit, remaining, saveStatus } = useAssessment(session.id, courseId, "post");
+  const { attempt, update, submit, justSubmitted, remaining, saveStatus } = useAssessment(session.id, courseId, "post");
   const words = attempt.puzzle.words;
   const filledWords = words.filter((word) => word.cells.every((key) => attempt.cells[key])).length;
   const answered = course.post.filter((question, index) => question.type === "short" ? String(attempt.answers[index] || "").trim() : attempt.answers[index] !== undefined).length;
   const completed = filledWords + answered, total = words.length + course.post.length;
   return <div className="test-page">
     <TestHeader title="Post-test" subtitle="Rangkai kata, pecahkan soal, dan rayakan progres belajarmu." session={session} onBack={onBack} />
-    {attempt.submitted ? <TestResult courseId={courseId} mode="post" attempt={attempt} onBack={onBack} /> : <>
+    {attempt.submitted ? <TestResult courseId={courseId} mode="post" attempt={attempt} celebrate={justSubmitted} onBack={onBack} /> : <>
       <div className="test-post-status"><TestProgress value={completed} total={total} label={`${completed} dari ${total} tantangan terisi`} /><TestTimer remaining={remaining} /></div>
       <div className="test-mode-tabs" role="tablist" aria-label="Bagian post-test" onKeyDown={(event) => {
         if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {

@@ -84,11 +84,33 @@
 .test-mixed-question:first-child { padding-top: 0; }.test-mixed-question h2 { margin: 14px 0 20px; font-size: 21px; line-height: 1.5; }
 .test-mixed-question .test-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .test-short-answer { width: min(100%, 330px); padding: 14px 16px; border: 1px solid #c4c8d6; border-radius: 8px; background: #fff; color: var(--navy); font-size: 18px; }
+.test-practice-label { display: inline-flex; align-items: center; gap: 6px; margin: -12px 0 18px; padding: 7px 11px; border-radius: 999px; background: #e6f6e9; color: #247b43; font-size: 12px; font-weight: 750; }
+.test-code-input { overflow: hidden; border: 1px solid #ced8e5; border-radius: 13px; background: #f7f9fc; }
+.test-code-heading { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 11px 15px; border-bottom: 1px solid #ced8e5; color: #50627a; font-size: 11px; font-weight: 700; }
+.test-code-input pre { overflow-x: auto; margin: 0; padding: 17px; color: #e7eefb; background: #1b2344; font: 13px/1.6 Consolas, Monaco, monospace; white-space: pre-wrap; }
+.test-code-input textarea { display: block; width: 100%; min-height: 110px; padding: 16px; border: 0; resize: vertical; outline: none; background: #fff; color: #1b2344; font: 14px/1.6 Consolas, Monaco, monospace; }
+.test-code-input textarea:focus-visible { outline: 3px solid var(--purple-light); outline-offset: -3px; }
+.test-code-input > p { margin: 0; padding: 10px 15px; border-top: 1px solid #e1e6ed; color: #66718b; font-size: 11px; line-height: 1.5; }
+.test-celebration { width: min(440px, calc(100vw - 30px)); text-align: center; border: 1px solid #ded1ff; border-radius: 24px; box-shadow: 0 22px 60px #1723474d; }
+.test-celebration::backdrop { background: #111831a6; }
+.test-celebration-emoji { display: block; margin: 0 auto 10px; font-size: 48px; }
+.test-celebration h2 { margin: 8px 0; font-size: 27px; }.test-celebration p { color: #66718b; line-height: 1.6; }
+.test-celebration > strong { display: block; margin: 15px 0 20px; color: var(--purple); font-size: 17px; }.test-celebration .activity-primary { width: 100%; justify-content: center; }
 .test-result-summary { display: flex; align-items: center; gap: 24px; padding: 28px 0; border-block: 1px solid #dddfea; }
 .test-result-icon { display: grid; place-items: center; width: 85px; height: 85px; border-radius: 50%; background: #fff0bf; color: #b68300; flex-shrink: 0; }
 .test-result-summary h2 { margin: 8px 0; font-size: 25px; }.test-result-summary p { margin: 6px 0; font-size: 14px; color: #737b91; }
 .test-score { margin-left: auto; display: grid; gap: 4px; text-align: center; flex-shrink: 0; }.test-score strong { color: var(--purple); font-size: 48px; line-height: 1; }.test-score span { color: #737b91; font-size: 12px; }
 .test-result-note { color: #65708a; font-size: 15px; line-height: 1.7; margin: 24px 0; }.test-review-title { margin: 40px 0 18px; font-size: 23px; }
+.mode-mentee .test-option:hover,
+.mode-mentee .test-option[data-selected="true"],
+.mode-mentee .test-clue:hover,
+.mode-mentee .test-clue[aria-pressed="true"],
+.mode-mentee .test-mode-tabs button > span { background: var(--career-light-2); }
+.mode-mentee .test-option:focus-within { outline-color: var(--career-line); }
+.mode-mentee .test-option-letter,
+.mode-mentee .test-crossword-cell[data-active="true"] { background: var(--career-light-2); }
+.mode-mentee .test-crossword-cell { border-color: var(--career-line); }
+.mode-mentee .test-clue[aria-pressed="true"] { border-color: var(--career-line); }
 .test-review { border-bottom: 1px solid #dfe2eb; }.test-review summary { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 20px 0; list-style: none; font-size: 14px; line-height: 1.6; }
 .test-review summary::-webkit-details-marker { display: none; }.test-review summary > svg { color: #bf5465; flex-shrink: 0; }.test-review[data-correct="true"] summary > svg { color: #34916a; }
 .test-review summary > strong { margin-left: auto; color: #737b91; font-size: 12px; white-space: nowrap; }.test-review > div { padding: 0 0 14px 33px; color: #66718b; font-size: 14px; line-height: 1.6; }

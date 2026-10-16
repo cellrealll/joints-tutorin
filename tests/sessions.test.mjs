@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { canJoinSession, compareSessionSchedule, isUpcomingSession, sessionStart } from "../src/pages/mentee/sesi/sessionUtils.js";
+import { canJoinSession, compareSessionSchedule, isUpcomingSession, sessionStart, sessionStatus } from "../src/pages/mentee/sesi/sessionUtils.js";
 import { demoOpeningCredits, migrateDemoCredits } from "../src/state/creditLedger.js";
 
 const session = { id: "session-1", date: "2026-10-14", time: "10:00", duration: 120, status: "Dikonfirmasi" };
@@ -13,6 +13,14 @@ test("join opens exactly ten minutes before the WIB schedule and closes at sessi
   assert.equal(canJoinSession(session, start), true);
   assert.equal(canJoinSession(session, start + 120 * 60000 - 1), true);
   assert.equal(canJoinSession(session, start + 120 * 60000), false);
+});
+
+test("confirmed session shows Sedang sesi during its scheduled window", () => {
+  const start = sessionStart(session);
+  assert.equal(sessionStatus(session, start - 1), "Dikonfirmasi");
+  assert.equal(sessionStatus(session, start), "Sedang sesi");
+  assert.equal(sessionStatus(session, start + session.duration * 60000 - 1), "Sedang sesi");
+  assert.equal(sessionStatus(session, start + session.duration * 60000), "Terlewat");
 });
 
 test("pending, completed, and cancelled sessions cannot join", () => {

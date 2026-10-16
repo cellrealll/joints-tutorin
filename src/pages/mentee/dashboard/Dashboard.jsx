@@ -2,7 +2,7 @@
 import AppIcon from "../../../components/common/AppIcon";
 import { dateKey, formatDate, useTutorData } from "../../../state/tutorStore";
 import { EmptyState } from "../../../components/common/ActivityUI";
-import { compareSessionSchedule, endTime, isUpcomingSession } from "../sesi/sessionUtils";
+import { compareSessionSchedule, endTime, isUpcomingSession, sessionStatus } from "../sesi/sessionUtils";
 import JoinSession from "../sesi/JoinSession";
 import useSessionClock from "../sesi/useSessionClock";
 import { useProfile } from "../../../state/profile";
@@ -70,7 +70,7 @@ function SectionHeading({ icon, title, action, onAction }) {
   );
 }
 
-function NextSession({ onDetailSession, setActive }) {
+function NextSession({ onDetailSession, onJoinSession, setActive }) {
   useSessionClock();
   const { sessions } = useTutorData();
   const session = sessions
@@ -92,6 +92,7 @@ function NextSession({ onDetailSession, setActive }) {
           </div>
           <div className="session-info">
             <h3>{session.subject}</h3>
+            {sessionStatus(session) === "Sedang sesi" && <span className="dashboard-session-live">● Sedang sesi</span>}
             <p>
               {session.role === "mentor"
                 ? `Mengajar ${session.learner}`
@@ -109,7 +110,7 @@ function NextSession({ onDetailSession, setActive }) {
             </div>
           </div>
           <div className="session-actions">
-            <JoinSession key={session.id} session={session} />
+            <JoinSession key={session.id} session={session} onJoin={onJoinSession} />
             <button
               className="outline-button session-detail"
               onClick={() => onDetailSession(session)}
@@ -297,6 +298,7 @@ export function TeachBanner({ setActive }) {
 export default function Dashboard({
   setActive,
   onDetailSession = () => setActive("Sesi"),
+  onJoinSession,
   onCourseDetail = () => setActive("Cari course"),
 }) {
   return (
@@ -305,6 +307,7 @@ export default function Dashboard({
         <WelcomeBanner setActive={setActive} />
         <NextSession
           onDetailSession={onDetailSession}
+          onJoinSession={onJoinSession}
           setActive={setActive}
         />
         <CourseRecommendations setActive={setActive} onCourseDetail={onCourseDetail} />

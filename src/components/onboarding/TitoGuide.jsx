@@ -9,14 +9,14 @@ const guideSteps = {
   mentee: [
     { title: "Halo, aku Tito!", text: "Selamat datang di Tutor.in! Di sini kamu bisa belajar dari sesama mahasiswa, mengembangkan skill, dan menyiapkan kariermu.", image: titoWelcome, page: "Beranda", target: "brand" },
     { title: "Temukan course yang pas", text: "Cari course dan mentor sesuai skill yang ingin kamu pelajari. Kamu bisa mulai dari rekomendasi yang paling cocok.", image: titoReading, page: "Cari course", target: "nav-cari-course" },
-    { title: "Pantau sesi belajarmu", text: "Di Courses ada jadwal, detail booking, dan tombol Join Session yang aktif mulai 10 menit sebelum sesi.", image: titoReading, page: "Courses", target: "nav-courses" },
+    { title: "Pantau sesi belajarmu", text: "Di Courses ada jadwal, detail booking, dan tombol Masuk sesi yang aktif mulai 10 menit sebelum sesi setelah mentor membagikan link Zoom.", image: titoReading, page: "Courses", target: "nav-courses" },
     { title: "Rancang langkah kariermu", text: "Buka menu Karier untuk Roadmap, Skill Analysis, Portfolio, Mentorship, dan peluang magang.", image: titoCheer, page: "Career Roadmap", target: "nav-karier" },
     { title: "Kenali kreditmu", text: "Saldo kredit dan semua transaksi belajarmu ada di sini. Kamu juga bisa memperoleh kredit dengan mengajar sebagai mentor.", image: titoWelcome, page: "Riwayat Kredit", target: "credit-balance" },
   ],
   mentor: [
     { title: "Halo, aku Tito!", text: "Selamat datang di Tutor.in! Sebagai mentor, kamu bisa berbagi ilmu, mendampingi mentee, dan mengumpulkan kredit dari sesi mengajar.", image: titoWelcome, page: "Beranda", target: "brand" },
     { title: "Lihat perkembanganmu", text: "Dashboard Mentor memperlihatkan level, progres mengajar, dan misi yang bisa kamu selesaikan.", image: titoCheer, page: "Beranda", target: "mentor-level" },
-    { title: "Atur sesi mengajar", text: "Di Sesi Mengajar kamu bisa melihat jadwal, detail sesi, dan riwayat pertemuan dengan mentee.", image: titoReading, page: "Sesi", target: "nav-sesi" },
+    { title: "Atur sesi mengajar", text: "Di Sesi Mengajar kamu bisa melihat jadwal, memulai Zoom dari detail sesi, dan membagikan link agar mentee bisa bergabung.", image: titoReading, page: "Sesi", target: "nav-sesi" },
     { title: "Pantau hasil mengajar", text: "Riwayat Kredit mencatat kredit yang masuk dan saldo yang bisa kamu gunakan saat belajar.", image: titoCheer, page: "Riwayat Kredit", target: "credit-balance" },
     { title: "Bisa kembali belajar", text: "Satu akun punya dua peran. Gunakan tombol Dashboard mentee untuk kembali belajar kapan saja.", image: titoWelcome, page: "Beranda", target: "role-switch" },
   ],

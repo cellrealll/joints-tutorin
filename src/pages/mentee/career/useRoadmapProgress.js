@@ -9,6 +9,7 @@ import { careerFor } from "./roadmapData";
 import { useCareerState } from "../../../state/careerStore";
 import { buildSkillProfile, hasMastery, skillAnalysis } from "../../../state/careerModel";
 import { sessionsForCourse } from "../../../state/learningProgress";
+import { courseFor } from "../test/testData";
 
 export default function useRoadmapProgress() {
   const data = useTutorData();
@@ -17,7 +18,9 @@ export default function useRoadmapProgress() {
   const career = careerFor(roadmap.target);
   const careerState = useCareerState();
   const contexts = courseCatalog.flatMap((course) => {
-    return [{ sessionId: course.id, bank: course.courseId, mode: "pre", title: course.title },
+    const placementBank = courseFor(course.title) || course.courseId;
+    return [{ sessionId: course.id, bank: placementBank, mode: "pre", title: course.title },
+      ...(placementBank !== course.courseId ? [{ sessionId: course.id, bank: course.courseId, mode: "pre", title: course.title }] : []),
       ...sessionsForCourse(course, data.sessions).flatMap((session) => ["pre", "post"].map((mode) =>
         ({ sessionId: session.id, bank: session.courseId || course.courseId, mode, title: course.title })))];
   });
@@ -27,7 +30,7 @@ export default function useRoadmapProgress() {
   const attempts = JSON.parse(raw);
   const assessments = contexts.flatMap((context, index) => {
     const result = assessmentResult(attempts[index], context.bank, context.mode);
-    const logicCorrect = context.mode === "pre" && context.bank === "programming"
+    const logicCorrect = context.mode === "pre" && ["programming", "frontend", "backend"].includes(context.bank)
       ? [0, 3, 4, 5, 6, 9].filter((index) => result?.items[index]?.correct).length : 0;
     return result ? [{ ...context, score: result.score, logicLevel: context.mode === "pre" ? logicCorrect >= 5 ? 3 : logicCorrect >= 3 ? 2 : 1 : 0 }] : [];
   });

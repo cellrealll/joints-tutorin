@@ -13,7 +13,7 @@ export default function AssessmentAction({ sessionId, subject, courseId: provide
     {buttonLabel}<AppIcon name="solar:arrow-right-linear" size={18} />
   </button>;
   return <div className="assessment-completed">
-    <span className="assessment-completed-label"><AppIcon name="solar:check-circle-bold" size={15} />{mode === "pre" ? "Pre-test" : "Post-test"} selesai</span>
+    <span className="assessment-completed-label"><AppIcon name="solar:check-circle-bold" size={15} />{mode === "pre" ? "Placement Test" : "Post-test"} selesai</span>
     <div className="assessment-completed-score"><span>Nilai</span><strong>{result.score}<small>/100</small></strong></div>
     <button className="assessment-review-button" type="button" onClick={onClick} aria-label={`Lihat pembahasan ${mode === "pre" ? "pre-test" : "post-test"}`}>
       Lihat pembahasan<AppIcon name="solar:arrow-right-linear" size={16} />

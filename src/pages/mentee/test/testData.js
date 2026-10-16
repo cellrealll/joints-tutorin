@@ -3,6 +3,7 @@ import crosswordGenerator from "crossword-layout-generator";
 const choice = (prompt, options, correct, explanation) => ({ type: "choice", prompt, options, correct, explanation });
 const short = (prompt, correct, explanation) => ({ type: "short", prompt, correct, explanation });
 const truth = (prompt, correct, explanation) => ({ type: "choice", prompt, options: ["Benar", "Salah"], correct: correct ? 0 : 1, explanation });
+const code = (prompt, starter, solutions, explanation, language = "JavaScript") => ({ type: "code", prompt, starter, solutions, correct: solutions[0], explanation, language });
 
 export const courses = {
   algebra: {
@@ -92,7 +93,85 @@ export const courses = {
   },
 };
 
+const programmingCode = [
+  code("Lengkapi fungsi agar mengembalikan angka genap dari array numbers.", "function evenNumbers(numbers) {\n  // Tulis baris return di sini\n}", ["return numbers.filter(number => number % 2 === 0);", "return numbers.filter(n => n % 2 === 0);"], "filter memilih elemen yang memenuhi kondisi sisa bagi dua sama dengan nol."),
+  code("Tulis satu baris untuk menjumlahkan seluruh angka dalam prices.", "const prices = [10, 20, 30];\n// Simpan hasilnya dalam const total", ["const total = prices.reduce((sum, price) => sum + price, 0);"], "reduce mengakumulasi nilai mulai dari 0."),
+  code("Lengkapi fungsi agar mengembalikan teks 'Lulus' ketika score minimal 75.", "function result(score) {\n  // Tulis baris return di sini\n}", ["return score >= 75 ? 'Lulus' : 'Belum lulus';", "return score >= 75 ? \"Lulus\" : \"Belum lulus\";"], "Operator ternary memilih hasil berdasarkan kondisi score >= 75."),
+  code("Tulis satu baris untuk mengambil properti name dari object user.", "const user = { name: 'Tito' };\n// Simpan nama dalam const name", ["const name = user.name;", "const name = user['name'];"], "Akses properti object dapat memakai notasi titik atau bracket."),
+  code("Lengkapi fungsi untuk mengembalikan panjang array items.", "function countItems(items) {\n  // Tulis baris return di sini\n}", ["return items.length;"], "Properti length menyimpan jumlah elemen array."),
+];
+
+courses.programming.pre.push(...programmingCode);
+courses.frontend = {
+  ...courses.programming, title: "Frontend Web Development", topic: "HTML, CSS, dan JavaScript",
+  pre: [...courses.programming.pre.slice(0, 10),
+    code("Tulis elemen HTML tombol bertuliskan Kirim dengan type button.", "<!-- Tulis elemen tombol di bawah ini -->", ['<button type="button">Kirim</button>'], "Elemen button dengan type button tidak mengirim form secara otomatis.", "HTML"),
+    code("Tulis deklarasi CSS untuk mengaktifkan flex layout.", ".toolbar {\n  /* Tulis satu deklarasi di sini */\n}", ["display: flex;"], "display: flex mengatur elemen anak dalam flex container.", "CSS"),
+    code("Lengkapi handler agar klik menaikkan count satu angka.", "let count = 0;\nfunction handleClick() {\n  // Tulis satu baris di sini\n}", ["count += 1;", "count = count + 1;", "count++;"], "Nilai count diperbarui setiap klik."),
+    code("Ambil elemen HTML dengan id app dan simpan di const app.", "// Tulis satu baris JavaScript", ["const app = document.getElementById('app');", 'const app = document.getElementById("app");'], "getElementById memilih elemen berdasarkan id."),
+    code("Lengkapi fungsi untuk mengembalikan hanya item yang active.", "function activeItems(items) {\n  // Tulis baris return di sini\n}", ["return items.filter(item => item.active);"], "filter menyaring array berdasarkan properti active."),
+  ],
+};
+courses.backend = {
+  ...courses.programming, title: "Backend API Engineering", topic: "API, data, dan respons server",
+  pre: [...courses.programming.pre.slice(0, 10),
+    code("Tulis satu baris untuk mengambil id dari parameter route Express.", "app.get('/users/:id', (req, res) => {\n  // Simpan id dalam const id\n});", ["const id = req.params.id;"], "Parameter route Express tersedia pada req.params."),
+    code("Kirim respons JSON dengan status HTTP 404 saat data tidak ditemukan.", "// Gunakan object { error: 'Not found' }", ["res.status(404).json({ error: 'Not found' });", 'res.status(404).json({ error: "Not found" });'], "Status 404 menandakan resource tidak ditemukan."),
+    code("Tulis satu baris untuk membaca JSON body dari request Express.", "// Simpan body dalam const payload", ["const payload = req.body;"], "Setelah middleware JSON aktif, payload tersedia pada req.body."),
+    code("Lengkapi fungsi agar mengembalikan true jika token tersedia.", "function hasToken(token) {\n  // Tulis baris return di sini\n}", ["return Boolean(token);", "return !!token;"], "Boolean mengubah nilai menjadi true atau false."),
+    code("Tulis satu baris untuk mengirim array users sebagai JSON.", "// Di dalam handler Express", ["res.json(users);", "return res.json(users);"], "res.json mengirim data sebagai JSON."),
+  ],
+};
+courses.uiux = {
+  title: "UI/UX Product Design", topic: "Riset, alur, dan prototipe",
+  pre: [
+    choice("Apa tujuan utama user interview?", ["Memahami kebutuhan pengguna", "Memilih warna logo", "Menambah fitur tanpa riset", "Mengukur kecepatan internet"], 0, "Interview membantu memahami kebutuhan dan masalah nyata pengguna."),
+    choice("Kapan usability testing paling berguna?", ["Sesudah seluruh produk dijual", "Saat menguji apakah tugas bisa diselesaikan pengguna", "Hanya ketika logo berubah", "Saat menulis kontrak"], 1, "Uji kegunaan mengamati keberhasilan dan hambatan saat pengguna menyelesaikan tugas."),
+    choice("Wireframe terutama menggambarkan ...", ["Struktur dan hierarki halaman", "Kode backend", "Hasil penjualan", "Warna final seluruh komponen"], 0, "Wireframe memetakan tata letak dan alur sebelum detail visual final."),
+    choice("Seorang pengguna sulit menemukan tombol daftar. Langkah awal terbaik?", ["Menghapus tombol", "Mengamati alur pengguna dan menguji alternatif", "Mengganti seluruh brand", "Mengabaikan laporan"], 1, "Masalah perlu divalidasi lewat observasi sebelum menentukan perbaikan."),
+    choice("Apa arti aksesibilitas dalam desain produk?", ["Hanya mendukung layar besar", "Membuat produk dapat digunakan beragam kemampuan", "Memilih satu warna", "Mengurangi semua teks"], 1, "Aksesibilitas membantu beragam pengguna memakai produk."),
+    choice("Kontras teks yang rendah dapat menyebabkan ...", ["Teks lebih mudah dibaca", "Teks sulit dibaca", "API lebih cepat", "Riset lebih akurat"], 1, "Kontras yang cukup diperlukan agar teks terbaca."),
+    choice("Prototype interaktif dipakai untuk ...", ["Menguji alur sebelum implementasi", "Menyimpan database", "Mengganti server", "Membuat invoice"], 0, "Prototype memungkinkan alur diuji tanpa membangun produk penuh."),
+    choice("Dalam user flow, decision point berarti ...", ["Titik pengguna memilih jalur", "Ukuran font", "Jumlah warna", "Versi browser"], 0, "Decision point menunjukkan percabangan jalur pengguna."),
+    choice("Design system membantu tim menjaga ...", ["Konsistensi komponen", "Jumlah meeting", "Ukuran server", "Jadwal liburan"], 0, "Komponen dan aturan bersama membuat antarmuka lebih konsisten."),
+    choice("Metode terbaik untuk menguji dua variasi CTA adalah ...", ["Menebak", "A/B test dengan metrik jelas", "Mengganti keduanya sekaligus", "Memilih berdasarkan selera pribadi"], 1, "A/B test membandingkan variasi dengan ukuran keberhasilan yang ditentukan."),
+    choice("Form panjang menyebabkan banyak pengguna berhenti. Apa yang diperiksa dulu?", ["Field yang tidak perlu dan titik pengguna keluar", "Jenis database", "Ukuran logo", "Jumlah developer"], 0, "Periksa friction dan data drop-off sebelum menyederhanakan form."),
+    choice("Pengguna tidak tahu langkah berikut setelah checkout. Solusi yang tepat?", ["Tambahkan status dan konfirmasi jelas", "Sembunyikan pesanan", "Tambah animasi saja", "Hapus halaman checkout"], 0, "Feedback sistem membantu pengguna memahami hasil tindakannya."),
+    choice("Jika dua pengguna berbeda memberi umpan balik berlawanan, sebaiknya ...", ["Pilih suara paling keras", "Lihat pola, konteks, dan data tambahan", "Abaikan keduanya", "Ubah semua layar"], 1, "Keputusan desain perlu konteks dan bukti yang cukup."),
+    choice("Apa yang perlu disertakan saat handoff desain ke developer?", ["Spesifikasi state, ukuran, dan perilaku komponen", "Gambar tanpa keterangan", "Hanya nama file", "Hanya moodboard"], 0, "Handoff yang jelas mencakup perilaku dan state, bukan hanya tampilan."),
+    choice("Tombol berwarna saja menandai error. Perbaikan aksesibilitasnya?", ["Tambahkan pesan teks dan ikon yang jelas", "Hilangkan semua warna", "Perkecil tombol", "Biarkan saja"], 0, "Informasi penting tidak boleh bergantung hanya pada warna."),
+  ],
+  words: [["RISET", "Proses memahami kebutuhan pengguna."], ["PROTOTIPE", "Model interaktif untuk menguji alur."], ["AKSES", "Kemudahan menggunakan produk bagi beragam kemampuan."], ["HIERARKI", "Urutan penekanan visual konten."], ["DESAIN", "Proses merancang solusi bagi pengguna."]],
+  post: [choice("Pengguna gagal menemukan filter. Langkah perbaikan pertama?", ["Amati tugas dan uji ulang penempatan filter", "Tambahkan warna acak", "Hapus seluruh filter", "Abaikan"], 0, "Validasi hambatan pengguna sebelum mengubah antarmuka."), truth("Prototype dapat dipakai untuk menguji alur sebelum produk selesai dikembangkan.", true, "Prototype membantu menguji ide lebih awal."), short("Sebutkan istilah untuk representasi awal tata letak halaman.", "WIREFRAME", "Wireframe memetakan struktur halaman.")],
+};
+courses.speaking = {
+  title: "Public Speaking for Work", topic: "Pesan, audiens, dan penyampaian",
+  pre: [
+    choice("Langkah pertama menyiapkan presentasi kerja adalah ...", ["Mengenali audiens dan tujuan", "Memilih animasi", "Membuat slide sebanyak mungkin", "Menghafal tanpa konteks"], 0, "Tujuan dan audiens menentukan isi pesan."),
+    choice("Pembukaan yang efektif sebaiknya ...", ["Menjelaskan konteks dan menarik perhatian", "Membaca semua slide", "Langsung menutup acara", "Menampilkan seluruh data"], 0, "Pembukaan memberi alasan audiens untuk mendengarkan."),
+    choice("Jika audiens tampak bingung, tindakan terbaik adalah ...", ["Mempercepat bicara", "Berhenti sejenak dan menjelaskan dengan contoh", "Mengabaikan", "Menaikkan volume saja"], 1, "Contoh dan jeda membantu pemahaman."),
+    choice("Satu slide sebaiknya memuat ...", ["Satu pesan utama yang mudah dipahami", "Semua paragraf laporan", "Teks sekecil mungkin", "Banyak animasi"], 0, "Slide mendukung satu gagasan utama agar mudah dipindai."),
+    choice("Apa manfaat latihan presentasi dengan timer?", ["Menyesuaikan durasi dan tempo", "Menghilangkan isi", "Mengganti audiens", "Menghindari tanya jawab"], 0, "Latihan waktu membantu menjaga presentasi sesuai slot."),
+    choice("Saat menjawab pertanyaan yang belum diketahui, sebaiknya ...", ["Jujur dan tindak lanjuti", "Mengarang jawaban", "Menyalahkan audiens", "Mengakhiri sesi"], 0, "Kejujuran dan tindak lanjut menjaga kepercayaan."),
+    choice("Kontak mata membantu ...", ["Membangun koneksi dengan audiens", "Menambah jumlah slide", "Mempercepat internet", "Menghapus gugup sepenuhnya"], 0, "Kontak mata meningkatkan keterlibatan."),
+    choice("Cerita singkat dalam presentasi berguna untuk ...", ["Membuat pesan mudah diingat", "Menggantikan semua bukti", "Memanjangkan sesi tanpa tujuan", "Menghindari struktur"], 0, "Cerita membantu audiens mengaitkan informasi dengan pengalaman."),
+    choice("Struktur presentasi yang jelas umumnya terdiri dari ...", ["Pembukaan, isi, penutup", "Hanya isi", "Penutup lalu pembukaan", "Daftar gambar"], 0, "Struktur memandu audiens mengikuti alur."),
+    choice("Bahasa tubuh yang terbuka cenderung ...", ["Mendukung pesan verbal", "Menggantikan seluruh konten", "Membuat data otomatis benar", "Menambah waktu"], 0, "Gestur dan postur dapat memperkuat penyampaian."),
+    choice("Presentasi terlalu padat angka. Bagaimana menyederhanakannya?", ["Soroti dua atau tiga temuan utama", "Bacakan setiap angka", "Hapus semua data", "Tambah grafik tanpa label"], 0, "Pilih temuan yang paling mendukung tujuan presentasi."),
+    choice("Saat presentasi daring dan suara terputus, lakukan ...", ["Cek koneksi lalu ulangi poin terakhir", "Terus bicara", "Langsung tutup", "Kirim slide tanpa penjelasan"], 0, "Mengulang poin memastikan audiens tidak kehilangan konteks."),
+    choice("Audiens berbeda bidang denganmu. Apa yang perlu diubah?", ["Gunakan istilah sederhana dan contoh relevan", "Tambah jargon", "Lewati penjelasan", "Bicara lebih cepat"], 0, "Pesan perlu disesuaikan dengan pengetahuan audiens."),
+    choice("Q&A panjang membuat waktu habis. Solusi terbaik?", ["Batasi waktu dan tawarkan tindak lanjut", "Abaikan semua pertanyaan", "Memotong tanpa sopan", "Mengulang pembukaan"], 0, "Batas waktu menjaga agenda sambil tetap menghargai pertanyaan."),
+    choice("Untuk meyakinkan tim tentang ide, argumen perlu ...", ["Klaim yang didukung bukti dan manfaat", "Opini tanpa data", "Slide penuh efek", "Istilah rumit"], 0, "Bukti dan manfaat membantu audiens mengevaluasi usulan."),
+  ],
+  words: [["AUDIENS", "Orang yang mendengarkan presentasi."], ["PESAN", "Gagasan utama yang ingin disampaikan."], ["JEDA", "Hentian singkat untuk memberi ruang memahami."], ["SUARA", "Media verbal dalam presentasi."], ["CERITA", "Narasi singkat yang membantu pesan diingat."]],
+  post: [choice("Slide penuh teks tidak terbaca. Tindakan terbaik?", ["Ringkas menjadi poin utama dan visual pendukung", "Perkecil font", "Tambah paragraf", "Baca semuanya"], 0, "Slide perlu membantu, bukan menggantikan pembicara."), truth("Menyesuaikan bahasa dengan audiens membantu pesan dipahami.", true, "Bahasa dan contoh perlu relevan dengan audiens."), short("Sebutkan bagian terakhir dari struktur presentasi pembukaan-isi-...", "PENUTUP", "Penutup menegaskan kembali pesan utama.")],
+};
+
 export function courseFor(subject = "") {
+  if (/ui\/ux|product design|design system/i.test(subject)) return "uiux";
+  if (/public speaking|pitching|presentation/i.test(subject)) return "speaking";
+  if (/frontend|react|web development/i.test(subject)) return "frontend";
+  if (/backend|api engineering|database dan api/i.test(subject)) return "backend";
   if (/algoritma|pemrograman/i.test(subject)) return "programming";
   if (/fisika/i.test(subject)) return "physics";
   if (/diskrit/i.test(subject)) return "discrete";
@@ -117,15 +196,19 @@ export function createPuzzle(courseId) {
 }
 
 export const normalizeAnswer = (value) => String(value ?? "").trim().toUpperCase();
+export const placementLevel = (score) => score >= 75 ? "Advanced" : score >= 40 ? "Intermediate" : "Beginner";
+export const normalizeCode = (value) => String(value ?? "").trim().replace(/\s+/g, "").replace(/'/g, '"').replace(/;$/, "");
+export const answeredQuestion = (question, answer) => question.type === "short" || question.type === "code" ? Boolean(String(answer ?? "").trim()) : answer !== undefined;
 export const correctQuestion = (question, answer) => question.type === "short"
-  ? normalizeAnswer(answer) === normalizeAnswer(question.correct) : answer === question.correct;
+  ? normalizeAnswer(answer) === normalizeAnswer(question.correct)
+  : question.type === "code" ? question.solutions.some((solution) => normalizeCode(answer) === normalizeCode(solution)) : answer === question.correct;
 export const wordGuess = (word, cells) => word.cells.map((cell) => cells[cell] || " ").join("");
 export function gradeTest(courseId, mode, attempt) {
   const course = courses[courseId];
-  const questions = mode === "pre" ? course.pre : course.post;
+  const questions = mode === "pre" ? course.pre.slice(0, attempt.questionCount || (attempt.submitted ? 10 : course.pre.length)) : course.post;
   const items = questions.map((question, index) => ({
-    prompt: question.prompt, answer: question.type === "short" ? attempt.answers[index] : question.options[attempt.answers[index]],
-    expected: question.type === "short" ? question.correct : question.options[question.correct],
+    prompt: question.prompt, answer: question.type === "short" || question.type === "code" ? attempt.answers[index] : question.options[attempt.answers[index]],
+    expected: question.type === "short" || question.type === "code" ? question.correct : question.options[question.correct],
     correct: correctQuestion(question, attempt.answers[index]), explanation: question.explanation,
   }));
   if (mode === "post") items.unshift(...attempt.puzzle.words.map((word) => ({

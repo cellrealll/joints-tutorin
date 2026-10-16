@@ -29,7 +29,7 @@ export const booking = {
   notePlaceholder: "Tulis catatan untuk tutor.",
   emptyNote: "Belum ada catatan untuk tutor.",
   preTest: {
-    title: "Pre-test",
+    title: "Placement Test",
     description: "Kerjakan tes awal sebelum sesi dimulai",
   },
   postTest: {

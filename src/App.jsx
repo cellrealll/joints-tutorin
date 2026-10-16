@@ -19,6 +19,8 @@ import Profil from "./pages/mentee/profil mentee/Profil";
 import ProfilMentor from "./pages/mentee/profil mentor/ProfilMentor";
 import RiwayatKredit from "./pages/mentee/riwayat kredit/RiwayatKredit";
 import Sesi from "./pages/mentee/sesi/Sesi";
+import { canJoinSession } from "./pages/mentee/sesi/sessionUtils";
+import { normalizeZoomInvite } from "./state/zoomMeeting";
 import Shop from "./pages/mentee/shop/Shop";
 import BookingSesi from "./pages/mentee/booking sesi/BookingSesi";
 import DetailSesi from "./pages/mentee/detail sesi/DetailSesi";
@@ -155,6 +157,16 @@ export default function App() {
     setActive("Detail Sesi");
   }
 
+  function openZoomSession(session) {
+    if (!canJoinSession(session)) return;
+    const zoomUrl = normalizeZoomInvite(session.zoomUrl);
+    if (zoomUrl) {
+      window.open(zoomUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+    if (session.role === "mentor" && active !== "Detail Sesi") openSessionDetail(session);
+  }
+
   function openTest(mode, session) {
     setAssessmentSession(session);
     setAssessmentOrigin(active);
@@ -166,7 +178,7 @@ export default function App() {
     openTest("pre", {
       id: course.id,
       subject: course.title,
-      courseId: course.courseId,
+      courseId: courseFor(course.title) || course.courseId,
       tutor: "Course placement",
     });
   }
@@ -230,6 +242,7 @@ export default function App() {
               setActive={setActive}
               onTutorProfile={openTutor}
               onDetailSession={openSessionDetail}
+              onJoinSession={openZoomSession}
               onProfile={() => setActive("Profil mentor")}
               onCourseDetail={openCourseDetail}
             />
@@ -261,9 +274,9 @@ export default function App() {
           ) : active === "Akun" ? (
             <Profil setActive={setActive} />
           ) : active === "Sesi" ? (
-            <Sesi setActive={setActive} onDetailSession={openSessionDetail} dashboardMode={dashboardMode} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
+            <Sesi setActive={setActive} onDetailSession={openSessionDetail} onJoinSession={openZoomSession} dashboardMode={dashboardMode} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
           ) : active === "Courses" ? (
-            <Sesi setActive={setActive} onDetailSession={openSessionDetail} dashboardMode={dashboardMode} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
+            <Sesi setActive={setActive} onDetailSession={openSessionDetail} onJoinSession={openZoomSession} dashboardMode={dashboardMode} initialRoleFilter={dashboardMode === "mentor" ? "Mengajar" : "Semua"} />
           ) : active === "Pre-test" && assessmentSession ? (
             <PreTest key={`${assessmentSession.id}-pre`} session={assessmentSession} courseId={assessmentSession.courseId || courseFor(assessmentSession.subject)}
               onBack={backFromAssessment} />
@@ -288,6 +301,7 @@ export default function App() {
               session={detailSession}
               bookingNote={bookingNote}
               onOpenTest={(mode) => openTest(mode, detailSession || { id: booking.code, subject: booking.topic, tutor: bookingMentor.name })}
+              onJoinSession={openZoomSession}
               onBack={() => setActive(detailOrigin === "Booking Sesi" ? "Courses" : detailOrigin)}
               onTeach={() => setActive("Jadi mentor")}
             />

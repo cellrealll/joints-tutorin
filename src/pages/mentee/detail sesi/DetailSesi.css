@@ -75,6 +75,7 @@
   font-weight: 800;
   white-space: nowrap;
 }
+.session-status-pill.live { background: #ffe0e0; color: #b62e39; }
 
 .session-detail-panel > h2 {
   margin: 0 0 28px;
@@ -139,6 +140,22 @@
   line-height: 1.6;
   font-weight: 600;
 }
+
+.session-zoom-panel { display: grid; gap: 16px; margin-top: 22px; padding: 20px; border: 1px solid var(--career-line); border-radius: 16px; background: var(--career-wash); }
+.session-zoom-heading { display: flex; align-items: flex-start; gap: 12px; }
+.session-zoom-heading > span { display: grid; place-items: center; width: 38px; height: 38px; flex-shrink: 0; border-radius: 11px; background: var(--career-light-2); color: var(--purple); }
+.session-zoom-heading h3 { margin: 0 0 5px; color: var(--navy); font-size: 17px; }
+.session-zoom-heading p, .session-zoom-note, .session-zoom-steps > span { margin: 0; color: #66718b; font-size: 12px; line-height: 1.55; }
+.session-zoom-steps { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.session-zoom-steps > a { text-decoration: none; }
+.session-zoom-form { display: grid; gap: 8px; }
+.session-zoom-form label { color: var(--navy); font-size: 12px; font-weight: 750; }
+.session-zoom-form > div { display: flex; gap: 9px; }
+.session-zoom-form input { min-width: 0; flex: 1; padding: 10px 12px; border: 1px solid var(--career-line); border-radius: 9px; color: var(--navy); font: inherit; font-size: 12px; }
+.session-zoom-form input:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+.session-zoom-form button { flex-shrink: 0; }
+.session-zoom-copy { display: inline-flex; align-items: center; gap: 7px; width: fit-content; padding: 0; border: 0; background: transparent; color: var(--purple); font-size: 12px; font-weight: 750; cursor: pointer; }
+.session-zoom-feedback { margin: 0; color: var(--career-dark); font-size: 12px; font-weight: 700; }
 
 .session-evaluation-panel {
   margin-top: 20px;
@@ -247,6 +264,7 @@
 }
 
 @media (max-width: 800px) {
+  .session-zoom-form > div { flex-direction: column; }
   .session-detail-panel,
   .session-evaluation-panel {
     padding: 24px 18px;

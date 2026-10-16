@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { cancelSession, formatDate, useTutorData } from "../../../state/tutorStore";
+import { cancelSession, formatDate, saveSessionZoomLink, useTutorData } from "../../../state/tutorStore";
 import { endTime, sessionStatus } from "../sesi/sessionUtils";
 import JoinSession from "../sesi/JoinSession";
 import useSessionClock from "../sesi/useSessionClock";
@@ -11,7 +11,7 @@ import AssessmentAction from "../test/AssessmentAction";
 function TutorSummary({ session }) {
   if (session) return <aside className="booking-side">
     <section className="booking-summary-panel">
-      <h2>{session.kind === "industry-mentorship" ? "Industry Mentor / Demo" : session.role === "mentor" ? "Ringkasan Mentee" : "Ringkasan Tutor"}</h2>
+      <h2>{session.kind === "industry-mentorship" ? "Industry Mentor" : session.role === "mentor" ? "Ringkasan Mentee" : "Ringkasan Tutor"}</h2>
       <div className="booking-summary-profile">
         <div className="booking-summary-photo" />
         <div><h3>{session.role === "mentor" ? session.learner : session.tutor}</h3><p>{session.subject}</p>{session.mentorTitle && <p>{session.mentorTitle} / {session.mentorCompany}</p>}</div>
@@ -120,7 +120,35 @@ function TeachBanner({ onTeach }) {
   );
 }
 
-export default function DetailSesi({ session: selectedSession, bookingNote = "", onBack, onTeach, onOpenTest }) {
+function ZoomSessionPanel({ session }) {
+  const [link, setLink] = useState(session.zoomUrl || "");
+  const [feedback, setFeedback] = useState("");
+  const mentor = session.role === "mentor";
+
+  function saveLink(event) {
+    event.preventDefault();
+    try {
+      saveSessionZoomLink(session.id, link);
+      setFeedback(mentor ? "Link Zoom tersimpan. Tombol Mulai sesi sekarang membuka meeting Zoom." : "Link Zoom tersimpan. Tombol Masuk sesi sekarang tersedia.");
+    } catch (error) { setFeedback(error.message || "Link Zoom belum tersimpan."); }
+  }
+
+  async function copyLink() {
+    try { await navigator.clipboard.writeText(session.zoomUrl); setFeedback("Link Zoom disalin. Bagikan kepada mentee yang memakai perangkat lain."); }
+    catch { document.getElementById(`zoom-link-${session.id}`)?.select(); setFeedback("Salin link yang terpilih di kolom menggunakan Ctrl+C."); }
+  }
+
+  return <section className="session-zoom-panel" aria-labelledby="session-zoom-title">
+    <div className="session-zoom-heading"><span><AppIcon name="solar:videocamera-record-bold" size={22} /></span><div><h3 id="session-zoom-title">Sesi melalui Zoom</h3><p>{mentor ? "Mulai meeting di Zoom, lalu bagikan link undangannya ke sesi ini." : session.zoomUrl ? "Link Zoom sudah siap. Masuk saat waktunya tiba." : "Mentor belum menambahkan link Zoom untuk sesi ini."}</p></div></div>
+    {mentor && <div className="session-zoom-steps"><a className="activity-outline" href="https://zoom.new" target="_blank" rel="noopener noreferrer"><AppIcon name="solar:export-linear" size={18} />1. Buka dan mulai Zoom</a><span>Salin link undangan dari meeting yang terbuka, lalu tempel di bawah.</span></div>}
+    {(mentor || !session.zoomUrl) && <form className="session-zoom-form" onSubmit={saveLink}><label htmlFor={`zoom-link-${session.id}`}>{mentor ? "2. Link undangan Zoom" : "Punya link dari mentor? Tempel di sini"}</label><div><input id={`zoom-link-${session.id}`} type="url" required value={link} onChange={(event) => { setLink(event.target.value); setFeedback(""); }} placeholder="https://zoom.us/j/123456789?pwd=..." autoComplete="url" /><button className="activity-primary" type="submit">Simpan link</button></div></form>}
+    {mentor && session.zoomUrl && <button className="session-zoom-copy" type="button" onClick={copyLink}><AppIcon name="solar:copy-linear" size={17} />Salin link untuk mentee</button>}
+    {mentor && <p className="session-zoom-note">Link tersimpan di browser ini. Bagikan link ke mentee bila mereka memakai perangkat lain.</p>}
+    {feedback && <p className="session-zoom-feedback" role="status">{feedback}</p>}
+  </section>;
+}
+
+export default function DetailSesi({ session: selectedSession, bookingNote = "", onBack, onTeach, onOpenTest, onJoinSession }) {
   const { sessions } = useTutorData();
   const session = sessions.find((item) => item.id === selectedSession?.id) || selectedSession;
   const [confirmCancel, setConfirmCancel] = useState(false);
@@ -158,7 +186,7 @@ export default function DetailSesi({ session: selectedSession, bookingNote = "",
                 <h1>Detail Sesi</h1>
                 <p>Informasi lengkap booking sesi kamu.</p>
               </div>
-              <span className="session-status-pill">
+              <span className={`session-status-pill ${session && sessionStatus(session) === "Sedang sesi" ? "live" : ""}`}>
                 <AppIcon name="solar:clock-circle-bold" size={18} />
                 {session ? sessionStatus(session) : booking.status}
               </span>
@@ -178,8 +206,9 @@ export default function DetailSesi({ session: selectedSession, bookingNote = "",
               <h3>Catatan untuk tutor</h3>
               <p>{noteText}</p>
             </section>
+            {session?.status === "Dikonfirmasi" && <ZoomSessionPanel key={session.id} session={session} />}
             {session && <div className="session-detail-actions">
-              <JoinSession key={session.id} session={session} />
+              {(session.role !== "mentor" || session.zoomUrl) && <JoinSession key={session.id} session={session} onJoin={onJoinSession} />}
               {session.status === "Menunggu konfirmasi" && <div className="sessions-cancel">
                 {confirmCancel ? <><p>Batalkan permintaan sesi ini?</p><button className="outline-button" onClick={() => setConfirmCancel(false)}>Kembali</button><button className="primary-button" onClick={handleCancel}>Ya, batalkan</button></> : <button className="outline-button" onClick={() => setConfirmCancel(true)}>Batalkan permintaan</button>}
               </div>}

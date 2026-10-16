@@ -2,6 +2,7 @@ import { useSyncExternalStore } from "react";
 import { getMentorProgress } from "./mentorProgress";
 import { demoOpeningCredits, migrateDemoCredits } from "./creditLedger";
 import { prepareIndustryBooking, cancelIndustryBooking } from "./industryBooking";
+import { ensureTodayZoomSessions, normalizeZoomInvite } from "./zoomMeeting";
 
 const storageKey = "tutorin-activity-v2";
 const listeners = new Set();
@@ -47,7 +48,7 @@ function migrateSessionRoles(state) {
       if (!sessions.some((existing) => existing.id === session.id)) sessions.push(session);
     });
   }
-  return migrateDemoCredits({ ...state, sessions, sessionRolesVersion: 1 });
+  return migrateDemoCredits({ ...state, sessions: ensureTodayZoomSessions(sessions), sessionRolesVersion: 1 });
 }
 
 function load() {
@@ -91,6 +92,14 @@ export function cancelSession(id) {
   }
   commit({ ...snapshot, sessions: snapshot.sessions.map((session) => session.id === id && session.status === "Menunggu konfirmasi"
     ? { ...session, status: "Dibatalkan" } : session) });
+}
+export function saveSessionZoomLink(id, value) {
+  const session = snapshot.sessions.find((item) => item.id === id);
+  if (!session || session.status !== "Dikonfirmasi") throw new Error("Sesi belum siap untuk Zoom.");
+  const zoomUrl = normalizeZoomInvite(value);
+  if (!zoomUrl) throw new Error("Tempel link undangan Zoom yang valid, misalnya https://zoom.us/j/123456789.");
+  commit({ ...snapshot, sessions: snapshot.sessions.map((item) => item.id === id || (session.meetingKey && item.meetingKey === session.meetingKey)
+    ? { ...item, zoomUrl } : item) });
 }
 export function bookIndustryMentorship(input) {
   const id = crypto.randomUUID();

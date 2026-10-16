@@ -75,7 +75,7 @@
 .industry-mentor-identity { display: flex; align-items: center; gap: 14px; }
 .industry-mentor-identity h2 { margin: 0 0 5px; font-size: 20px; }
 .industry-mentor-identity p { margin: 0; color: #65718d; font-size: 12px; line-height: 1.6; }
-.industry-portrait { width: 72px; height: 72px; border-radius: 22px; background: #dff6ec; flex-shrink: 0; }
+.industry-portrait { width: 72px; height: 72px; border-radius: 22px; background: #dff6ec; object-fit: cover; object-position: center 24%; flex-shrink: 0; }
 .industry-mentor-card > p, .career-job-card p { margin: 0; color: #65718d; font-size: 13px; line-height: 1.6; }
 .industry-mentor-card > .career-actions, .career-job-card > .career-actions { margin-top: auto; }
 .industry-profile { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr); gap: 22px; align-items: start; }

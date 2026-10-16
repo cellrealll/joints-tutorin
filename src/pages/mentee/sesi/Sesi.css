@@ -23,6 +23,7 @@
 .sessions-time, .sessions-badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 18px; font-size: 10px; font-weight: 650; }
 .sessions-time { background: #e5dcff; color: #7542dd; }
 .sessions-badge.confirmed { background: #e4f2ff; color: #2674ab; }
+.sessions-badge.live { background: #ffe0e0; color: #b62e39; }
 .sessions-badge.pending { background: #fff2d8; color: #936200; }
 .sessions-badge.completed { background: #def7ec; color: #217554; }
 .sessions-badge.cancelled { background: #ffe6ec; color: #b73759; }

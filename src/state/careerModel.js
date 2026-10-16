@@ -11,8 +11,8 @@ export function assessedLevel(skillId, attempt) {
 export function buildSkillProfile(attempts, catalog, sessions, enrollments, legacyResults = []) {
   return Object.fromEntries(Object.entries(careerSkills).map(([id, skill]) => {
     const assessed = assessedLevel(id, attempts[id]);
-    // The old programming bank measures logic, not HTML, CSS, or React.
-    const legacyLogic = id === "logic" ? legacyResults.filter((result) => result.bank === "programming")
+    // The introductory questions in these banks measure logic, not HTML, CSS, or React.
+    const legacyLogic = id === "logic" ? legacyResults.filter((result) => ["programming", "frontend", "backend"].includes(result.bank))
       .reduce((best, result) => Math.max(best, result.logicLevel || 0), 0) : 0;
     const course = catalog.find((item) => item.id === skill.courseId);
     const learning = courseLearningProgress(course, sessions, enrollments[course.id]);

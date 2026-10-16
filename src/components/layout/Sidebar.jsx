@@ -2,8 +2,8 @@ import { useState } from "react";
 import AppIcon from "../common/AppIcon";
 import NavbarItem from "./NavbarItem";
 import mascot from "../../assets/mascot.png";
-import expandedLogo from "../../../images/logos/logo1.png";
-import collapsedLogo from "../../../images/logos/logo2.png";
+import expandedLogo from "../../../images/logos/logo1new.png";
+import collapsedLogo from "../../../images/logos/logo2new.png";
 import "./Sidebar.css";
 
 const menteeMenu = [

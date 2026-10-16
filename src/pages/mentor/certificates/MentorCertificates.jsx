@@ -6,7 +6,7 @@ import { formatTeachingTime, mentorCertificates } from "../../../state/mentorCer
 import londonArtwork from "../../../../images/certificate/0b7732ec-b0f2-4518-940b-f7b96aa8bff4.png";
 import japanArtwork from "../../../../images/certificate/99da7d33-1698-4150-89c3-fd417fe7e0f8.png";
 import parisArtwork from "../../../../images/certificate/1c3ea4da-50ad-4009-b485-5eb153710917.png";
-import tutorinLogo from "../../../../images/logos/logo1.png";
+import tutorinLogo from "../../../../images/logos/logo1new.png";
 import "./MentorCertificates.css";
 
 const artworks = [londonArtwork, japanArtwork, parisArtwork];

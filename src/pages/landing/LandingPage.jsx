@@ -4,7 +4,7 @@ import room from "../../assets/landing-study-room.png";
 import campus from "../../assets/landing-campus.png";
 import welcomeMascot from "../../assets/mascot-welcome.png";
 import readingMascot from "../../assets/mascot-reading.png";
-import expandedLogo from "../../../images/logos/logo1.png";
+import expandedLogo from "../../../images/logos/logo1new.png";
 import "./LandingPage.css";
 
 const features = [

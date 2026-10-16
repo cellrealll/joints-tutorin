@@ -42,7 +42,7 @@
 .mentor-certificate-document-body { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 45px 26px; text-align: center; background: radial-gradient(circle at top right, #f4ecff, transparent 43%), #fffdf7; }
 .mentor-certificate-document-body::before { content: ""; position: absolute; inset: 12px; border: 1px solid #e4d8fa; pointer-events: none; }
 .mentor-certificate-letterhead { display: flex; justify-content: space-between; align-items: center; align-self: stretch; gap: 16px; margin-bottom: 13px; color: #778097; text-align: right; font-size: 10px; line-height: 1.45; }
-.mentor-certificate-letterhead img { display: block; width: 82px; height: 64px; object-fit: contain; mix-blend-mode: multiply; }
+.mentor-certificate-letterhead img { display: block; width: 82px; height: 64px; object-fit: contain; }
 .mentor-certificate-letterhead strong { color: #26326d; font-size: 11px; }
 .mentor-certificate-seal { display: grid; place-items: center; width: 58px; height: 58px; margin: 0 0 9px; border: 1px solid #d3bfff; border-radius: 50%; background: #eee7ff; color: #7951ee; font-size: 33px; line-height: 1; }
 .mentor-certificate-document h1 { margin: 7px 0 15px; font-size: clamp(27px, 2.6vw, 37px); line-height: 1.1; }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { authenticateAccount } from '../../state/backend';
-import logo from '../../../images/logos/logo1.png';
+import logo from '../../../images/logos/logo1new.png';
 import mascot from '../../assets/mascot-reading.png';
 import './AuthPage.css';
 

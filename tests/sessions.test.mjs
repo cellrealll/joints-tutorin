@@ -28,6 +28,12 @@ test("pending, completed, and cancelled sessions cannot join", () => {
     assert.equal(canJoinSession({ ...session, status }, sessionStart(session)), false);
   }
 });
+test("mentee waits until the mentor explicitly starts the scheduled session", () => {
+  const now = sessionStart(session);
+  const learning = { ...session, role: 'mentee', zoomUrl: 'https://zoom.us/j/123456789' };
+  assert.equal(sessionStatus(learning, now), 'Menunggu mentor');
+  assert.equal(sessionStatus({ ...learning, startedAt: new Date(now).toISOString() }, now), 'Sedang sesi');
+});
 
 test("dashboard and Courses select the same nearest active session including tied times", (t) => {
   t.mock.method(Date, "now", () => Date.parse("2026-10-14T02:55:00Z"));

@@ -405,12 +405,19 @@
   width: 62px;
   height: 62px;
   border-radius: 18px;
-  background: #fff4c7;
+  background: linear-gradient(145deg, #fff8dc, #ffefb1);
+  box-shadow: inset 0 0 0 1px #f4dfa4;
   color: #e8a500;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
+}
+
+.course-certificate-art {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
 }
 
 .course-certificate-panel p {

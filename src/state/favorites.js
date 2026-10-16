@@ -1,10 +1,11 @@
+import { documentStorage } from "./backend";
 import { useSyncExternalStore } from "react";
 
 const key = "tutorin-favorites";
 const listeners = new Set();
 function readFavorites() {
   try {
-    const saved = JSON.parse(localStorage.getItem(key));
+    const saved = JSON.parse(documentStorage.getItem(key));
     return Array.isArray(saved) ? [...new Set(saved.filter((name) => typeof name === "string"))] : [];
   } catch { return []; }
 }
@@ -24,7 +25,7 @@ window.addEventListener("storage", (event) => {
 
 export function toggleFavorite(name) {
   const next = favorites.includes(name) ? favorites.filter((item) => item !== name) : [...favorites, name];
-  localStorage.setItem(key, JSON.stringify(next));
+  documentStorage.setItem(key, JSON.stringify(next));
   favorites = next;
   notify();
 }

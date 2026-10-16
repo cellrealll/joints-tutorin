@@ -1,3 +1,4 @@
+import TutorPortrait from "../../../components/common/TutorPortrait";
 import { useState } from "react";
 import { cancelSession, formatDate, saveSessionZoomLink, useTutorData } from "../../../state/tutorStore";
 import { endTime, sessionStatus } from "../sesi/sessionUtils";
@@ -7,14 +8,25 @@ import { courseFor } from "../test/testData";
 import AppIcon from "../../../components/common/AppIcon";
 import { booking, tutor } from "../sessionData";
 import AssessmentAction from "../test/AssessmentAction";
+import CourseCompletionFeedback from "../../../components/common/CourseCompletionFeedback";
 
 function TutorSummary({ session }) {
   if (session) return <aside className="booking-side">
     <section className="booking-summary-panel">
       <h2>{session.kind === "industry-mentorship" ? "Industry Mentor" : session.role === "mentor" ? "Ringkasan Mentee" : "Ringkasan Tutor"}</h2>
       <div className="booking-summary-profile">
-        <div className="booking-summary-photo" />
-        <div><h3>{session.role === "mentor" ? session.learner : session.tutor}</h3><p>{session.subject}</p>{session.mentorTitle && <p>{session.mentorTitle} / {session.mentorCompany}</p>}</div>
+        <div className="booking-summary-photo"><TutorPortrait name={session?.role === "mentor" ? session.learner : session?.tutor || tutor.name} /></div>
+        <div>
+          <div className="booking-summary-title">
+            <h3>{session.role === "mentor" ? session.learner : session.tutor}</h3>
+            {session.role !== "mentor" && session.tutorBadge && <span>{session.tutorBadge}</span>}
+          </div>
+          <p>{session.role !== "mentor" && session.tutorSubjects ? session.tutorSubjects : session.subject}</p>
+          {session.role !== "mentor" && session.tutorRating && <div className="booking-summary-meta">
+            <span><AppIcon name="solar:star-bold" size={15} /><strong>{session.tutorRating}</strong>{session.tutorReviews && ` (${session.tutorReviews} ulasan)`}</span>
+          </div>}
+          {session.mentorTitle && <p>{session.mentorTitle} / {session.mentorCompany}</p>}
+        </div>
       </div>
       <div className="booking-cost"><AppIcon name="bx:coin-stack" size={34} /><div>
         <strong>{session.role === "mentor" ? "Pendapatan sesi" : "Biaya Sesi"}</strong>
@@ -28,7 +40,7 @@ function TutorSummary({ session }) {
         <h2>Ringkasan Tutor</h2>
 
         <div className="booking-summary-profile">
-          <div className="booking-summary-photo" />
+          <div className="booking-summary-photo"><TutorPortrait name={session?.role === "mentor" ? session.learner : session?.tutor || tutor.name} /></div>
           <div>
             <div className="booking-summary-title">
               <h3>{tutor.name}</h3>
@@ -123,13 +135,12 @@ function TeachBanner({ onTeach }) {
 function ZoomSessionPanel({ session }) {
   const [link, setLink] = useState(session.zoomUrl || "");
   const [feedback, setFeedback] = useState("");
-  const mentor = session.role === "mentor";
 
-  function saveLink(event) {
+  async function saveLink(event) {
     event.preventDefault();
     try {
-      saveSessionZoomLink(session.id, link);
-      setFeedback(mentor ? "Link Zoom tersimpan. Tombol Mulai sesi sekarang membuka meeting Zoom." : "Link Zoom tersimpan. Tombol Masuk sesi sekarang tersedia.");
+      await saveSessionZoomLink(session.id, link);
+      setFeedback("Link Zoom tersimpan. Klik Mulai sesi agar mentee bisa bergabung.");
     } catch (error) { setFeedback(error.message || "Link Zoom belum tersimpan."); }
   }
 
@@ -139,18 +150,21 @@ function ZoomSessionPanel({ session }) {
   }
 
   return <section className="session-zoom-panel" aria-labelledby="session-zoom-title">
-    <div className="session-zoom-heading"><span><AppIcon name="solar:videocamera-record-bold" size={22} /></span><div><h3 id="session-zoom-title">Sesi melalui Zoom</h3><p>{mentor ? "Mulai meeting di Zoom, lalu bagikan link undangannya ke sesi ini." : session.zoomUrl ? "Link Zoom sudah siap. Masuk saat waktunya tiba." : "Mentor belum menambahkan link Zoom untuk sesi ini."}</p></div></div>
-    {mentor && <div className="session-zoom-steps"><a className="activity-outline" href="https://zoom.new" target="_blank" rel="noopener noreferrer"><AppIcon name="solar:export-linear" size={18} />1. Buka dan mulai Zoom</a><span>Salin link undangan dari meeting yang terbuka, lalu tempel di bawah.</span></div>}
-    {(mentor || !session.zoomUrl) && <form className="session-zoom-form" onSubmit={saveLink}><label htmlFor={`zoom-link-${session.id}`}>{mentor ? "2. Link undangan Zoom" : "Punya link dari mentor? Tempel di sini"}</label><div><input id={`zoom-link-${session.id}`} type="url" required value={link} onChange={(event) => { setLink(event.target.value); setFeedback(""); }} placeholder="https://zoom.us/j/123456789?pwd=..." autoComplete="url" /><button className="activity-primary" type="submit">Simpan link</button></div></form>}
-    {mentor && session.zoomUrl && <button className="session-zoom-copy" type="button" onClick={copyLink}><AppIcon name="solar:copy-linear" size={17} />Salin link untuk mentee</button>}
-    {mentor && <p className="session-zoom-note">Link tersimpan di browser ini. Bagikan link ke mentee bila mereka memakai perangkat lain.</p>}
+    <div className="session-zoom-heading"><span><AppIcon name="solar:videocamera-record-bold" size={22} /></span><div><h3 id="session-zoom-title">Sesi melalui Zoom</h3><p>Siapkan meeting Zoom, simpan link undangan, lalu klik Mulai sesi agar mentee dapat bergabung.</p></div></div>
+    <div className="session-zoom-steps"><a className="activity-outline" href="https://zoom.new" target="_blank" rel="noopener noreferrer"><AppIcon name="solar:export-linear" size={18} />1. Buka dan mulai Zoom</a><span>Salin link undangan dari meeting yang terbuka, lalu tempel di bawah.</span></div>
+    <form className="session-zoom-form" onSubmit={saveLink}><label htmlFor={`zoom-link-${session.id}`}>2. Link undangan Zoom</label><div><input id={`zoom-link-${session.id}`} type="url" required value={link} onChange={(event) => { setLink(event.target.value); setFeedback(""); }} placeholder="https://zoom.us/j/123456789?pwd=..." autoComplete="url" /><button className="activity-primary" type="submit">Simpan link</button></div></form>
+    {session.zoomUrl && <button className="session-zoom-copy" onClick={copyLink}>Salin link untuk mentee</button>}
+    <p className="session-zoom-note">Link tersimpan di akun. Mentee dapat bergabung setelah kamu menekan Mulai sesi.</p>
     {feedback && <p className="session-zoom-feedback" role="status">{feedback}</p>}
   </section>;
 }
 
-export default function DetailSesi({ session: selectedSession, bookingNote = "", onBack, onTeach, onOpenTest, onJoinSession }) {
-  const { sessions } = useTutorData();
+export default function DetailSesi({ session: selectedSession, bookingNote = "", onBack, onTeach, onOpenTest, onJoinSession, dashboardMode = "mentee" }) {
+  const { sessions, courseCompletions = {} } = useTutorData();
   const session = sessions.find((item) => item.id === selectedSession?.id) || selectedSession;
+  const mentorView = dashboardMode === "mentor" && session?.role === "mentor";
+  const forbidden = dashboardMode !== "mentor" && session?.role === "mentor";
+  const completion = session?.role !== "mentor" && session?.status === "Selesai" ? courseCompletions[session?.catalogCourseId] : null;
   const [confirmCancel, setConfirmCancel] = useState(false);
   const [message, setMessage] = useState("");
   useSessionClock();
@@ -163,13 +177,15 @@ export default function DetailSesi({ session: selectedSession, bookingNote = "",
     : booking.code;
   const showEvaluation = !session || (session.kind !== "industry-mentorship" && session.role !== "mentor" && session.status !== "Dibatalkan" && (session.courseId || courseFor(session.subject)));
 
-  function handleCancel() {
+  async function handleCancel() {
     try {
-      cancelSession(session.id);
+      await cancelSession(session.id);
       setConfirmCancel(false);
-      setMessage(session.kind === "industry-mentorship" ? "Booking mentorship demo dibatalkan. Kredit dikembalikan ke saldo." : "Permintaan sesi berhasil dibatalkan. Tidak ada kredit yang dipotong.");
-    } catch { setMessage("Sesi belum dibatalkan. Periksa izin penyimpanan browser."); }
+      setMessage("Sesi dibatalkan. Kredit booking dikembalikan ke saldo.");
+    } catch (error) { setMessage(error.message || "Sesi belum dibatalkan. Coba kembali."); }
   }
+
+  if (forbidden) return <section className="alternate-page"><h1>Sesi mengajar</h1><p>Buka dashboard mentor untuk mengelola sesi mengajar ini.</p><button className="primary-button" onClick={onBack}>Kembali</button></section>;
 
   return (
     <div className="session-detail-page">
@@ -203,10 +219,10 @@ export default function DetailSesi({ session: selectedSession, bookingNote = "",
             </div>
 
             <section className="session-note-card">
-              <h3>Catatan untuk tutor</h3>
+              <h3>{mentorView ? "Catatan dari mentee" : "Catatan untuk tutor"}</h3>
               <p>{noteText}</p>
             </section>
-            {session?.status === "Dikonfirmasi" && <ZoomSessionPanel key={session.id} session={session} />}
+            {mentorView && session?.status === "Dikonfirmasi" && <ZoomSessionPanel key={session.id} session={session} />}
             {session && <div className="session-detail-actions">
               {(session.role !== "mentor" || session.zoomUrl) && <JoinSession key={session.id} session={session} onJoin={onJoinSession} />}
               {session.status === "Menunggu konfirmasi" && <div className="sessions-cancel">
@@ -216,7 +232,8 @@ export default function DetailSesi({ session: selectedSession, bookingNote = "",
             </div>}
           </section>
 
-          {showEvaluation && <section className="session-evaluation-panel">
+          <CourseCompletionFeedback completion={completion} title={session?.subject} />
+          {showEvaluation && !completion && <section className="session-evaluation-panel">
             <div className="session-evaluation-heading">
               <h2>Evaluasi</h2>
               <span>*Wajib</span>

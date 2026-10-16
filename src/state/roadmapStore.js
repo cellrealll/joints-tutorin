@@ -1,3 +1,4 @@
+import { documentStorage } from "./backend";
 import { useSyncExternalStore } from "react";
 import { careerFor, careerRoadmaps } from "../pages/mentee/career/roadmapData";
 
@@ -7,7 +8,7 @@ const practiceKeys = new Set(careerRoadmaps.flatMap((career) => career.milestone
   .filter((stage) => !stage.lessons.length).map((stage) => `${career.id}:${stage.id}`)));
 function load() {
   try {
-    const saved = JSON.parse(localStorage.getItem(key));
+    const saved = JSON.parse(documentStorage.getItem(key));
     return { target: careerFor(saved?.target).id, practiced: Array.isArray(saved?.practiced)
       ? [...new Set(saved.practiced.filter((id) => practiceKeys.has(id)))] : [] };
   } catch { return { target: "frontend", practiced: [] }; }
@@ -16,7 +17,7 @@ let snapshot = load();
 const getSnapshot = () => snapshot;
 const subscribe = (listener) => { listeners.add(listener); return () => listeners.delete(listener); };
 function commit(next) {
-  localStorage.setItem(key, JSON.stringify(next));
+  documentStorage.setItem(key, JSON.stringify(next));
   snapshot = next;
   listeners.forEach((listener) => listener());
 }

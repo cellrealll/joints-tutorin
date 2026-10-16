@@ -1,0 +1,8 @@
+.action-feedback { position:fixed; box-sizing:border-box; width:min(440px,calc(100% - 32px)); max-height:calc(100dvh - 40px); padding:32px; border:1px solid #dedee9; border-radius:24px; background:white; color:var(--navy,#222454); text-align:center; box-shadow:0 24px 80px #17173830; }
+.action-feedback::backdrop { background:#17173888; backdrop-filter:blur(3px); }
+.action-feedback-close { position:absolute; top:10px; right:15px; border:0; background:transparent; color:#737383; font:inherit; font-size:28px; cursor:pointer; }
+.action-feedback-icon { display:grid; place-items:center; margin:0 auto 18px; width:76px; height:76px; border-radius:24px; color:#24764d; background:#e8f7ee; }
+.action-feedback.credit .action-feedback-icon { color:#ae7914; background:#fff3cd; }
+.action-feedback h2 { font-size:24px; margin:0 0 12px; }
+.action-feedback p { color:#737383; font-size:15px; line-height:1.7; margin:0 0 24px; }
+.action-feedback-buttons { display:flex; justify-content:center; flex-wrap:wrap; gap:12px; }

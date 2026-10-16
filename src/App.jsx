@@ -1,5 +1,7 @@
+import { BackendStatus } from "./components/common/BackendStatus";
+import FeedbackProvider from "./components/common/FeedbackProvider";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { flushSync } from "react-dom";
 import LandingPage from "./pages/landing/LandingPage";
 import Sidebar from "./components/layout/Sidebar";
@@ -21,6 +23,9 @@ import RiwayatKredit from "./pages/mentee/riwayat kredit/RiwayatKredit";
 import Sesi from "./pages/mentee/sesi/Sesi";
 import { canJoinSession } from "./pages/mentee/sesi/sessionUtils";
 import { normalizeZoomInvite } from "./state/zoomMeeting";
+import { startSession } from "./state/tutorStore";
+import { backendSnapshot, subscribeBackend, refreshWorkspace } from "./state/backend";
+import AuthPage from "./pages/auth/AuthPage";
 import Shop from "./pages/mentee/shop/Shop";
 import BookingSesi from "./pages/mentee/booking sesi/BookingSesi";
 import DetailSesi from "./pages/mentee/detail sesi/DetailSesi";
@@ -84,9 +89,12 @@ function AlternatePage({ active, setActive, onActivateMentor }) {
 }
 
 export default function App() {
-  const [entered, setEntered] = useState(() => window.location.hash === "#dashboard");
+  const [routeHash, setRouteHash] = useState(() => window.location.hash);
+  const entered = routeHash === "#dashboard";
+  const account = useSyncExternalStore(subscribeBackend, backendSnapshot);
+  const signedIn = Boolean(account.user && !account.user.guest);
   useEffect(() => {
-    const onHashChange = () => setEntered(window.location.hash === "#dashboard");
+    const onHashChange = () => setRouteHash(window.location.hash);
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
@@ -105,13 +113,21 @@ export default function App() {
   const [assessmentSession, setAssessmentSession] = useState(null);
   const [assessmentOrigin, setAssessmentOrigin] = useState("Sesi");
   const [courseDetailId, setCourseDetailId] = useState("");
+  const [courseSearch, setCourseSearch] = useState("");
   const [mentorshipCategory, setMentorshipCategory] = useState("Career Consultation");
   const switchingRole = useRef(false);
+  useEffect(() => {
+    if (!signedIn || !entered || !["Beranda", "Courses", "Sesi", "Detail Sesi"].includes(active)) return;
+    const refresh = () => { if (document.visibilityState === "visible") refreshWorkspace(); };
+    const timer = setInterval(refresh, 10000);
+    window.addEventListener("focus", refresh);
+    return () => { clearInterval(timer); window.removeEventListener("focus", refresh); };
+  }, [entered, active, signedIn]);
 
   function setActive(page) {
     if (dashboardMode === "mentor" && ["Shop"].includes(page)) return;
     if (page === "Jadi mentor" && profile.mentorActive) { switchDashboard("mentor"); return; }
-    if (page === "Cari course") setCourseDetailId("");
+    if (page === "Cari course") { setCourseDetailId(""); setCourseSearch(""); }
     updateActive(page);
     window.scrollTo({ top: 0, behavior: "instant" });
   }
@@ -157,14 +173,21 @@ export default function App() {
     setActive("Detail Sesi");
   }
 
-  function openZoomSession(session) {
+  async function openZoomSession(session) {
     if (!canJoinSession(session)) return;
     const zoomUrl = normalizeZoomInvite(session.zoomUrl);
-    if (zoomUrl) {
-      window.open(zoomUrl, "_blank", "noopener,noreferrer");
+    if (!zoomUrl) {
+      if (session.role === "mentor" && active !== "Detail Sesi") openSessionDetail(session);
       return;
     }
-    if (session.role === "mentor" && active !== "Detail Sesi") openSessionDetail(session);
+    if (session.role !== "mentor" && !session.startedAt) return;
+    const meetingWindow = window.open('about:blank', '_blank');
+    if (!meetingWindow) throw new Error('Izinkan popup browser untuk membuka sesi.');
+    meetingWindow.opener = null;
+    try {
+      if (session.role === "mentor") await startSession(session.id);
+      meetingWindow.location.replace(zoomUrl);
+    } catch (error) { meetingWindow.close(); throw error; }
   }
 
   function openTest(mode, session) {
@@ -184,6 +207,7 @@ export default function App() {
   }
 
   function openCourseDetail(courseId) {
+    setCourseSearch("");
     setCourseDetailId(courseId);
     updateActive("Cari course");
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -200,10 +224,12 @@ export default function App() {
 
   const sessionPages = ["Booking Sesi", "Detail Sesi", "Pre-test", "Post-test"];
 
-  if (!entered) return <LandingPage onChooseRole={(mode) => {
+  if (["#sign-in", "#sign-up"].includes(routeHash) || (!signedIn && ["#dashboard", "#pilih-peran"].includes(routeHash))) return <AuthPage key={routeHash} mode={routeHash === "#sign-up" ? "register" : "login"} />;
+  if (!entered) return <LandingPage onStart={() => { window.location.hash = signedIn ? "#pilih-peran" : "#sign-in"; }} onChooseRole={(mode) => {
+    if (!signedIn) { window.location.hash = "#sign-in"; return; }
     switchDashboard(mode);
     window.location.hash = "dashboard";
-    setEntered(true);
+    setRouteHash("#dashboard");
     window.scrollTo({ top: 0, behavior: "instant" });
   }} />;
 
@@ -225,14 +251,22 @@ export default function App() {
 
       <main className="main-area">
         <div className="topbar-row">
-          <SearchBar />
+          <SearchBar onCourse={openCourseDetail} onTutor={openTutor} onClear={() => setCourseSearch("")}
+            onSearch={(query) => { setActive("Cari course"); setCourseSearch(query); }} />
           <Header
             onProfileClick={() => setActive("Akun")}
             onShopClick={dashboardMode === "mentee" ? () => setActive("Shop") : undefined}
+            onHistoryClick={() => setActive("Riwayat Kredit")}
           />
         </div>
 
-        <div className="page-view" key={`${active}-${dashboardMode}`}>
+        <BackendStatus />
+        <FeedbackProvider key={`${active}-${dashboardMode}`} onShop={() => {
+          setPreferredMode("mentee");
+          try { localStorage.setItem("tutorin-dashboard-mode", "mentee"); } catch { /* Mode changes for this visit. */ }
+          updateActive("Shop");
+        }}>
+        <div className="page-view">
           {active === "Beranda" && dashboardMode === "mentor" ? (
             <DashboardMentor onSessions={() => setActive("Sesi")} onHistory={() => setActive("Riwayat Kredit")} onSwitchMode={switchDashboard} />
           ) : active === "Sertifikat Tutor" && dashboardMode === "mentor" ? (
@@ -258,7 +292,9 @@ export default function App() {
             <CareerOpportunities setActive={setActive} onCourseDetail={openCourseDetail} />
           ) : active === "Cari tutor" || active === "Cari mentor" || active === "Cari course" ? (
             <CariTutor
-              key={courseDetailId || "catalog"}
+              key={`${courseDetailId || "catalog"}:${courseSearch}`}
+              searchQuery={courseSearch}
+              onClearSearch={() => setCourseSearch("")}
               onProfile={openTutor}
               onStartPreTest={openCoursePreTest}
               initialCourseId={courseDetailId}
@@ -292,12 +328,13 @@ export default function App() {
               bookingNote={bookingNote}
               onBack={() => setActive("Cari course")}
               onBookingNoteChange={setBookingNote}
-              onSessionDetail={() => openSessionDetail(null)}
+              onSessionDetail={openSessionDetail}
               onHome={() => setActive("Beranda")}
               onTeach={() => setActive("Jadi mentor")}
             />
           ) : active === "Detail Sesi" ? (
             <DetailSesi
+              dashboardMode={dashboardMode}
               session={detailSession}
               bookingNote={bookingNote}
               onOpenTest={(mode) => openTest(mode, detailSession || { id: booking.code, subject: booking.topic, tutor: bookingMentor.name })}
@@ -309,6 +346,7 @@ export default function App() {
             <AlternatePage active={active} setActive={setActive} onActivateMentor={activateMentor} />
           )}
         </div>
+        </FeedbackProvider>
       </main>
       <TitoGuide key={`${profile.email || profile.username}-${dashboardMode}`} profile={profile} role={dashboardMode} onNavigate={setActive} />
     </div>

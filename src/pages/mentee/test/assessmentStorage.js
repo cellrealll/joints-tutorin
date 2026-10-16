@@ -1,16 +1,17 @@
+import { documentStorage } from "../../../state/backend";
 import { gradeTest } from "./testData";
 
 const listeners = new Set();
 export const assessmentKey = (sessionId, courseId, mode) => `tutorin-test-v1:${sessionId}:${courseId}:${mode}`;
 export function readAssessment(key) {
-  try { return localStorage.getItem(key); } catch { return null; }
+  try { return documentStorage.getItem(key); } catch { return null; }
 }
 export function subscribeAssessments(listener) {
   listeners.add(listener);
   return () => listeners.delete(listener);
 }
 export function saveAssessment(key, attempt) {
-  localStorage.setItem(key, JSON.stringify(attempt));
+  documentStorage.setItem(key, JSON.stringify(attempt));
   listeners.forEach((listener) => listener());
 }
 window.addEventListener("storage", (event) => {

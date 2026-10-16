@@ -29,7 +29,7 @@ export function sessionCategory(session) {
 
 export function sessionStatus(session, now = Date.now()) {
   const start = sessionStart(session);
-  if (session.status === "Dikonfirmasi" && now >= start && now < start + session.duration * 60000) return "Sedang sesi";
+  if (session.status === "Dikonfirmasi" && now >= start && now < start + session.duration * 60000) return session.role === "mentee" && !session.startedAt ? "Menunggu mentor" : "Sedang sesi";
   if (session.status !== "Selesai" && session.status !== "Dibatalkan" && now >= start + session.duration * 60000) return "Terlewat";
   return session.status;
 }

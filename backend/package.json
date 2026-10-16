@@ -1,12 +1,13 @@
 {
   "name": "tutorin-joints-backend",
   "version": "1.0.0",
-  "description": "Backend for tutorin-joints (Express + MySQL)",
+  "description": "Tutor.in API with authenticated persistent workspace storage",
   "main": "src/server.js",
   "type": "commonjs",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "test": "node --test tests/*.test.cjs"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
     "sequelize": "^6.37.8"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "nodemon": "^3.1.14"
   }
 }

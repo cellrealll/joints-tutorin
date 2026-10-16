@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AppIcon from "./AppIcon";
+import TutorPortrait from "./TutorPortrait";
 import { toggleFavorite, useFavorites } from "../../state/favorites";
 import "./MentorCard.css";
 
@@ -16,7 +17,7 @@ export default function MentorCard({ tutor, onProfile }) {
     <button className="mentor-card-heart" aria-label={label} title={label} aria-pressed={favorite} onClick={toggle}>
       <AppIcon name={favorite ? "solar:heart-bold" : "solar:heart-linear"} size={23} />
     </button>
-    <div className="tutor-avatar"><AppIcon name={tutor.avatar} size={98} /></div>
+    <div className="tutor-avatar"><TutorPortrait name={tutor.name} /></div>
     <h3>{tutor.name}</h3>
     <p className="tutor-subjects">{tutor.subjects}</p>
     <div className="rating-line">

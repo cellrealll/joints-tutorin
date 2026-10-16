@@ -4,9 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/dev.mjs",
+    "dev:frontend": "vite",
+    "dev:backend": "npm --prefix backend run dev",
     "build": "vite build",
     "lint": "eslint .",
+    "test": "node --test tests/*.test.mjs backend/tests/*.test.cjs",
+    "test:e2e": "node backend/tests/browser.cjs",
     "test:assessments": "node --test tests/assessment.test.mjs",
     "test:roadmap": "node --test tests/roadmap.test.mjs",
     "test:career": "node --test tests/career.test.mjs",
@@ -16,6 +20,7 @@
     "@fontsource-variable/sn-pro": "^5.3.0",
     "@iconify/react": "^6.0.2",
     "crossword-layout-generator": "^0.1.1",
+    "jspdf": "^4.2.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

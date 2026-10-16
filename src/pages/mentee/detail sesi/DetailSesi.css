@@ -2,6 +2,16 @@
   min-width: 0;
 }
 
+.session-detail-page .booking-summary-title {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.session-detail-page .booking-summary-title h3 {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .session-detail-back {
   border: 0;
   background: transparent;

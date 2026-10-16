@@ -1,0 +1,7 @@
+.backend-status { display:flex; flex-wrap:wrap; align-items:center; gap:12px; padding:12px 20px; background:#fff4cf; color:#282454; font:inherit; }
+.backend-status button { cursor:pointer; border:0; border-radius:8px; padding:8px 12px; background:#282454; color:white; }
+.account-connection { margin:24px 0; padding:24px; border:1px solid #ddd; border-radius:18px; background:white; }
+.account-connection form { display:flex; flex-wrap:wrap; gap:16px; align-items:end; }
+.account-connection label { display:grid; gap:8px; }
+.account-connection input { max-width:100%; border:1px solid #ccc; border-radius:8px; padding:10px; font:inherit; }
+.backend-startup { padding:48px; max-width:720px; margin:auto; }

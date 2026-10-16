@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import AppIcon from "../../../components/common/AppIcon";
 import { BalanceBanner } from "../../../components/common/ActivityUI";
-import { completeDemoPurchase } from "../../../state/tutorStore";
+import { completeDemoPurchase, getTutorBalance } from "../../../state/tutorStore";
+import { useFeedback } from "../../../state/feedbackContext";
 import "./Shop.css";
 import Dropdown from "../../../components/common/Dropdown";
 
@@ -18,6 +19,7 @@ const methods = [
 const rupiah = (value) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(value);
 
 export default function Shop({ setActive }) {
+  const feedback = useFeedback();
   const [selected, setSelected] = useState(packages[1]);
   const [method, setMethod] = useState("QRIS");
   const [filter, setFilter] = useState("all");
@@ -43,20 +45,22 @@ export default function Shop({ setActive }) {
   useEffect(() => () => clearTimeout(timerRef.current), []);
 
   function startCheckout() {
-    setOrder({ ...selected, method, id: crypto.randomUUID(), status: "pending", expiresAt: Date.now() + 900000 });
+    setOrder({ ...selected, packageId: selected.id, method, id: crypto.randomUUID(), status: "pending", expiresAt: Date.now() + 900000 });
     setRemaining(900); setProof(""); setMessage("");
     verificationRef.current.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "center" });
   }
   function finishDemo() {
     if (!pending || busy || expired || Date.now() >= order.expiresAt) return;
     setBusy(true); setMessage("");
-    timerRef.current = setTimeout(() => {
+    timerRef.current = setTimeout(async () => {
       try {
         if (Date.now() >= order.expiresAt) { setRemaining(0); return; }
-        completeDemoPurchase(order);
+        const purchase = await completeDemoPurchase(order);
         setOrder({ ...order, status: "success" });
         setMessage(`${order.credits + order.bonus} kredit berhasil ditambahkan ke saldo demo.`);
-      } catch { setMessage("Kredit belum tersimpan. Periksa izin penyimpanan browser lalu coba lagi."); }
+        feedback.show({ title: "Pembayaran berhasil", message: `${purchase.amount} kredit sudah masuk. Saldo kamu sekarang ${getTutorBalance()} kredit.`,
+          actionLabel: "Lihat riwayat kredit", onAction: () => setActive("Riwayat Kredit") });
+      } catch (error) { setMessage(error.message || "Kredit belum tersimpan. Coba lagi."); }
       finally { setBusy(false); }
     }, 700);
   }

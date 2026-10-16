@@ -1,28 +1,15 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const { sequelize } = require("./config/db");
-
-const app = express();
-
-app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
-app.use("/api/career", require("./routes/career"));
-app.use(express.json());
-
-require("./models");
-
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/courses", require("./routes/courses"));
-
-const PORT = process.env.PORT || 5000;
-(async () => {
-  try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-    console.log("Database connected and synced");
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  } catch (err) {
-    console.error("Unable to connect to DB:", err);
-    process.exit(1);
-  }
-})();
+const path = require("node:path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+const { openStorage } = require("./storage");
+const { createApp } = require("./app");
+async function start() {
+  const storage = await openStorage(process.env.DATA_FILE || path.resolve(__dirname, "../data/tutorin.json"));
+  const app = await createApp(storage);
+  const port = Number(process.env.PORT || 5000);
+  const server = app.listen(port, process.env.HOST || "127.0.0.1", () => console.log(`Tutor.in API: http://localhost:${port}/api (persistent file storage)`));
+  server.on("error", (error) => { console.error(`Server gagal dijalankan: ${error.message}`); process.exitCode = 1; });
+  for (const signal of ["SIGINT", "SIGTERM"]) process.on(signal, () => server.close(() => process.exit(0)));
+  return server;
+}
+if (require.main === module) start().catch((error) => { console.error(`Backend gagal dijalankan: ${error.message}`); process.exitCode = 1; });
+module.exports = { start };

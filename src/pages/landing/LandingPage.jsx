@@ -13,7 +13,7 @@ const features = [
   { icon: "solar:chart-square-bold", text: "Lihat progres nyata", color: "yellow" },
 ];
 
-export default function LandingPage({ onChooseRole }) {
+export default function LandingPage({ onChooseRole, onStart }) {
   const [choosingRole, setChoosingRole] = useState(() => window.location.hash === "#pilih-peran");
   const roleHeading = useRef(null);
   useEffect(() => {
@@ -33,7 +33,7 @@ export default function LandingPage({ onChooseRole }) {
         <p className="landing-eyebrow">Siap belajar dengan cara paling fun?</p>
         <h2>Swap knowledge,<br /><span>Grow</span> together.</h2>
         <p className="landing-description">Tutor.in membantu kamu belajar bareng mentor pilihan dengan suasana yang nyaman, jadwal fleksibel, dan progres yang terasa nyata.</p>
-        <button className="landing-start" onClick={() => { window.location.hash = "pilih-peran"; }}>Mulai masuk Tutor.in<AppIcon name="solar:arrow-right-linear" size={25} /></button>
+        <button className="landing-start" onClick={onStart}>Mulai masuk Tutor.in<AppIcon name="solar:arrow-right-linear" size={25} /></button>
         <ul className="landing-features">{features.map((feature) => <li key={feature.text}><span className={`landing-feature-icon ${feature.color}`}><AppIcon name={feature.icon} size={27} /></span><span>{feature.text}</span></li>)}</ul>
       </div>
       <img className="landing-welcome-mascot" src={welcomeMascot} alt="Maskot Tutor.in membawa buku dan menyapa." width="550" height="550" />

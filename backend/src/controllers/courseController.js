@@ -1,4 +1,4 @@
-const { Course, Tutor, Enrollment, User } = require("../models");
+const { Course, Tutor, Enrollment } = require("../models");
 
 exports.list = async (req, res) => {
   try {

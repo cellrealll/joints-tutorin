@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { backendSnapshot, documentStorage, subscribeBackend } from "../../../state/backend";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { courses, createPuzzle } from "./testData";
 import { assessmentKey, saveAssessment } from "./assessmentStorage";
 
@@ -10,7 +11,7 @@ function newAttempt(courseId, mode) {
 }
 function loadAttempt(key, courseId, mode) {
   try {
-    const saved = JSON.parse(localStorage.getItem(key));
+    const saved = JSON.parse(documentStorage.getItem(key));
     if (saved?.version === 1 && saved.courseId === courseId && saved.mode === mode && saved.answers && saved.cells &&
       Array.isArray(saved.flags) && Number.isFinite(saved.deadline) && (mode !== "post" || saved.puzzle?.words?.length)) {
       return { ...saved, questionCount: saved.questionCount || (saved.submitted ? 10 : courses[courseId].pre.length),
@@ -22,6 +23,7 @@ function loadAttempt(key, courseId, mode) {
 }
 
 export default function useAssessment(sessionId, courseId, mode) {
+  const connection = useSyncExternalStore(subscribeBackend, backendSnapshot);
   const key = assessmentKey(sessionId, courseId, mode);
   const [attempt, setAttempt] = useState(() => loadAttempt(key, courseId, mode));
   const [clock, setClock] = useState(Date.now);
@@ -52,5 +54,7 @@ export default function useAssessment(sessionId, courseId, mode) {
     });
   }
   function submit() { setJustSubmitted(true); update({ submitted: true }); }
-  return { attempt, update, submit, justSubmitted, saveStatus, remaining: Math.max(0, Math.ceil((attempt.deadline - clock) / 1000)) };
+  return { attempt, update, submit, justSubmitted,
+    saveStatus: connection.pending ? "Menyimpan jawaban…" : connection.phase === "ready" ? "Jawaban tersimpan di server" : saveStatus,
+    remaining: Math.max(0, Math.ceil((attempt.deadline - clock) / 1000)) };
 }

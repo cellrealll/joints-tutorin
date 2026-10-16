@@ -1,0 +1,6 @@
+.notification-unread { position:absolute; top:2px; right:2px; width:8px; height:8px; border-radius:50%; background:var(--purple); border:2px solid white; }
+.payment-notification-list { max-height:300px; overflow:auto; margin:10px 0; }
+.payment-notification-list article { padding:12px 0; border-bottom:1px solid #eee; }
+.payment-notification-list article>span { color:#29734b; font-size:13px; font-weight:800; }
+.payment-notification-list article p { margin:5px 0; font-size:12px; line-height:1.5; }
+.payment-notification-list article small { color:#888; font-size:11px; }

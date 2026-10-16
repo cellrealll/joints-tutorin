@@ -1,3 +1,9 @@
+const calendarDate = new Date();
+calendarDate.setDate(calendarDate.getDate() + 1);
+const calendarMonth = `${calendarDate.getFullYear()}-${String(calendarDate.getMonth() + 1).padStart(2, "0")}`;
+export function bookingDateLabel(day) {
+  return new Intl.DateTimeFormat("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(`${calendarMonth}-${String(day).padStart(2, "0")}T00:00:00`));
+}
 export const tutor = {
   name: "Angela Wilkins",
   subjects: "Matematika - Fisika",
@@ -16,9 +22,10 @@ export const tutor = {
 };
 
 export const booking = {
-  monthLabel: "Mei 2025",
-  availableDate: "Rabu, 14 Mei 2025",
-  selectedDay: "14",
+  month: calendarMonth,
+  monthLabel: new Intl.DateTimeFormat("id-ID", { month: "long", year: "numeric" }).format(calendarDate),
+  availableDate: bookingDateLabel(calendarDate.getDate()),
+  selectedDay: String(calendarDate.getDate()),
   initialTime: "08:00 - 10:00",
   userCredits: 20,
   code: "TTR-140525-1024",
@@ -38,43 +45,13 @@ export const booking = {
   },
 };
 
-export const calendarDays = [
-  { label: "28", muted: true },
-  { label: "29", muted: true },
-  { label: "30", muted: true },
-  { label: "1" },
-  { label: "2" },
-  { label: "3" },
-  { label: "4" },
-  { label: "5" },
-  { label: "6" },
-  { label: "7" },
-  { label: "8" },
-  { label: "9" },
-  { label: "10" },
-  { label: "11" },
-  { label: "12" },
-  { label: "13" },
-  { label: "14" },
-  { label: "15" },
-  { label: "16" },
-  { label: "17" },
-  { label: "18" },
-  { label: "19" },
-  { label: "20" },
-  { label: "21" },
-  { label: "22" },
-  { label: "23" },
-  { label: "24" },
-  { label: "25" },
-  { label: "26" },
-  { label: "27" },
-  { label: "28" },
-  { label: "29" },
-  { label: "30" },
-  { label: "31" },
-  { label: "1", muted: true },
-];
+const monthStart = new Date(calendarDate.getFullYear(), calendarDate.getMonth(), 1);
+const firstOffset = (monthStart.getDay() + 6) % 7;
+const monthLength = new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 0).getDate();
+export const calendarDays = Array.from({ length: Math.ceil((firstOffset + monthLength) / 7) * 7 }, (_, index) => {
+  const day = index - firstOffset + 1;
+  return { label: day >= 1 && day <= monthLength ? String(day) : "", muted: day < calendarDate.getDate() || day > monthLength };
+});
 
 export const weekdays = ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"];
 

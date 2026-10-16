@@ -3,8 +3,10 @@ import { useRef, useState } from "react";
 import AppIcon from "../../../components/common/AppIcon";
 import { CreditCard, WeeklyProgress, TeachBanner } from "../dashboard/Dashboard";
 import "./ProfilMentor.css";
-import { addBooking } from "../../../state/tutorStore";
+import { addBooking, useTutorData } from "../../../state/tutorStore";
+import { isCreditError, useFeedback } from "../../../state/feedbackContext";
 import Dropdown from "../../../components/common/Dropdown";
+import TutorPortrait from "../../../components/common/TutorPortrait";
 
 const days = ["Sen", "Sel", "Rab", "Kam", "Jum"];
 
@@ -64,6 +66,8 @@ export default function ProfilMentor({
   onBack,
 }) {
   const [tab, setTab] = useState("Ringkasan");
+  const feedback = useFeedback();
+  const { balance } = useTutorData();
   const [message, setMessage] = useState("");
   const dialogRef = useRef(null);
   const subjects = tutor?.subjects
@@ -113,10 +117,10 @@ export default function ProfilMentor({
     dialogRef.current?.showModal();
   }
 
-  function bookSession(event) {
+  async function bookSession(event) {
     event.preventDefault();
-
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const date = form.get("date");
     const day = new Date(`${date}T00:00:00`).getDay();
 
@@ -129,7 +133,9 @@ export default function ProfilMentor({
     }
 
     try {
-      addBooking({
+      const required = tutor.creditsCourse || tutor.credits;
+      if (balance < required) { dialogRef.current?.close(); feedback.credit(balance, required); return; }
+      await addBooking({
         tutor: tutor.name,
         subject: form.get("subject"),
         date,
@@ -139,12 +145,13 @@ export default function ProfilMentor({
 
       dialogRef.current?.close();
       setMessage(
-        `Permintaan booking dengan ${tutor.name} tersimpan di browser untuk ${date}, pukul ${form.get("time")} WIB.`
+        `Permintaan booking dengan ${tutor.name} tersimpan di server untuk ${date}, pukul ${form.get("time")} WIB.`
       );
-      event.currentTarget.reset();
-    } catch {
+      formElement.reset();
+    } catch (error) {
+      if (isCreditError(error)) { dialogRef.current?.close(); feedback.credit(balance, tutor.creditsCourse || tutor.credits); return; }
       setMessage(
-        "Permintaan booking belum tersimpan. Periksa izin penyimpanan browser."
+        error.message || "Permintaan booking belum tersimpan. Coba kembali."
       );
     }
   }
@@ -159,7 +166,7 @@ export default function ProfilMentor({
 
         <section className="mentor-overview" aria-label="Profil mentor">
           <div className="mentor-avatar">
-            <AppIcon name={tutor.avatar} size={100} />
+            <TutorPortrait name={tutor.name} />
           </div>
 
           <div className="mentor-identity">

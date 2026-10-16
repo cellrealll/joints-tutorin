@@ -15,8 +15,10 @@ export default function DashboardMentor({ onSessions, onHistory }) {
   const [detail, setDetail] = useState(null);
   const [feedback, setFeedback] = useState("");
   const openDetail = (value) => { setDetail(value); dialogRef.current.showModal(); };
-  const claim = (mission) => {
-    if (claimMentorMission(mission.id)) setFeedback(`Hadiah +${mission.reward} kredit berhasil masuk ke saldo!`);
+  const claim = async (mission) => {
+    try {
+      if (await claimMentorMission(mission.id)) setFeedback(`Hadiah +${mission.reward} kredit berhasil masuk ke saldo!`);
+    } catch (error) { setFeedback(error.message || "Hadiah belum dapat diklaim."); }
   };
   const missionRows = () => missions.map((mission) => <div className="mentor-mission" key={mission.id}>
     <span className={`mentor-mission-icon ${mission.color}`}><AppIcon name={mission.icon} size={25} /></span>

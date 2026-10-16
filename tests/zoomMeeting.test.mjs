@@ -23,4 +23,8 @@ test("today's mentor and mentee sessions open now and share one Zoom link", () =
   const saved = sessions.map((session) => ({ ...session, zoomUrl: "https://zoom.us/j/123456789?pwd=abc" }));
   assert.equal(ensureTodayZoomSessions(saved, now + 60000).every((session) => session.zoomUrl === saved[0].zoomUrl), true);
   assert.equal(ensureTodayZoomSessions(saved, now + 86400000).every((session) => session.zoomUrl === ""), true);
+  const startedAt = new Date(now).toISOString();
+  const started = saved.map((session) => ({ ...session, startedAt }));
+  assert.equal(ensureTodayZoomSessions(started, now + 60000).every((session) => session.startedAt === startedAt), true);
+  assert.equal(ensureTodayZoomSessions(started, now + 86400000).every((session) => session.startedAt === null), true);
 });

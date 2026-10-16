@@ -8,6 +8,11 @@
 .career-hero-icon { flex-shrink: 0; color: #278aaa; display: grid; place-items: center; width: 124px; height: 124px; background: #ffffff8a; border-radius: 32px; transform: rotate(-5deg); }
 .green .career-hero-icon { color: #249b72; }
 .career-target { margin-top: 18px; }
+.career-target > label { margin-bottom:7px; }
+.career-target-dropdown { width:min(100%,340px); }
+.career-target-dropdown .dropdown-trigger { padding-right:24px; border-radius:14px; min-height:46px; font-weight:700; }
+.career-filters label:has(.custom-dropdown) { min-width:150px; }
+.course-filter-dropdown { width:180px; flex-shrink:0; }
 .career-target label { display: grid; gap: 7px; font-size: 12px; font-weight: 700; }
 .career-target select { max-width: 330px; padding: 11px; border: 1px solid #b7ccde; border-radius: 9px; font: inherit; font-size: 14px; background: #fff; color: var(--navy); }
 .career-target p:empty { display: none; }
@@ -135,6 +140,15 @@
 .career-assessment fieldset:focus-within { border-color: var(--purple); }
 
 /* Portfolio cover and project gallery. */
+.portfolio-related-skills { min-width:0; margin:0; padding:16px; border:1px solid var(--career-line,#d8e6dc); border-radius:12px; }
+.portfolio-related-skills legend { padding:0 6px; font-size:14px; font-weight:700; color:var(--navy); }
+.portfolio-related-skills p,.portfolio-related-skills small { margin:0 0 12px; font-size:12px; color:#687d71; }
+.portfolio-skill-options { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:10px; margin-bottom:12px; }
+.career-form .portfolio-skill-option { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid var(--career-line,#d8e6dc); border-radius:9px; background:var(--career-wash,#f5faf6); cursor:pointer; }
+.career-form .portfolio-skill-option input { width:17px; height:17px; margin:0; flex-shrink:0; accent-color:var(--purple); }
+.portfolio-skill-option:has(input:checked) { border-color:var(--purple); background:#f1edff; }
+.portfolio-skill-option:focus-within { outline:2px solid var(--purple); outline-offset:2px; }
+.portfolio-skill-option span { font-size:13px; }
 .portfolio-profile { position: relative; overflow: hidden; border-color: var(--career-line); background: linear-gradient(120deg, var(--career-light-2), var(--career-light)); }
 .portfolio-profile::after { content: ""; position: absolute; right: -35px; top: -75px; width: 220px; height: 220px; border: 1px solid #ffffffb0; border-radius: 50%; pointer-events: none; }
 .portfolio-profile > * { position: relative; z-index: 1; }

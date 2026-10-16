@@ -7,6 +7,7 @@ import JoinSession from "../sesi/JoinSession";
 import useSessionClock from "../sesi/useSessionClock";
 import { useProfile } from "../../../state/profile";
 import useRoadmapProgress from "../career/useRoadmapProgress";
+import TutorPortrait from "../../../components/common/TutorPortrait";
 
 function CareerRoadmapEntry({ setActive }) {
   const { career, progress } = useRoadmapProgress();
@@ -74,7 +75,7 @@ function NextSession({ onDetailSession, onJoinSession, setActive }) {
   useSessionClock();
   const { sessions } = useTutorData();
   const session = sessions
-    .filter(isUpcomingSession)
+    .filter((session) => session.role !== "mentor" && isUpcomingSession(session))
     .sort(compareSessionSchedule)[0];
 
   return (
@@ -88,7 +89,7 @@ function NextSession({ onDetailSession, onJoinSession, setActive }) {
       {session ? (
         <article className="session-card">
           <div className="session-avatar">
-            <AppIcon name="fa7-solid:user" size={55} />
+            <TutorPortrait name={session.tutor} />
           </div>
           <div className="session-info">
             <h3>{session.subject}</h3>
@@ -158,6 +159,7 @@ const recommendedCourses = [
 ];
 
 function CourseRecommendations({ setActive, onCourseDetail }) {
+  const { courseCompletions = {} } = useTutorData();
   return (
     <section className="recommendations-section">
       <SectionHeading
@@ -173,6 +175,7 @@ function CourseRecommendations({ setActive, onCourseDetail }) {
               <AppIcon name={course.icon} size={34} />
             </div>
             <h3>{course.title}</h3>
+            {courseCompletions[course.id] && <span className="course-completion-badge">Course selesai</span>}
             <p>{course.meta}</p>
             <button className="primary-button profile-button" onClick={() => onCourseDetail(course.id)}>
               Detail Course

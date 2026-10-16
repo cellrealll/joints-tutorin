@@ -1,3 +1,4 @@
+import { documentStorage } from "./backend";
 import { useSyncExternalStore } from "react";
 import { careerSkills } from "./careerSkills";
 
@@ -8,7 +9,7 @@ const initial = () => ({ skillAttempts: {}, projects: [], savedJobs: [], portfol
 const listeners = new Set();
 function load() {
   try {
-    const saved = JSON.parse(localStorage.getItem(key));
+    const saved = JSON.parse(documentStorage.getItem(key));
     const base = initial();
     if (!saved || typeof saved !== "object") return base;
     return { ...base,
@@ -26,7 +27,7 @@ let snapshot = load();
 const subscribe = (listener) => { listeners.add(listener); return () => listeners.delete(listener); };
 const getSnapshot = () => snapshot;
 function commit(next) {
-  localStorage.setItem(key, JSON.stringify(next));
+  documentStorage.setItem(key, JSON.stringify(next));
   snapshot = next;
   listeners.forEach((listener) => listener());
 }

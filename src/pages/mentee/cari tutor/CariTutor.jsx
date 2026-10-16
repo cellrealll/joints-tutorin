@@ -1,3 +1,4 @@
+import Dropdown from "../../../components/common/Dropdown";
 import { useMemo, useRef, useState } from "react";
 import { courseCatalog as courses } from "../../../state/courseCatalog";
 import { saveEnrollments, useEnrollments } from "../../../state/enrollments";
@@ -5,10 +6,14 @@ import AppIcon from "../../../components/common/AppIcon";
 import { addBooking, useTutorData } from "../../../state/tutorStore";
 import { courseLearningProgress } from "../../../state/learningProgress";
 import LessonProgress from "../../../components/common/LessonProgress";
+import CourseCompletionFeedback from "../../../components/common/CourseCompletionFeedback";
 import useRoadmapProgress from "../career/useRoadmapProgress";
 import { recommendedCourseStart } from "../../../state/careerModel";
 import { assessmentKey, assessmentResult, readAssessment } from "../test/assessmentStorage";
 import { courseFor, placementLevel } from "../test/testData";
+import { courseMatchesSearch } from "../../../state/searchCatalog";
+import { isCreditError, useFeedback } from "../../../state/feedbackContext";
+import TutorPortrait from "../../../components/common/TutorPortrait";
 
 const shiftOptions = [
   { id: "shift-1", label: "Shift 1", time: "08:00", range: "08:00 - 10:00" },
@@ -51,30 +56,10 @@ function nextDateFor(day) {
 
 
 function FilterSelect({ label, value, onChange, options }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div className={`filter-select ${value ? "active" : ""} ${open ? "open" : ""}`}>
-      <button className="filter-select-trigger" type="button" aria-expanded={open} aria-haspopup="listbox" onClick={() => setOpen(!open)}>
-        <span>{value || label}</span>
-        <AppIcon name="solar:alt-arrow-down-linear" size={20} />
-      </button>
-      {open && (
-        <div className="filter-menu" role="listbox" aria-label={label}>
-          <button className={`filter-option ${!value ? "selected" : ""}`} type="button" role="option" aria-selected={!value} onClick={() => { onChange(""); setOpen(false); }}>
-            {label}
-          </button>
-          {options.map((option) => (
-            <button className={`filter-option ${value === option ? "selected" : ""}`} key={option} type="button" role="option" aria-selected={value === option} onClick={() => { onChange(option); setOpen(false); }}>
-              {option}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  return <Dropdown ariaLabel={label} className="course-filter-dropdown" value={value} onChange={onChange} options={[{ value: "", label }, ...options.map((option) => ({ value: option, label: option }))]} />;
 }
 
-function CourseCard({ course, onOpen }) {
+function CourseCard({ course, onOpen, completed }) {
   return (
     <article className="search-course-card">
       <div className="course-icon" aria-hidden="true">
@@ -83,6 +68,7 @@ function CourseCard({ course, onOpen }) {
       <div className="search-course-info">
         <div className="search-course-title">
           <h2>{course.title}</h2>
+          {completed && <span className="course-completion-badge">Course selesai</span>}
         </div>
         <p>{course.description}</p>
         <div className="search-meta">
@@ -98,7 +84,7 @@ function CourseCard({ course, onOpen }) {
       </div>
       <div className="search-actions">
         <button className="primary-button book-button" type="button" onClick={onOpen}>
-          Lihat Detail
+          {completed ? "Lihat feedback" : "Lihat Detail"}
           <AppIcon name="solar:alt-arrow-right-linear" size={17} />
         </button>
       </div>
@@ -125,8 +111,18 @@ function CourseProgressPanel() {
 function CertificatePanel() {
   return (
     <section className="panel course-certificate-panel">
-      <div className="certificate-icon">
-        <AppIcon name="solar:diploma-verified-bold" size={42} />
+      <div className="certificate-icon" aria-hidden="true">
+        <svg viewBox="0 0 80 80" fill="none" className="course-certificate-art">
+          <path d="m64 8 2 5 5 2-5 2-2 5-2-5-5-2 5-2ZM12 50l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5Z" fill="#F1BA36" />
+          <rect x="15" y="18" width="49" height="38" rx="6" fill="#E9DEFF" transform="rotate(-9 15 18)" />
+          <rect x="15" y="18" width="49" height="38" rx="6" fill="white" stroke="#28245D" strokeWidth="2.5" />
+          <path d="M25 29h23M25 36h16M25 43h11" stroke="#A798D6" strokeWidth="3" strokeLinecap="round" />
+          <path d="m45 51-3 19 10-5 9 5-3-19" fill="#8C6AE5" stroke="#6550A4" strokeWidth="2" strokeLinejoin="round" />
+          <circle cx="51.5" cy="48.5" r="12.5" fill="#F8CB4C" stroke="#D99A20" strokeWidth="2" />
+          <path d="m46 49 4 4 7-8" stroke="#28245D" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="9" cy="25" r="2.5" fill="#B49AEA" />
+          <circle cx="70" cy="39" r="2" fill="#B49AEA" />
+        </svg>
       </div>
       <h3>Sertifikat Course</h3>
       <p>Sertifikat terbuka setelah semua post-test selesai dan final project dinilai.</p>
@@ -135,6 +131,8 @@ function CertificatePanel() {
 }
 
 function ScheduleSetup({ course, result, enrollment, onSave }) {
+  const feedback = useFeedback();
+  const { balance } = useTutorData();
   const { profile } = useRoadmapProgress();
   const lockedStart = recommendedCourseStart(course.id, profile);
   const [startStep, setStartStep] = useState(Math.min(enrollment.startStep || lockedStart, lockedStart));
@@ -144,16 +142,21 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
   const availableDays = tutor?.availability.days || [];
   const selectedShift = tutor?.availability.shift || "";
   const selectedShiftData = selectedShift ? shiftOptions.find((item) => item.id === selectedShift) : null;
+  const [message, setMessage] = useState("");
+  const [busy, setBusy] = useState(false);
 
   function clearChoice() {
     setSelectedTutor("");
     setSelectedDay("");
   }
 
-  function saveSchedule() {
-    if (!selectedTutor || !selectedDay || !selectedShiftData) return;
+  async function saveSchedule() {
+    if (busy || !selectedTutor || !selectedDay || !selectedShiftData) return;
+    setBusy(true); setMessage("");
     const selectedTutorData = course.tutors.find((item) => item.name === selectedTutor);
-    addBooking({
+    if (balance < selectedTutorData.creditsCourse) { feedback.credit(balance, selectedTutorData.creditsCourse); setBusy(false); return; }
+    try {
+    await addBooking({
       tutor: selectedTutor,
       subject: course.title,
       date: nextDateFor(selectedDay),
@@ -165,10 +168,16 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
       startStep,
     });
     onSave({ startStep, tutor: selectedTutor, day: selectedDay, shift: selectedShift, scheduled: true });
+    } catch (error) {
+      if (isCreditError(error)) feedback.credit(balance, selectedTutorData.creditsCourse);
+      else setMessage(error.message || "Jadwal belum tersimpan.");
+    }
+    finally { setBusy(false); }
   }
 
   return (
     <section className="course-panel setup-panel">
+      <p role="status">{busy ? "Menyimpan jadwal…" : message}</p>
       <div className="course-section-heading">
         <div>
           <span className="course-eyebrow">Setelah Placement Test</span>
@@ -216,7 +225,7 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
               ))}
             </div>}
             {selectedShiftData && <p className="selected-shift-note">Jam mentor ini tetap: {selectedShiftData.label}, {selectedShiftData.range}</p>}
-            <button className="primary-button setup-submit" type="button" disabled={!selectedTutor || !selectedDay || !selectedShiftData} onClick={saveSchedule}>
+            <button className="primary-button setup-submit" type="button" disabled={busy || !selectedTutor || !selectedDay || !selectedShiftData} onClick={saveSchedule}>
               Simpan jadwal course
             </button>
           </div>
@@ -227,8 +236,11 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
 }
 
 function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollment, onEnroll, onCancelEnrollment, onUpdateEnrollment, onRoadmap }) {
+  const feedback = useFeedback();
   const confirmRef = useRef(null);
-  const { sessions } = useTutorData();
+  const { sessions, balance, courseCompletions = {} } = useTutorData();
+  const completion = courseCompletions[course.id];
+  const completed = Boolean(completion);
   const learning = courseLearningProgress(course, sessions, enrollment);
   const { allAssessments } = useRoadmapProgress();
   const placementBank = courseFor(course.title) || course.courseId;
@@ -253,17 +265,20 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
           <h1>{course.title}</h1>
           <p>{course.description}</p>
           <div className="course-hero-actions">
-            <button className="primary-button" type="button" disabled={isEnrolled} onClick={() => confirmRef.current?.showModal()}>
-              {isEnrolled ? "Sudah terdaftar" : "Daftar Course"}
+            <button className="primary-button" type="button" disabled={isEnrolled || completed} onClick={() => {
+              if (balance <= 0) feedback.credit(balance, Math.min(...course.tutors.map((tutor) => tutor.creditsCourse)));
+              else confirmRef.current?.showModal();
+            }}>
+              {completed ? "Course selesai" : isEnrolled ? "Sudah terdaftar" : "Daftar Course"}
               <AppIcon name={isEnrolled ? "solar:check-circle-bold" : "solar:clipboard-list-bold"} size={18} />
             </button>
-            {isEnrolled && (
+            {isEnrolled && !completed && (
               <button className="primary-button secondary-action" type="button" disabled={Boolean(pretestResult)} onClick={() => onStartPreTest(course)}>
                 {pretestResult ? "Placement Test selesai" : "Mulai Placement Test"}
                 <AppIcon name="solar:clipboard-check-bold" size={18} />
               </button>
             )}
-            {isEnrolled && pretestResult && !enrollment?.scheduled && (
+            {isEnrolled && !completed && pretestResult && !enrollment?.scheduled && (
               <button className="outline-button cancel-course-button" type="button" onClick={() => onCancelEnrollment(course.id)}>
                 Cancel course
               </button>
@@ -271,7 +286,8 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
           </div>
         </section>
 
-        {isEnrolled && !pretestResult && (
+        <CourseCompletionFeedback completion={completion} title={course.title} />
+        {isEnrolled && !completed && !pretestResult && (
           <section className="course-panel skill-gap-panel">
             <div>
               <span className="course-eyebrow">Placement Test tersedia</span>
@@ -285,7 +301,7 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
           </section>
         )}
 
-        {isEnrolled && pretestResult && (
+        {isEnrolled && !completed && pretestResult && (
           <>
           {!ownPretest && <p className="activity-feedback">Hasil Placement Test sebelumnya digunakan kembali. Rekomendasi mulai materi tetap mengikuti kompetensi dan prasyarat, bukan skor total.</p>}
           <ScheduleSetup
@@ -336,7 +352,7 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
             {course.tutors.map((tutor) => (
               <article className="course-tutor-card" key={tutor.name}>
                 <button className="search-avatar" type="button" onClick={() => onTutorProfile(tutor)} aria-label={`Buka profil ${tutor.name}`}>
-                  <AppIcon name={tutor.avatar} size={58} />
+                  <TutorPortrait name={tutor.name} />
                 </button>
                 <div>
                   <h3>{tutor.name}</h3>
@@ -374,7 +390,8 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
   );
 }
 
-export default function CariTutor({ onProfile = () => {}, onStartPreTest = () => {}, initialCourseId = "", onRoadmap }) {
+export default function CariTutor({ onProfile = () => {}, onStartPreTest = () => {}, initialCourseId = "", onRoadmap, searchQuery = "", onClearSearch = () => {} }) {
+  const { courseCompletions = {} } = useTutorData();
   const [category, setCategory] = useState("");
   const [selectedCourse, setSelectedCourse] = useState(() => courses.find((course) => course.id === initialCourseId) || null);
   const enrollments = useEnrollments();
@@ -391,7 +408,7 @@ export default function CariTutor({ onProfile = () => {}, onStartPreTest = () =>
     updateEnrollments({ ...enrollments, [courseId]: { ...(enrollments[courseId] || {}), registered: true, ...updates } });
   }
 
-  const filteredCourses = useMemo(() => courses.filter((course) => !category || course.category === category), [category]);
+  const filteredCourses = useMemo(() => courses.filter((course) => (!category || course.category === category) && courseMatchesSearch(course, searchQuery)), [category, searchQuery]);
   const hasActiveFilter = Boolean(category);
 
   if (selectedCourse) {
@@ -417,6 +434,7 @@ export default function CariTutor({ onProfile = () => {}, onStartPreTest = () =>
   return (
     <div className="cari-tutor-layout">
       <div className="cari-tutor-main">
+        {searchQuery && <div className="career-section-heading"><p role="status">{filteredCourses.length} course ditemukan untuk “{searchQuery}”</p><button className="text-link" onClick={onClearSearch}>Hapus kata kunci</button></div>}
         <div className="filter-row course-filter-row" aria-label="Filter course">
           <strong>Filter by</strong>
           <FilterSelect label="Kategori" value={category} onChange={setCategory} options={categoryOptions} />
@@ -424,13 +442,13 @@ export default function CariTutor({ onProfile = () => {}, onStartPreTest = () =>
         </div>
         <div className="search-tutor-list">
           {filteredCourses.length > 0 ? filteredCourses.map((course) => (
-            <CourseCard key={course.id} course={course} onOpen={() => setSelectedCourse(course)} />
+            <CourseCard key={course.id} course={course} completed={Boolean(courseCompletions[course.id])} onOpen={() => setSelectedCourse(course)} />
           )) : (
             <div className="empty-state search-empty-state">
               <AppIcon name="solar:magnifer-linear" size={38} />
               <h3>Course tidak ditemukan</h3>
-              <p>Coba ubah filter kategori.</p>
-              <button className="primary-button" type="button" onClick={() => setCategory("")}>Reset Filter</button>
+              <p>Coba kata kunci lain atau ubah filter kategori.</p>
+              <button className="primary-button" type="button" onClick={() => { setCategory(""); onClearSearch(); }}>Reset Filter</button>
             </div>
           )}
         </div>

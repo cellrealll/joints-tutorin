@@ -9,10 +9,9 @@ import { compareSessionSchedule, endTime, isUpcomingSession, sessionCategory, se
 import JoinSession from "./JoinSession";
 import useSessionClock from "./useSessionClock";
 
-export default function Sesi({ setActive, onDetailSession, onJoinSession, initialRoleFilter = "Semua", dashboardMode = "mentee" }) {
+export default function Sesi({ setActive, onDetailSession, onJoinSession, dashboardMode = "mentee" }) {
   const { sessions } = useTutorData();
   const [tab, setTab] = useState("Mendatang");
-  const [roleFilter, setRoleFilter] = useState(initialRoleFilter);
   const [selectedDate, setSelectedDate] = useState("");
   const mentorView = dashboardMode === "mentor";
   const listTitle = mentorView
@@ -20,7 +19,7 @@ export default function Sesi({ setActive, onDetailSession, onJoinSession, initia
     : { Mendatang: "Course Mendatang", Riwayat: "Riwayat Course", Dibatalkan: "Course Dibatalkan" }[tab];
   useSessionClock();
   const today = dateKey(new Date());
-  const roleSessions = sessions.filter((session) => roleFilter === "Semua" || (roleFilter === "Mengajar" ? session.role === "mentor" : session.role !== "mentor"));
+  const roleSessions = sessions.filter((session) => mentorView ? session.role === "mentor" : session.role !== "mentor");
   const upcoming = roleSessions.filter(isUpcomingSession);
   const completed = roleSessions.filter((session) => session.status === "Selesai");
   const visible = roleSessions.filter((session) => (tab === "Mendatang" ? isUpcomingSession(session) : tab === "Riwayat" ? !isUpcomingSession(session) && session.status !== "Dibatalkan" : session.status === "Dibatalkan") && (!selectedDate || session.date === selectedDate))
@@ -42,15 +41,12 @@ export default function Sesi({ setActive, onDetailSession, onJoinSession, initia
       <section className="sessions-hero"><div><span>{mentorView ? "Sesi Mengajar" : "Courses Saya"}</span><h1>{mentorView ? "Jadwal mengajarmu" : "Kelola course dan jadwalmu"}</h1><p>{mentorView ? "Lihat sesi bersama mentee, jadwal mendatang, dan riwayat mengajar dalam satu kalender." : "Course terdaftar, jadwal mentor, riwayat belajar, dan konfirmasi mentor dalam satu kalender."}</p></div>
         <div className="sessions-count"><strong>{upcoming.length}</strong><span>Jadwal mendatang</span></div>
       </section>
-      {!mentorView && <div className="sessions-role-filter"><span>Aktivitas saya</span><div className="activity-tabs" aria-label="Filter peran">
-        {["Semua", "Belajar", "Mengajar"].map((label) => <button key={label} aria-pressed={roleFilter === label} onClick={() => setRoleFilter(label)}>{label}</button>)}
-      </div></div>}
       <section className="sessions-content">
         <div className="sessions-section-heading"><div><h2>{listTitle}</h2><p>{visible.length} jadwal {selectedDate ? `pada ${formatDate(selectedDate)}` : "dalam daftar"}</p></div>
           {selectedDate && <button className="sessions-clear-date" onClick={() => setSelectedDate("")}>Semua tanggal<AppIcon name="solar:close-circle-linear" size={16} /></button>}
         </div>
         <div className="activity-tabs" aria-label="Filter course">{["Mendatang", "Riwayat", "Dibatalkan"].map((label) => <button key={label} aria-pressed={tab === label} onClick={() => { setTab(label); setSelectedDate(""); }}>{label}</button>)}</div>
-        <div className="sessions-list" key={`${tab}-${selectedDate}-${roleFilter}`}>
+        <div className="sessions-list" key={`${tab}-${selectedDate}-${dashboardMode}`}>
           {visible.map((session) => {
             const date = new Date(`${session.date}T00:00:00`);
             return <article className={`sessions-row ${sessionCategory(session)}`} key={session.id} data-role={session.role}>

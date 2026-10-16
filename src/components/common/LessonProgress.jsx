@@ -12,7 +12,7 @@ export default function LessonProgress({ course, learning, enrollment, lessonInd
     try {
       updateEnrollment(course.id, { completedLessons });
       setMessage("Progres belajar tersimpan dan tersinkron dengan roadmap.");
-    } catch { setMessage("Progres belum tersimpan. Periksa izin penyimpanan browser lalu coba lagi."); }
+    } catch { setMessage("Progres belum tersimpan. Coba kembali setelah koneksi tersedia."); }
   }
   return <div className="lesson-progress">
     <p>Centang materi yang sudah kamu pelajari. Catatan mandiri ini tidak menggantikan post-test atau sertifikat.</p>

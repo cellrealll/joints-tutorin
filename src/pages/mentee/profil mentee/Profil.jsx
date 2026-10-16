@@ -1,3 +1,4 @@
+import { AccountConnection } from "../../../components/common/BackendStatus";
 import { useState } from "react";
 import AppIcon from "../../../components/common/AppIcon";
 import "./Profil.css";
@@ -39,7 +40,7 @@ export default function Profil({ setActive }) {
       setEditing(false);
       setMessage("Profil berhasil disimpan.");
     } catch {
-      setMessage("Profil belum tersimpan. Izinkan penyimpanan browser lalu coba kembali.");
+      setMessage("Profil belum tersimpan. Coba kembali setelah koneksi tersedia.");
     }
   }
 
@@ -62,6 +63,7 @@ export default function Profil({ setActive }) {
           </div>
         </div>
       </section>
+      <AccountConnection />
       <div className="profile-columns">
         <section className="profile-details" aria-labelledby="profile-details-title">
           <form onSubmit={saveProfile}>

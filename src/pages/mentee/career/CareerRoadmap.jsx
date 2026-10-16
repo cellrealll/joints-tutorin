@@ -1,3 +1,4 @@
+import Dropdown from "../../../components/common/Dropdown";
 import { useState } from "react";
 import AppIcon from "../../../components/common/AppIcon";
 import LessonProgress from "../../../components/common/LessonProgress";
@@ -18,7 +19,7 @@ function RoadmapJourney({ career, progress, enrollments, onCourseDetail }) {
     try {
       toggleRoadmapPractice(`${career.id}:${stage.id}`);
       setMessage(stage.completed ? "Catatan latihan dibatalkan." : "Latihan mandiri tercatat. Milestone berikutnya terbuka!");
-    } catch { setMessage("Progres belum tersimpan. Periksa izin penyimpanan browser lalu coba lagi."); }
+    } catch { setMessage("Progres belum tersimpan. Coba kembali setelah koneksi tersedia."); }
   }
   return <section className="activity-panel roadmap-journey" aria-labelledby="roadmap-journey-title">
     <div className="roadmap-section-heading"><div><span className="roadmap-eyebrow">LANGKAH DEMI LANGKAH</span><h2 id="roadmap-journey-title">Perjalanan belajarmu</h2></div><span>{progress.completed}/{progress.stages.length} milestone</span></div>
@@ -61,12 +62,12 @@ export default function CareerRoadmap({ onCourseDetail, setActive }) {
   ];
   function chooseCareer(id) {
     try { selectCareer(id); setMessage(""); }
-    catch { setMessage("Pilihan karier belum tersimpan. Periksa izin penyimpanan browser lalu coba lagi."); }
+    catch { setMessage("Pilihan karier belum tersimpan. Coba kembali setelah koneksi tersedia."); }
   }
   return <div className="career-roadmap-page">
     <header className="activity-heading"><h1>My Career Roadmap</h1><p>Dari skill pertama hingga langkah karier berikutnya. Belajar terarah, tumbuh bersama.</p></header>
     <section className="roadmap-hero">
-      <div><span className="roadmap-eyebrow">MASA DEPANMU, LANGKAHMU</span><h2>Skill hari ini.<br />Peluang esok hari.</h2><p>Tentukan tujuanmu, temukan langkah belajarnya, dan bangun skill bersama peer Tutor.in.</p><label htmlFor="career-target">Target karier</label><select id="career-target" value={career.id} onChange={(event) => chooseCareer(event.target.value)}>{careerRoadmaps.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}</select><div className="roadmap-hero-meta"><span><AppIcon name="career:flag" size={16} />{progress.stages.length} milestone</span><span><AppIcon name="career:check" size={16} />{progress.percent}% tercapai</span></div></div>
+      <div><span className="roadmap-eyebrow">MASA DEPANMU, LANGKAHMU</span><h2>Skill hari ini.<br />Peluang esok hari.</h2><p>Tentukan tujuanmu, temukan langkah belajarnya, dan bangun skill bersama peer Tutor.in.</p><label htmlFor="career-target">Target karier</label><Dropdown id="career-target" ariaLabel="Target karier" className="career-target-dropdown" value={career.id} onChange={chooseCareer} options={careerRoadmaps.map((item) => ({ value: item.id, label: item.title }))} /><div className="roadmap-hero-meta"><span><AppIcon name="career:flag" size={16} />{progress.stages.length} milestone</span><span><AppIcon name="career:check" size={16} />{progress.percent}% tercapai</span></div></div>
       <img src={mascot} alt="" width="220" height="220" />
     </section>
     <div className="roadmap-career-options" role="group" aria-label="Pilih target karier">{careerRoadmaps.map((item) => <button key={item.id} aria-pressed={career.id === item.id} onClick={() => chooseCareer(item.id)}><AppIcon name={item.icon} size={22} />{item.title}{career.id === item.id && <AppIcon name="career:check" size={16} />}</button>)}</div>

@@ -62,3 +62,12 @@ Tes API menjalankan server HTTP dan database sementara: validasi, isolasi akun, 
 Tes browser memakai Microsoft Edge headless secara default. Set `PLAYWRIGHT_CHANNEL=chrome` untuk Chrome, atau `PLAYWRIGHT_CHANNEL=chromium` dan pasang Chromium dengan `npm --prefix backend exec playwright install chromium`.
 
 Untuk mencoba hasil produksi, jalankan backend (`npm --prefix backend start`) dan `npm run preview` setelah build. Hosting statis harus meneruskan `/api` ke backend atau memakai `VITE_API_URL` saat build.
+
+## Deployment
+
+Deployment Vercel tersedia di sini:
+
+- **Live Website:** https://joints-tutorin.vercel.app/
+- **Deployment Repository:** https://github.com/SoniaRY-15/joints-tutorin
+
+Repository deployment ini digunakan untuk menyiapkan dan menjalankan Tutor.in di Vercel. Repository utama tetap menjadi sumber pengembangan proyek.

@@ -16,6 +16,7 @@ import SkillAnalysis from "./pages/mentee/career/SkillAnalysis";
 import CareerPortfolio from "./pages/mentee/career/CareerPortfolio";
 import IndustryMentorship from "./pages/mentee/career/IndustryMentorship";
 import CareerOpportunities from "./pages/mentee/career/CareerOpportunities";
+import CareerInformation from "./pages/mentee/career/CareerInformation";
 import CariTutor from "./pages/mentee/cari tutor/CariTutor";
 import Profil from "./pages/mentee/profil mentee/Profil";
 import ProfilMentor from "./pages/mentee/profil mentor/ProfilMentor";
@@ -280,6 +281,8 @@ export default function App() {
               onProfile={() => setActive("Profil mentor")}
               onCourseDetail={openCourseDetail}
             />
+          ) : active === "Informasi Karier" ? (
+            <CareerInformation setActive={setActive} onCourseDetail={openCourseDetail} />
           ) : active === "Career Roadmap" ? (
             <CareerRoadmap onCourseDetail={openCourseDetail} setActive={setActive} />
           ) : active === "Skill Analysis" ? (

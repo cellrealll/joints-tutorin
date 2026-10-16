@@ -25,6 +25,7 @@ const mentorMenu = [
 ];
 
 const careerMenu = [
+  { label: "Informasi Karier", shortLabel: "Info Karier", icon: "career:bulb" },
   { label: "Career Roadmap", shortLabel: "Roadmap", icon: "career:route" },
   { label: "Skill Analysis", shortLabel: "Skill Analysis", icon: "career:chart" },
   { label: "Career Portfolio", shortLabel: "Portfolio", icon: "career:folder" },

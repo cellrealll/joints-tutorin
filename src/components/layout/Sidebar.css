@@ -1,10 +1,15 @@
 .app-shell .sidebar .side-nav {
+  flex: 1 1 0;
+  min-height: 0;
   min-width: 0;
   overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
   scrollbar-width: none;
 }
 
 .app-shell .sidebar .side-nav::-webkit-scrollbar { display: none; }
+.app-shell .sidebar .side-nav > * { flex-shrink: 0; }
 
 .career-menu { min-width: 0; flex-shrink: 0; }
 .career-menu-trigger .career-menu-chevron { margin-left: auto; flex-shrink: 0; transition: transform 180ms ease; }

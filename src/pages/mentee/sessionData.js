@@ -11,7 +11,7 @@ export const tutor = {
   reviews: "124",
   credits: 10,
   sessionDurationMinutes: 60,
-  badge: "Tutor Pro",
+  badge: "Mentor Pro",
   availability: [
     ["Sen", "09:00 - 17:00"],
     ["Sel", "09:00 - 17:00"],
@@ -33,8 +33,8 @@ export const booking = {
   adminPhone: "0812-3456-7890",
   timezone: "WIB",
   topic: "Aljabar Linear",
-  notePlaceholder: "Tulis catatan untuk tutor.",
-  emptyNote: "Belum ada catatan untuk tutor.",
+  notePlaceholder: "Tulis catatan untuk mentor.",
+  emptyNote: "Belum ada catatan untuk mentor.",
   preTest: {
     title: "Placement Test",
     description: "Kerjakan tes awal sebelum sesi dimulai",

@@ -13,7 +13,7 @@ export default function CourseCompletionFeedback({ completion, title }) {
     <p className="course-completion-meta">Feedback dari {completion.tutor} · {new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${completion.completedAt}T00:00:00`))}{completion.isDemo ? ' · Contoh hasil belajar' : ''}</p>
     <div className="course-completion-details">
       <div><h3>Yang sudah kamu kuasai</h3><ul>{completion.strengths.map((strength) => <li key={strength}>{strength}</li>)}</ul></div>
-      <div><h3>Saran tutor</h3><p>{completion.improvement}</p><h3>Langkah berikutnya</h3><p>{completion.nextStep}</p></div>
+      <div><h3>Saran mentor</h3><p>{completion.improvement}</p><h3>Langkah berikutnya</h3><p>{completion.nextStep}</p></div>
     </div>
   </section>;
 }

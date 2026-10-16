@@ -1,0 +1,9 @@
+.booking-credits { display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:20px; margin:18px 0; border:1px solid #d4e5d5; border-radius:16px; background:linear-gradient(110deg,#f0f7ef,#fbfdf8); color:#202456; }
+.booking-credits-price>span,.booking-credits-wallet>span { display:block; font-size:12px; font-weight:650; color:#6e7b70; }
+.booking-credits-price>strong { display:block; font-size:30px; font-weight:850; line-height:1.25; margin-top:8px; letter-spacing:-.5px; color:#437a4d; }
+.booking-credits strong small { font-size:13px; font-weight:650; letter-spacing:0; }
+.booking-credits-price>p,.booking-credits-wallet>p { margin:7px 0 0; font-size:11px; color:#78857c; line-height:1.7; }
+.booking-credits-wallet { padding-left:18px; border-left:1px solid #d5e6d6; }
+.booking-credits-wallet>strong { display:block; margin-top:9px; font-size:23px; line-height:1.4; font-weight:800; }
+.booking-credits-wallet b { display:block; color:#437a4d; font-size:12px; }.booking-credits-wallet .booking-credits-shortfall,.booking-credits-shortfall b { color:#b04c42; }
+@media(max-width:480px) { .booking-credits { padding:16px; gap:12px; }.booking-credits-price>strong { font-size:25px; }.booking-credits-wallet { padding-left:12px; }.booking-credits-wallet>strong { font-size:21px; } }

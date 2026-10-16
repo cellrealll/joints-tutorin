@@ -7,6 +7,7 @@ import { addBooking, useTutorData } from "../../../state/tutorStore";
 import { isCreditError, useFeedback } from "../../../state/feedbackContext";
 import Dropdown from "../../../components/common/Dropdown";
 import TutorPortrait from "../../../components/common/TutorPortrait";
+import BookingCredits from "../../../components/common/BookingCredits";
 
 const days = ["Sen", "Sel", "Rab", "Kam", "Jum"];
 
@@ -360,6 +361,7 @@ export default function ProfilMentor({
         </div>
 
         <form onSubmit={bookSession}>
+          <BookingCredits balance={balance} cost={tutor.creditsCourse || tutor.credits} unit="course" />
           <p>
             {tutor.name} / {tutor.creditsCourse || tutor.credits} kredit per course
           </p>

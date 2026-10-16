@@ -270,7 +270,7 @@ export default function App() {
         <div className="page-view">
           {active === "Beranda" && dashboardMode === "mentor" ? (
             <DashboardMentor onSessions={() => setActive("Sesi")} onHistory={() => setActive("Riwayat Kredit")} onSwitchMode={switchDashboard} />
-          ) : active === "Sertifikat Tutor" && dashboardMode === "mentor" ? (
+          ) : active === "Sertifikat Mentor" && dashboardMode === "mentor" ? (
             <MentorCertificates onSessions={() => setActive("Sesi")} />
           ) : active === "Beranda" ? (
             <Dashboard
@@ -293,7 +293,7 @@ export default function App() {
             <IndustryMentorship setActive={setActive} onOpenSession={openSessionDetail} initialCategory={mentorshipCategory} />
           ) : active === "Career Opportunities" ? (
             <CareerOpportunities setActive={setActive} onCourseDetail={openCourseDetail} />
-          ) : active === "Cari tutor" || active === "Cari mentor" || active === "Cari course" ? (
+          ) : active === "Cari mentor" || active === "Cari course" ? (
             <CariTutor
               key={`${courseDetailId || "catalog"}:${courseSearch}`}
               searchQuery={courseSearch}

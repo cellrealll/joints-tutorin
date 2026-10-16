@@ -16,6 +16,6 @@ export function searchCatalog(query) {
   const courses = courseCatalog.filter((course) => courseMatchesSearch(course, query)).map((course) => ({ id: `course:${course.id}`, type: 'Course', label: course.title, detail: course.category, courseId: course.id }));
   const skills = Object.entries(careerSkills).filter(([, skill]) => matches(skill.title)).map(([id, skill]) => ({ id: `skill:${id}`, type: 'Skill', label: skill.title, detail: courseCatalog.find((course) => course.id === skill.courseId)?.title || '', courseId: skill.courseId }));
   const uniqueTutors = [...new Map([...tutors, ...courseCatalog.flatMap((course) => course.tutors)].map((tutor) => [tutor.name, tutor])).values()];
-  const mentors = uniqueTutors.filter((tutor) => matches(`${tutor.name} ${tutor.subjects}`)).map((tutor) => ({ id: `tutor:${tutor.name}`, type: 'Tutor', label: tutor.name, detail: tutor.subjects, tutor }));
+  const mentors = uniqueTutors.filter((tutor) => matches(`${tutor.name} ${tutor.subjects}`)).map((tutor) => ({ id: `tutor:${tutor.name}`, type: 'Mentor', label: tutor.name, detail: tutor.subjects, tutor }));
   return [...skills, ...courses, ...mentors].slice(0, 10);
 }

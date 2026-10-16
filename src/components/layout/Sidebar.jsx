@@ -19,7 +19,7 @@ const menteeMenu = [
 const mentorMenu = [
   { label: "Dashboard Mentor", page: "Beranda", icon: "fa7-solid:home" },
   { label: "Sesi Mengajar", page: "Sesi", icon: "fa7-solid:calendar" },
-  { label: "Sertifikat Tutor", icon: "solar:medal-ribbon-star-bold" },
+  { label: "Sertifikat Mentor", icon: "solar:medal-ribbon-star-bold" },
   { label: "Riwayat Kredit", icon: "fa7-solid:wallet" },
   { label: "Akun", icon: "fa7-solid:user" },
 ];

@@ -2,6 +2,7 @@ import Dropdown from "../../../components/common/Dropdown";
 import { useMemo, useRef, useState } from "react";
 import { courseCatalog as courses } from "../../../state/courseCatalog";
 import { saveEnrollments, useEnrollments } from "../../../state/enrollments";
+import BookingCredits from "../../../components/common/BookingCredits";
 import AppIcon from "../../../components/common/AppIcon";
 import { addBooking, useTutorData } from "../../../state/tutorStore";
 import { courseLearningProgress } from "../../../state/learningProgress";
@@ -97,7 +98,7 @@ function CourseProgressPanel() {
     <section className="panel course-progress-panel">
       <h3>Alur Course</h3>
       <div className="course-flow">
-        {["Daftar course", "Placement Test", "Pilih mulai sesi", "Pilih tutor dan jadwal", "Project dan sertifikat"].map((step, index) => (
+        {["Daftar course", "Placement Test", "Pilih mulai sesi", "Pilih mentor dan jadwal", "Project dan sertifikat"].map((step, index) => (
           <div className="course-flow-step" key={step}>
             <span>{index + 1}</span>
             <strong>{step}</strong>
@@ -168,6 +169,7 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
       startStep,
     });
     onSave({ startStep, tutor: selectedTutor, day: selectedDay, shift: selectedShift, scheduled: true });
+    feedback.show({ title: "Jadwal course berhasil disimpan", message: `${course.title} bersama ${selectedTutor} sudah dijadwalkan pada ${dayMeta[selectedDay].label}, pukul ${selectedShiftData.time} WIB. ${selectedTutorData.creditsCourse} kredit digunakan. Sisa saldo kamu ${balance - selectedTutorData.creditsCourse} kredit. Jadwal bisa dilihat di halaman Courses.` });
     } catch (error) {
       if (isCreditError(error)) feedback.credit(balance, selectedTutorData.creditsCourse);
       else setMessage(error.message || "Jadwal belum tersimpan.");
@@ -203,20 +205,21 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
         </div>
         <div className="setup-step">
           <div className="setup-heading-inline">
-            <h3>2. Pilih tutor</h3>
+            <h3>2. Pilih mentor</h3>
             {(selectedTutor || selectedDay || selectedShift) && <button type="button" onClick={clearChoice}>Hapus pilihan</button>}
           </div>
           <div className="setup-choice-list">
             {course.tutors.map((item) => (
               <button key={item.name} type="button" aria-pressed={selectedTutor === item.name} onClick={() => { setSelectedTutor(item.name); setSelectedDay(""); }}>
                 <strong>{item.name}</strong>
-                <span>{item.rating} ({item.reviews}) / {item.creditsCourse} kredit per course</span>
+                <span>{item.rating} ({item.reviews})</span>
+                <span className="setup-tutor-price"><strong>{item.creditsCourse} kredit</strong> / course</span>
               </button>
             ))}
           </div>
           <div className="setup-schedule-section">
             <h3>3. Pilih jadwal</h3>
-            <p>{tutor ? `Pilih hari belajar bersama ${tutor.name}.` : "Pilih tutor terlebih dahulu untuk melihat hari yang tersedia."}</p>
+            <p>{tutor ? `Pilih hari belajar bersama ${tutor.name}.` : "Pilih mentor terlebih dahulu untuk melihat hari yang tersedia."}</p>
             {tutor && <div className="setup-choice-list compact">
               {availableDays.map((day) => (
                 <button key={day} type="button" aria-pressed={selectedDay === day} onClick={() => setSelectedDay(day)}>
@@ -225,6 +228,7 @@ function ScheduleSetup({ course, result, enrollment, onSave }) {
               ))}
             </div>}
             {selectedShiftData && <p className="selected-shift-note">Jam mentor ini tetap: {selectedShiftData.label}, {selectedShiftData.range}</p>}
+            <BookingCredits balance={balance} cost={tutor?.creditsCourse} unit="course" />
             <button className="primary-button setup-submit" type="button" disabled={busy || !selectedTutor || !selectedDay || !selectedShiftData} onClick={saveSchedule}>
               Simpan jadwal course
             </button>
@@ -292,7 +296,7 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
             <div>
               <span className="course-eyebrow">Placement Test tersedia</span>
               <h2>Kerjakan Placement Test sebelum pilih jadwal</h2>
-              <p>Hasil tes membantu menentukan titik mulai belajar. Setelah selesai, kamu bisa memilih sesi awal, tutor, dan jadwal.</p>
+              <p>Hasil tes membantu menentukan titik mulai belajar. Setelah selesai, kamu bisa memilih sesi awal, mentor, dan jadwal.</p>
             </div>
             <div className="score-ring pending-score">
               <AppIcon name="solar:lock-keyhole-unlocked-linear" size={38} />
@@ -344,8 +348,8 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
         <section className="course-panel">
           <div className="course-section-heading">
             <div>
-              <span className="course-eyebrow">Jadwal tutor</span>
-              <h2>Tutor tersedia di course ini</h2>
+              <span className="course-eyebrow">Jadwal mentor</span>
+              <h2>Mentor tersedia di course ini</h2>
             </div>
           </div>
           <div className="course-tutor-list">
@@ -364,7 +368,7 @@ function CourseDetail({ course, onBack, onTutorProfile, onStartPreTest, enrollme
                   <p className="tutor-schedule-line">{formatAvailability(tutor)}</p>
                 </div>
                 <div className="course-tutor-actions">
-                  <button className="outline-button" type="button" onClick={() => onTutorProfile(tutor)}>Profil tutor</button>
+                  <button className="outline-button" type="button" onClick={() => onTutorProfile(tutor)}>Profil mentor</button>
                 </div>
               </article>
             ))}

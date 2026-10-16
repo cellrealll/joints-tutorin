@@ -922,3 +922,5 @@
   }
 }
 .course-roadmap-return { display: inline-flex; align-items: center; gap: 8px; margin-top: 16px; }
+.setup-choice-list .setup-tutor-price { color:#437a4d; font-size:13px; margin-top:4px; }
+.setup-choice-list .setup-tutor-price strong { display:inline; font-size:20px; font-weight:850; }

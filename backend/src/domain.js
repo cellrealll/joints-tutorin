@@ -62,7 +62,7 @@ async function loadDomain() {
     if (Date.parse(`${input.date}T${input.time}:00+07:00`) <= Date.now()) fail('Pilih jadwal mendatang.');
     const course = catalog.courseCatalog.find((c) => c.id === input.catalogCourseId || c.title === input.subject);
     const selectedTutor = course?.tutors.find((t) => t.name === input.tutor) || tutors.tutors.find((t) => t.name === input.tutor);
-    if (!selectedTutor || (course && !course.tutors.some((t) => t.name === input.tutor))) fail('Tutor tidak tersedia.');
+    if (!selectedTutor || (course && !course.tutors.some((t) => t.name === input.tutor))) fail('Mentor tidak tersedia.');
     const credits = selectedTutor.creditsCourse ?? selectedTutor.credits;
     const duration = course ? 120 : 60;
     if (activity.transactions.reduce((sum, tx) => sum + tx.amount, 0) < credits) fail('Kredit belum cukup. Isi kredit terlebih dahulu.', 409, 'INSUFFICIENT_CREDITS');

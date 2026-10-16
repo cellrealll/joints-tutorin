@@ -4,6 +4,7 @@ import { booking, bookingDateLabel, calendarDays, timeSlots, tutor, weekdays } f
 import { addBooking, useTutorData } from "../../../state/tutorStore";
 import { isCreditError, useFeedback } from "../../../state/feedbackContext";
 import TutorPortrait from "../../../components/common/TutorPortrait";
+import BookingCredits from "../../../components/common/BookingCredits";
 
 function BookingStepper({ step, complete }) {
   const steps = ["Pilih Jadwal", "Tinjau Rincian", "Konfirmasi"];
@@ -91,7 +92,7 @@ function ReviewStep({ selectedDay, bookingNote, onBookingNoteChange, remainingCr
     <>
       <header className="booking-panel-heading compact">
         <h1>Tinjau Rincian Sesi</h1>
-        <p>Pastikan detail tutor, jadwal, dan kredit sudah sesuai sebelum melanjutkan konfirmasi.</p>
+        <p>Pastikan detail mentor, jadwal, dan kredit sudah sesuai sebelum melanjutkan konfirmasi.</p>
       </header>
 
       <section className="booking-review-card">
@@ -131,7 +132,7 @@ function ReviewStep({ selectedDay, bookingNote, onBookingNoteChange, remainingCr
       </div>
 
       <section className="booking-note">
-        <label htmlFor="booking-note">Catatan untuk tutor</label>
+        <label htmlFor="booking-note">Catatan untuk mentor</label>
         <textarea
           id="booking-note"
           placeholder={booking.notePlaceholder}
@@ -150,7 +151,7 @@ function ConfirmationStep({ complete, session }) {
         <section className="booking-success-hero">
           <AppIcon name="solar:check-circle-linear" size={68} />
           <h1>Permintaan booking tersimpan</h1>
-          <p>Jadwal telah diajukan dan menunggu konfirmasi tutor.</p>
+          <p>Jadwal telah diajukan dan menunggu konfirmasi mentor.</p>
           <span>
             <AppIcon name="solar:info-circle-linear" size={15} />
             Detail booking tersimpan di halaman sesi.
@@ -167,7 +168,7 @@ function ConfirmationStep({ complete, session }) {
 
         <p className="booking-footnote">
           <AppIcon name="solar:info-circle-linear" size={15} />
-          Tutor akan mengonfirmasi maksimal 1 x 24 jam setelah booking.
+          Mentor akan mengonfirmasi maksimal 1 x 24 jam setelah booking.
         </p>
       </>
     );
@@ -177,7 +178,7 @@ function ConfirmationStep({ complete, session }) {
     <>
       <header className="booking-panel-heading compact">
         <h1>Konfirmasi</h1>
-        <p>Lakukanlah konfirmasi untuk membuat jadwal tutoring.</p>
+        <p>Lakukan konfirmasi untuk membuat jadwal mentoring.</p>
       </header>
 
       <section className="booking-confirm-card">
@@ -186,7 +187,7 @@ function ConfirmationStep({ complete, session }) {
         <p>Klik tombol konfirmasi untuk mengonfirmasi booking sesi.</p>
         <span>
           <AppIcon name="solar:info-circle-linear" size={15} />
-          Booking dapat dibatalkan selama masih menunggu konfirmasi tutor.
+          Booking dapat dibatalkan selama masih menunggu konfirmasi mentor.
         </span>
       </section>
     </>
@@ -197,7 +198,7 @@ function TutorSummary() {
   return (
     <aside className="booking-side">
       <section className="booking-summary-panel">
-        <h2>Ringkasan Tutor</h2>
+        <h2>Ringkasan Mentor</h2>
 
         <div className="booking-summary-profile">
           <div className="booking-summary-photo"><TutorPortrait name={tutor.name} /></div>
@@ -262,7 +263,7 @@ function TeachBanner({ onTeach }) {
       </div>
       <button className="button-white teach-banner-button" type="button" onClick={onTeach}>
         <AppIcon name="fluent:hat-graduation-12-regular" size={23} />
-        Jadi tutor
+        Jadi mentor
       </button>
     </section>
   );
@@ -344,6 +345,7 @@ export default function BookingSesi({
         <div className="booking-main">
           <section className="booking-panel">
             <BookingStepper step={step} complete={complete} />
+            <BookingCredits balance={balance} cost={tutor.credits} duration={tutor.sessionDurationMinutes} confirmed={complete} />
 
             {step === 1 && (
               <ScheduleStep
@@ -392,10 +394,10 @@ export default function BookingSesi({
             </button>
             <AppIcon className="booking-modal-icon" name="solar:info-circle-linear" size={64} />
             <h2 id="confirm-booking-title">Yakin ingin mengonfirmasi booking?</h2>
-            <p>Pastikan jadwal dan tutor sudah sesuai. Setelah dikonfirmasi, booking akan diproses dan kredit akan terpakai.</p>
+            <p>Pastikan jadwal dan mentor sudah sesuai. Setelah dikonfirmasi, booking akan diproses dan kredit akan terpakai.</p>
             <span>
               <AppIcon name="solar:danger-triangle-linear" size={16} />
-              Booking dapat dibatalkan sebelum tutor mengonfirmasi.
+              Booking dapat dibatalkan sebelum mentor mengonfirmasi.
             </span>
             <div>
               <button className="primary-button" type="button" disabled={busy} onClick={confirmBooking}>{busy ? "Menyimpan…" : "Ya, Konfirmasi"}</button>

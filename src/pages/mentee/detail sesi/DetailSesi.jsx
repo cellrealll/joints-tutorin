@@ -13,13 +13,13 @@ import CourseCompletionFeedback from "../../../components/common/CourseCompletio
 function TutorSummary({ session }) {
   if (session) return <aside className="booking-side">
     <section className="booking-summary-panel">
-      <h2>{session.kind === "industry-mentorship" ? "Industry Mentor" : session.role === "mentor" ? "Ringkasan Mentee" : "Ringkasan Tutor"}</h2>
+      <h2>{session.kind === "industry-mentorship" ? "Industry Mentor" : session.role === "mentor" ? "Ringkasan Mentee" : "Ringkasan Mentor"}</h2>
       <div className="booking-summary-profile">
         <div className="booking-summary-photo"><TutorPortrait name={session?.role === "mentor" ? session.learner : session?.tutor || tutor.name} /></div>
         <div>
           <div className="booking-summary-title">
             <h3>{session.role === "mentor" ? session.learner : session.tutor}</h3>
-            {session.role !== "mentor" && session.tutorBadge && <span>{session.tutorBadge}</span>}
+            {session.role !== "mentor" && session.tutorBadge && <span>{session.tutorBadge.replace(/\btutor\b/gi, "Mentor")}</span>}
           </div>
           <p>{session.role !== "mentor" && session.tutorSubjects ? session.tutorSubjects : session.subject}</p>
           {session.role !== "mentor" && session.tutorRating && <div className="booking-summary-meta">
@@ -37,7 +37,7 @@ function TutorSummary({ session }) {
   return (
     <aside className="booking-side">
       <section className="booking-summary-panel">
-        <h2>Ringkasan Tutor</h2>
+        <h2>Ringkasan Mentor</h2>
 
         <div className="booking-summary-profile">
           <div className="booking-summary-photo"><TutorPortrait name={session?.role === "mentor" ? session.learner : session?.tutor || tutor.name} /></div>
@@ -126,7 +126,7 @@ function TeachBanner({ onTeach }) {
       </div>
       <button className="button-white teach-banner-button" type="button" onClick={onTeach}>
         <AppIcon name="fluent:hat-graduation-12-regular" size={23} />
-        Jadi tutor
+        Jadi mentor
       </button>
     </section>
   );
@@ -219,7 +219,7 @@ export default function DetailSesi({ session: selectedSession, bookingNote = "",
             </div>
 
             <section className="session-note-card">
-              <h3>{mentorView ? "Catatan dari mentee" : "Catatan untuk tutor"}</h3>
+              <h3>{mentorView ? "Catatan dari mentee" : "Catatan untuk mentor"}</h3>
               <p>{noteText}</p>
             </section>
             {mentorView && session?.status === "Dikonfirmasi" && <ZoomSessionPanel key={session.id} session={session} />}
